@@ -1,6 +1,7 @@
 import {
     applyFilter,
     emptyFilter,
+    filterForLevel,
     filterToSql,
     matchesFilter,
     type Word,
@@ -15,6 +16,7 @@ const persianBook: Word = {
     abstraction_score: 0.2,
     topic_tags: ["education"],
     origins: ["Arabic"],
+    registers: ["neutral"],
 };
 
 const persianHouse: Word = {
@@ -26,6 +28,19 @@ const persianHouse: Word = {
     abstraction_score: 0.1,
     topic_tags: ["home"],
     origins: ["Iranian"],
+    registers: ["neutral", "colloquial"],
+};
+
+const persianRareLiterary: Word = {
+    id: 3,
+    language_code: "fa",
+    lemma_native: "ژرف‌نگری",
+    lemma_latin: "žarf-negari",
+    frequency_rank: 18000,
+    abstraction_score: 0.85,
+    topic_tags: ["thought"],
+    origins: ["Iranian"],
+    registers: ["literary"],
 };
 
 describe("applyFilter", () => {
@@ -65,6 +80,42 @@ describe("applyFilter", () => {
         def.topics.exclude = ["education"];
         expect(applyFilter(def, [persianBook, persianHouse]).map((w) => w.id)).toEqual([2]);
     });
+
+    test("register include narrows to literary advanced words", () => {
+        const def = emptyFilter();
+        def.registers.include = ["literary"];
+        const result = applyFilter(def, [persianBook, persianHouse, persianRareLiterary]);
+        expect(result.map((w) => w.id)).toEqual([3]);
+    });
+
+    test("register exclude drops colloquial entries", () => {
+        const def = emptyFilter();
+        def.registers.exclude = ["colloquial"];
+        const result = applyFilter(def, [persianBook, persianHouse, persianRareLiterary]);
+        expect(result.map((w) => w.id)).toEqual([1, 3]);
+    });
+});
+
+describe("filterForLevel", () => {
+    test("A1 keeps the band tight and concrete", () => {
+        const def = filterForLevel("A1");
+        expect(def.frequency.max).toBe(1500);
+        expect(def.abstraction.max).toBeLessThanOrEqual(0.5);
+    });
+
+    test("C2 surfaces long-tail vocabulary and literary register", () => {
+        const def = filterForLevel("C2");
+        expect(def.frequency.min).toBeGreaterThanOrEqual(10000);
+        expect(def.registers.include).toContain("literary");
+    });
+
+    test("matches the right words by level", () => {
+        const a1 = filterForLevel("A1");
+        const c1 = filterForLevel("C1");
+        expect(matchesFilter(a1, persianHouse)).toBe(true);
+        expect(matchesFilter(a1, persianRareLiterary)).toBe(false);
+        expect(matchesFilter(c1, persianRareLiterary)).toBe(true);
+    });
 });
 
 describe("matchesFilter", () => {
@@ -80,7 +131,7 @@ describe("matchesFilter", () => {
 describe("filterToSql", () => {
     test("emits frequency + abstraction by default", () => {
         const { where, needsOriginsJoin } = filterToSql(emptyFilter());
-        expect(where).toMatch(/frequency_rank between 1 and 20000/);
+        expect(where).toMatch(/frequency_rank between 1 and 50000/);
         expect(where).toMatch(/abstraction_score between 0 and 1/);
         expect(needsOriginsJoin).toBe(false);
     });
@@ -100,5 +151,14 @@ describe("filterToSql", () => {
         def.origins.include = ["O'Hara"];
         const { where } = filterToSql(def);
         expect(where).toContain("'O''Hara'");
+    });
+
+    test("register filters reference the senses table", () => {
+        const def = emptyFilter();
+        def.registers.include = ["literary", "formal"];
+        def.registers.exclude = ["slang"];
+        const { where } = filterToSql(def);
+        expect(where).toMatch(/exists \(select 1 from senses si.*'literary'.*'formal'/);
+        expect(where).toMatch(/not exists \(select 1 from senses se.*'slang'/);
     });
 });

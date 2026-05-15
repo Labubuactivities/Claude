@@ -38,6 +38,26 @@ export type PrefDef =
 export type PrefGroup = "appearance" | "linguistic" | "behavior" | "notifications";
 
 export const PREFS_MANIFEST: PrefDef[] = [
+    // -------------------- Learning --------------------
+    {
+        key: "level",
+        kind: "enum",
+        group: "linguistic",
+        label: "Your level",
+        help: "Drives the default filter and which presets surface first. Adjust any time — the app serves everyone from absolute beginner to near-native.",
+        options: [
+            { value: "A1", label: "A1 — Beginner" },
+            { value: "A2", label: "A2 — Elementary" },
+            { value: "B1", label: "B1 — Intermediate" },
+            { value: "B2", label: "B2 — Upper-intermediate" },
+            { value: "C1", label: "C1 — Advanced" },
+            { value: "C2", label: "C2 — Proficient" },
+            { value: "native-near", label: "Native-near refinement" },
+        ],
+        default: "B1",
+        perLanguage: true,
+    },
+
     // -------------------- Appearance --------------------
     {
         key: "theme",
