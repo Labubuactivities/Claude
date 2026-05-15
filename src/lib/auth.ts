@@ -6,14 +6,17 @@ import { identify, reset, track } from "./analytics";
 
 type AuthState = {
     session: Session | null;
+    previewMode: boolean;
     loading: boolean;
     initialize: () => Promise<void>;
     signInWithEmail: (email: string) => Promise<{ error: string | null }>;
+    enterPreview: () => void;
     signOut: () => Promise<void>;
 };
 
 export const useAuth = create<AuthState>((set) => ({
     session: null,
+    previewMode: false,
     loading: true,
 
     initialize: async () => {
@@ -40,7 +43,13 @@ export const useAuth = create<AuthState>((set) => ({
         return { error: error?.message ?? null };
     },
 
+    enterPreview: () => {
+        set({ previewMode: true });
+        track("preview_mode_entered");
+    },
+
     signOut: async () => {
+        set({ previewMode: false });
         await supabase.auth.signOut();
     },
 }));

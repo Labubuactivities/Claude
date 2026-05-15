@@ -34,6 +34,7 @@ export default function RootLayout() {
 function Bootstrapper() {
     const initialize = useAuth((s) => s.initialize);
     const session = useAuth((s) => s.session);
+    const previewMode = useAuth((s) => s.previewMode);
     const loading = useAuth((s) => s.loading);
     const [ready, setReady] = useState(false);
 
@@ -53,13 +54,14 @@ function Bootstrapper() {
 
     useEffect(() => {
         if (!ready || loading) return;
+        const authed = Boolean(session) || previewMode;
         const inAuthGroup = segments[0] === "(auth)";
-        if (!session && !inAuthGroup) {
+        if (!authed && !inAuthGroup) {
             router.replace("/(auth)/sign-in");
-        } else if (session && inAuthGroup) {
+        } else if (authed && inAuthGroup) {
             router.replace("/(tabs)");
         }
-    }, [ready, loading, session, segments, router]);
+    }, [ready, loading, session, previewMode, segments, router]);
 
     return <ThemedStack />;
 }

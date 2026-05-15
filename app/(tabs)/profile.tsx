@@ -11,6 +11,7 @@ import { useTheme } from "@/theme/provider";
 export default function Profile() {
     const theme = useTheme();
     const session = useAuth((s) => s.session);
+    const previewMode = useAuth((s) => s.previewMode);
     const signOut = useAuth((s) => s.signOut);
 
     const appearancePrefs = PREFS_MANIFEST.filter((p) => p.group === "appearance");
@@ -18,7 +19,7 @@ export default function Profile() {
     return (
         <Screen>
             <Text variant="title">Profile</Text>
-            <Text variant="caption">{session?.user.email ?? "—"}</Text>
+            <Text variant="caption">{previewMode ? "Preview mode (not signed in)" : (session?.user.email ?? "—")}</Text>
 
             <Text variant="heading" style={{ marginTop: 16 }}>
                 Appearance
@@ -60,7 +61,7 @@ export default function Profile() {
                 ]}
             >
                 <Text variant="body" style={{ color: theme.colors.danger }}>
-                    Sign out
+                    {previewMode ? "Exit preview" : "Sign out"}
                 </Text>
             </Pressable>
         </Screen>

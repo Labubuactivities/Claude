@@ -16,6 +16,7 @@ import { useTheme } from "@/theme/provider";
 export default function SignIn() {
     const theme = useTheme();
     const signInWithEmail = useAuth((s) => s.signInWithEmail);
+    const enterPreview = useAuth((s) => s.enterPreview);
 
     const [email, setEmail] = useState("");
     const [sending, setSending] = useState(false);
@@ -134,6 +135,72 @@ export default function SignIn() {
                                     {error}
                                 </Text>
                             )}
+
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    marginTop: theme.spacing(6),
+                                    gap: theme.spacing(2),
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        height: 1,
+                                        backgroundColor: theme.colors.border,
+                                    }}
+                                />
+                                <Text style={{ color: theme.colors.textMuted, fontSize: 12 * theme.fontScale }}>
+                                    or
+                                </Text>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        height: 1,
+                                        backgroundColor: theme.colors.border,
+                                    }}
+                                />
+                            </View>
+
+                            <Pressable
+                                onPress={enterPreview}
+                                style={({ pressed }) => [
+                                    styles.button,
+                                    {
+                                        backgroundColor: "transparent",
+                                        borderColor: theme.colors.border,
+                                        borderWidth: 1,
+                                        borderRadius: theme.radii.md,
+                                        padding: theme.spacing(3.5),
+                                        marginTop: theme.spacing(3),
+                                        opacity: pressed ? 0.7 : 1,
+                                    },
+                                ]}
+                            >
+                                <Text
+                                    style={[
+                                        styles.buttonText,
+                                        {
+                                            color: theme.colors.textSecondary,
+                                            fontSize: 15 * theme.fontScale,
+                                            fontWeight: "500",
+                                        },
+                                    ]}
+                                >
+                                    Preview without signing in
+                                </Text>
+                            </Pressable>
+                            <Text
+                                style={{
+                                    color: theme.colors.textMuted,
+                                    fontSize: 12 * theme.fontScale,
+                                    textAlign: "center",
+                                    marginTop: theme.spacing(2),
+                                }}
+                            >
+                                Browse the UI without a Supabase project. Nothing is saved.
+                            </Text>
                         </>
                     )}
                 </View>
