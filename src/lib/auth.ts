@@ -1,7 +1,7 @@
 import type { Session } from "@supabase/supabase-js";
 import { create } from "zustand";
 
-import { supabase } from "./supabase";
+import { supabase, supabaseConfigured } from "./supabase";
 import { identify, reset, track } from "./analytics";
 
 type AuthState = {
@@ -20,6 +20,10 @@ export const useAuth = create<AuthState>((set) => ({
     loading: true,
 
     initialize: async () => {
+        if (!supabaseConfigured) {
+            set({ session: null, loading: false });
+            return;
+        }
         const { data } = await supabase.auth.getSession();
         set({ session: data.session, loading: false });
         if (data.session?.user.id) {
@@ -39,6 +43,9 @@ export const useAuth = create<AuthState>((set) => ({
     },
 
     signInWithEmail: async (email: string) => {
+        if (!supabaseConfigured) {
+            return { error: "Supabase not configured. Tap 'Preview without signing in' instead." };
+        }
         const { error } = await supabase.auth.signInWithOtp({ email });
         return { error: error?.message ?? null };
     },
