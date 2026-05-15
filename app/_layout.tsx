@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { initAnalytics } from "@/lib/analytics";
 import { useAuth } from "@/lib/auth";
 import { useHydratePrefs } from "@/prefs/use-pref";
@@ -19,15 +20,17 @@ const queryClient = new QueryClient({
 
 export default function RootLayout() {
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <SafeAreaProvider>
-                <QueryClientProvider client={queryClient}>
-                    <ThemeProvider>
-                        <Bootstrapper />
-                    </ThemeProvider>
-                </QueryClientProvider>
-            </SafeAreaProvider>
-        </GestureHandlerRootView>
+        <ErrorBoundary>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <SafeAreaProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <ThemeProvider>
+                            <Bootstrapper />
+                        </ThemeProvider>
+                    </QueryClientProvider>
+                </SafeAreaProvider>
+            </GestureHandlerRootView>
+        </ErrorBoundary>
     );
 }
 
@@ -41,12 +44,36 @@ function Bootstrapper() {
     useHydratePrefs();
 
     useEffect(() => {
-        (async () => {
-            await initAnalytics();
-            await initialize();
+        let cancelled = false;
+        const finish = () => {
+            if (cancelled) return;
             setReady(true);
             SplashScreen.hideAsync().catch(() => {});
+        };
+
+        // Force-hide the splash after 4s no matter what so we never end up
+        // staring at a blank screen because something hung silently.
+        const fallback = setTimeout(finish, 4000);
+
+        (async () => {
+            try {
+                await initAnalytics();
+            } catch (e) {
+                console.warn("initAnalytics failed", e);
+            }
+            try {
+                await initialize();
+            } catch (e) {
+                console.warn("auth initialize failed", e);
+            }
+            clearTimeout(fallback);
+            finish();
         })();
+
+        return () => {
+            cancelled = true;
+            clearTimeout(fallback);
+        };
     }, [initialize]);
 
     const segments = useSegments();
