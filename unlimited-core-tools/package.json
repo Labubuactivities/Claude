@@ -1,0 +1,39 @@
+{
+  "name": "unlimited-core-tools",
+  "version": "1.0.0",
+  "description": "MCP server providing free web search, raw page scraping, and Wikipedia lookup over stdio. No API keys required.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "unlimited-core-tools": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prepare": "npm run build",
+    "diagnose": "node dist/index.js --diagnose"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "search",
+    "wikipedia",
+    "scraping"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "cheerio": "^1.0.0",
+    "undici": "^6.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  }
+}
