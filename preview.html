@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Word — preview</title>
+<style>
+    :root {
+        --bg: #0b0d12;
+        --bg-elevated: #13161d;
+        --surface: #1a1e27;
+        --border: #262b36;
+        --text: #e7e9ee;
+        --text-secondary: #a8adb8;
+        --text-muted: #6b7180;
+        --accent: #6366f1;
+        --accent-on: #ffffff;
+        --danger: #f43f5e;
+        --font-scale: 1;
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 14px;
+    }
+    [data-theme="light"] {
+        --bg: #ffffff;
+        --bg-elevated: #f7f8fa;
+        --surface: #eef0f4;
+        --border: #dbdfe6;
+        --text: #0b0d12;
+        --text-secondary: #3f4654;
+        --text-muted: #6b7180;
+        --danger: #dc2626;
+    }
+    [data-theme="sepia"] {
+        --bg: #f5ecd9;
+        --bg-elevated: #efe3c4;
+        --surface: #ebdcb7;
+        --border: #d9c79b;
+        --text: #3a2e1c;
+        --text-secondary: #6b5839;
+        --text-muted: #8b7754;
+        --danger: #b91c1c;
+    }
+    [data-theme="high-contrast"] {
+        --bg: #000000;
+        --bg-elevated: #0a0a0a;
+        --surface: #141414;
+        --border: #ffffff;
+        --text: #ffffff;
+        --text-secondary: #ffffff;
+        --text-muted: #cccccc;
+        --accent: #ffff00;
+        --accent-on: #000000;
+        --danger: #ff5555;
+    }
+    [data-accent="indigo"] { --accent: #6366f1; }
+    [data-accent="emerald"] { --accent: #10b981; }
+    [data-accent="amber"] { --accent: #f59e0b; }
+    [data-accent="rose"] { --accent: #f43f5e; }
+    [data-accent="slate"] { --accent: #64748b; }
+    [data-font="sm"] { --font-scale: 0.9; }
+    [data-font="md"] { --font-scale: 1; }
+    [data-font="lg"] { --font-scale: 1.15; }
+    [data-font="xl"] { --font-scale: 1.3; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: calc(16px * var(--font-scale));
+        line-height: 1.4;
+        -webkit-font-smoothing: antialiased;
+    }
+    body {
+        display: flex;
+        flex-direction: column;
+        max-width: 480px;
+        margin: 0 auto;
+        min-height: 100vh;
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+    }
+    .screen {
+        flex: 1;
+        display: none;
+        flex-direction: column;
+        padding: 24px;
+        padding-bottom: 88px;
+        overflow-y: auto;
+    }
+    .screen.active { display: flex; }
+
+    .tabbar {
+        position: sticky;
+        bottom: 0;
+        display: none;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        padding: 8px 0 12px;
+    }
+    body.tabbar-visible .tabbar { display: flex; }
+    .tab {
+        flex: 1;
+        background: none;
+        border: 0;
+        color: var(--text-muted);
+        font-size: calc(12px * var(--font-scale));
+        font-weight: 500;
+        padding: 8px;
+        cursor: pointer;
+        transition: color .15s;
+    }
+    .tab.active { color: var(--accent); }
+
+    h1 {
+        font-size: calc(28px * var(--font-scale));
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+    h2 {
+        font-size: calc(20px * var(--font-scale));
+        font-weight: 600;
+        margin-top: 28px;
+        margin-bottom: 8px;
+    }
+    .caption {
+        color: var(--text-secondary);
+        font-size: calc(14px * var(--font-scale));
+        margin-bottom: 16px;
+    }
+    .muted {
+        color: var(--text-muted);
+        font-size: calc(13px * var(--font-scale));
+    }
+
+    input[type="email"], input[type="text"] {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: var(--radius-md);
+        padding: 14px;
+        font-size: calc(16px * var(--font-scale));
+        margin-top: 16px;
+    }
+    input[type="email"]::placeholder { color: var(--text-muted); }
+
+    button.primary {
+        width: 100%;
+        background: var(--accent);
+        color: var(--accent-on);
+        border: 0;
+        border-radius: var(--radius-md);
+        padding: 14px;
+        font-size: calc(16px * var(--font-scale));
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 12px;
+        transition: opacity .15s;
+    }
+    button.primary:hover { opacity: 0.9; }
+    button.primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    button.secondary {
+        width: 100%;
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 14px;
+        font-size: calc(15px * var(--font-scale));
+        cursor: pointer;
+        margin-top: 12px;
+    }
+    button.secondary:hover { background: var(--surface); }
+
+    button.danger {
+        width: 100%;
+        background: transparent;
+        color: var(--danger);
+        border: 1px solid var(--danger);
+        border-radius: var(--radius-md);
+        padding: 14px;
+        font-size: calc(15px * var(--font-scale));
+        cursor: pointer;
+        margin-top: 12px;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 24px 0 4px;
+        color: var(--text-muted);
+        font-size: calc(12px * var(--font-scale));
+    }
+    .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+    }
+
+    .pref-row {
+        margin-top: 12px;
+    }
+    .pref-label {
+        font-size: calc(15px * var(--font-scale));
+        margin-bottom: 6px;
+    }
+    .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .chip {
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 6px 10px;
+        font-size: calc(13px * var(--font-scale));
+        cursor: pointer;
+    }
+    .chip.selected {
+        background: var(--accent);
+        color: var(--accent-on);
+        border-color: var(--accent);
+    }
+    .toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        cursor: pointer;
+    }
+    .toggle-switch {
+        width: 44px;
+        height: 26px;
+        border-radius: 13px;
+        background: var(--border);
+        position: relative;
+        transition: background .15s;
+    }
+    .toggle.on .toggle-switch { background: var(--accent); }
+    .toggle-knob {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        background: var(--bg);
+        transition: left .15s;
+    }
+    .toggle.on .toggle-knob { left: 21px; }
+
+    .lang-item {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+    }
+    .lang-native { font-size: calc(18px * var(--font-scale)); }
+    .lang-en { color: var(--text-muted); font-size: calc(13px * var(--font-scale)); margin-top: 2px; }
+
+    .word-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        margin-top: 12px;
+    }
+    .word-native {
+        font-size: calc(32px * var(--font-scale));
+        font-weight: 600;
+        direction: rtl;
+        text-align: right;
+    }
+    .word-latin {
+        color: var(--text-secondary);
+        font-size: calc(16px * var(--font-scale));
+        margin-top: 4px;
+    }
+    .word-ipa {
+        color: var(--text-muted);
+        font-size: calc(14px * var(--font-scale));
+        margin-top: 2px;
+    }
+    .word-gloss {
+        margin-top: 12px;
+        font-size: calc(15px * var(--font-scale));
+    }
+    .word-meta {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .badge {
+        background: var(--surface);
+        color: var(--text-secondary);
+        border-radius: var(--radius-sm);
+        padding: 2px 8px;
+        font-size: calc(11px * var(--font-scale));
+    }
+    .info-banner {
+        background: var(--surface);
+        border-radius: var(--radius-md);
+        padding: 12px;
+        margin-top: 12px;
+        font-size: calc(13px * var(--font-scale));
+        color: var(--text-secondary);
+    }
+</style>
+</head>
+<body>
+
+<!-- Sign-in screen -->
+<section id="screen-signin" class="screen active">
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <h1>Word</h1>
+        <p class="caption">Sign in to start wandering.</p>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" />
+        <button class="primary" id="btn-magic" disabled>Send magic link</button>
+        <p id="signin-note" class="muted" style="text-align:center; margin-top:12px; display:none;"></p>
+        <div class="divider">or</div>
+        <button class="secondary" id="btn-preview">Preview without signing in</button>
+        <p class="muted" style="text-align:center; margin-top:8px;">Browse the UI without a backend. Nothing is saved.</p>
+    </div>
+</section>
+
+<!-- Today tab -->
+<section id="screen-today" class="screen">
+    <h1>Today</h1>
+    <p class="caption">Your daily words will land here as notifications come in.</p>
+    <div class="info-banner">No notifications yet. Set a daily count per language on the Profile tab and we'll start sending you words to wander.</div>
+    <h2>Languages</h2>
+    <div class="lang-item">
+        <div class="lang-native">فارسی</div>
+        <div class="lang-en">Persian</div>
+    </div>
+    <div class="lang-item">
+        <div class="lang-native">Türkçe</div>
+        <div class="lang-en">Turkish</div>
+    </div>
+    <div class="lang-item">
+        <div class="lang-native">Español</div>
+        <div class="lang-en">Spanish</div>
+    </div>
+</section>
+
+<!-- Browse tab -->
+<section id="screen-browse" class="screen">
+    <h1>Browse</h1>
+    <p class="caption">Search and wander the dictionary. Real data lands in M2 once the ingest pipeline populates words.</p>
+    <input type="text" placeholder="Search..." />
+    <h2>Sample word card</h2>
+    <div class="word-card">
+        <div class="word-native">کتاب</div>
+        <div class="word-latin">ketâb</div>
+        <div class="word-ipa">/keˈtɒːb/</div>
+        <div class="word-gloss">book — a written or printed work consisting of pages glued or sewn together.</div>
+        <div class="word-meta">
+            <span class="badge">Arabic origin</span>
+            <span class="badge">freq 47</span>
+            <span class="badge">neutral</span>
+            <span class="badge">education</span>
+        </div>
+    </div>
+    <div class="word-card">
+        <div class="word-native">خانه</div>
+        <div class="word-latin">xâne</div>
+        <div class="word-ipa">/xɒːˈne/</div>
+        <div class="word-gloss">house, home — a building for human habitation.</div>
+        <div class="word-meta">
+            <span class="badge">Iranian origin</span>
+            <span class="badge">freq 102</span>
+            <span class="badge">neutral</span>
+            <span class="badge">home</span>
+        </div>
+    </div>
+</section>
+
+<!-- Saved tab -->
+<section id="screen-saved" class="screen">
+    <h1>Saved</h1>
+    <p class="caption">Words you tap-and-save from cards or notifications show up here.</p>
+    <div class="info-banner">You haven't saved any words yet. Tap the star on any word card to save it.</div>
+</section>
+
+<!-- Profile tab -->
+<section id="screen-profile" class="screen">
+    <h1>Profile</h1>
+    <p class="caption" id="profile-email">Preview mode (not signed in)</p>
+
+    <h2>Appearance</h2>
+
+    <div class="pref-row">
+        <div class="pref-label">Theme</div>
+        <div class="chip-row" data-pref="theme">
+            <button class="chip" data-value="system">System</button>
+            <button class="chip" data-value="light">Light</button>
+            <button class="chip selected" data-value="dark">Dark</button>
+            <button class="chip" data-value="sepia">Sepia</button>
+            <button class="chip" data-value="high-contrast">High contrast</button>
+        </div>
+    </div>
+
+    <div class="pref-row">
+        <div class="pref-label">Accent color</div>
+        <div class="chip-row" data-pref="accent">
+            <button class="chip selected" data-value="indigo">Indigo</button>
+            <button class="chip" data-value="emerald">Emerald</button>
+            <button class="chip" data-value="amber">Amber</button>
+            <button class="chip" data-value="rose">Rose</button>
+            <button class="chip" data-value="slate">Slate</button>
+        </div>
+    </div>
+
+    <div class="pref-row">
+        <div class="pref-label">Font size</div>
+        <div class="chip-row" data-pref="font">
+            <button class="chip" data-value="sm">Small</button>
+            <button class="chip selected" data-value="md">Medium</button>
+            <button class="chip" data-value="lg">Large</button>
+            <button class="chip" data-value="xl">Extra large</button>
+        </div>
+    </div>
+
+    <h2>Linguistic</h2>
+    <div class="toggle on" data-toggle="latin"><span>Show Latin romanization</span><span class="toggle-switch"><span class="toggle-knob"></span></span></div>
+    <div class="toggle on" data-toggle="ipa"><span>Show phonetic (IPA)</span><span class="toggle-switch"><span class="toggle-knob"></span></span></div>
+    <div class="toggle on" data-toggle="origin"><span>Show etymology badges</span><span class="toggle-switch"><span class="toggle-knob"></span></span></div>
+
+    <button class="danger" id="btn-signout">Exit preview</button>
+</section>
+
+<!-- Tab bar -->
+<nav class="tabbar">
+    <button class="tab active" data-screen="today">Today</button>
+    <button class="tab" data-screen="browse">Browse</button>
+    <button class="tab" data-screen="saved">Saved</button>
+    <button class="tab" data-screen="profile">Profile</button>
+</nav>
+
+<script>
+    const root = document.documentElement;
+
+    // Email input enables Send button
+    const email = document.getElementById("email");
+    const magic = document.getElementById("btn-magic");
+    const note = document.getElementById("signin-note");
+    email.addEventListener("input", () => { magic.disabled = !email.value.trim(); });
+    magic.addEventListener("click", () => {
+        note.textContent = "This preview has no backend — use 'Preview without signing in' below.";
+        note.style.display = "block";
+        note.style.color = "var(--text-muted)";
+    });
+
+    // Preview button enters tabs
+    document.getElementById("btn-preview").addEventListener("click", () => {
+        document.getElementById("screen-signin").classList.remove("active");
+        document.getElementById("screen-today").classList.add("active");
+        document.body.classList.add("tabbar-visible");
+    });
+
+    // Sign out
+    document.getElementById("btn-signout").addEventListener("click", () => {
+        document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+        document.getElementById("screen-signin").classList.add("active");
+        document.body.classList.remove("tabbar-visible");
+        document.querySelectorAll(".tab").forEach((t, i) => t.classList.toggle("active", i === 0));
+    });
+
+    // Tab switching
+    document.querySelectorAll(".tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+            document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+            document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+            document.getElementById("screen-" + tab.dataset.screen).classList.add("active");
+        });
+    });
+
+    // Pref chip groups: theme / accent / font
+    document.querySelectorAll("[data-pref]").forEach(group => {
+        group.querySelectorAll(".chip").forEach(chip => {
+            chip.addEventListener("click", () => {
+                group.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
+                chip.classList.add("selected");
+                const pref = group.dataset.pref;
+                const val = chip.dataset.value;
+                if (pref === "theme") {
+                    if (val === "system") {
+                        root.setAttribute("data-theme", matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                    } else {
+                        root.setAttribute("data-theme", val);
+                    }
+                } else if (pref === "accent") {
+                    root.setAttribute("data-accent", val);
+                } else if (pref === "font") {
+                    root.setAttribute("data-font", val);
+                }
+            });
+        });
+    });
+
+    // Boolean toggles
+    document.querySelectorAll(".toggle").forEach(t => {
+        t.addEventListener("click", () => t.classList.toggle("on"));
+    });
+
+    // Initial defaults
+    root.setAttribute("data-theme", "dark");
+    root.setAttribute("data-accent", "indigo");
+    root.setAttribute("data-font", "md");
+</script>
+
+</body>
+</html>
