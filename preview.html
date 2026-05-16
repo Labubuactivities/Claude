@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Lexa — preview</title>
+<title>Folio — preview</title>
 <style>
     :root {
         --bg: #0b0d12;
@@ -16,48 +16,33 @@
         --accent: #6366f1;
         --accent-on: #ffffff;
         --danger: #f43f5e;
+        --success: #10b981;
         --font-scale: 1;
         --radius-sm: 6px;
         --radius-md: 10px;
         --radius-lg: 14px;
     }
     [data-theme="light"] {
-        --bg: #ffffff;
-        --bg-elevated: #f7f8fa;
-        --surface: #eef0f4;
-        --border: #dbdfe6;
-        --text: #0b0d12;
-        --text-secondary: #3f4654;
-        --text-muted: #6b7180;
-        --danger: #dc2626;
+        --bg: #ffffff; --bg-elevated: #f7f8fa; --surface: #eef0f4;
+        --border: #dbdfe6; --text: #0b0d12; --text-secondary: #3f4654;
+        --text-muted: #6b7180; --danger: #dc2626; --success: #059669;
     }
     [data-theme="sepia"] {
-        --bg: #f5ecd9;
-        --bg-elevated: #efe3c4;
-        --surface: #ebdcb7;
-        --border: #d9c79b;
-        --text: #3a2e1c;
-        --text-secondary: #6b5839;
-        --text-muted: #8b7754;
-        --danger: #b91c1c;
+        --bg: #f5ecd9; --bg-elevated: #efe3c4; --surface: #ebdcb7;
+        --border: #d9c79b; --text: #3a2e1c; --text-secondary: #6b5839;
+        --text-muted: #8b7754; --danger: #b91c1c;
     }
     [data-theme="high-contrast"] {
-        --bg: #000000;
-        --bg-elevated: #0a0a0a;
-        --surface: #141414;
-        --border: #ffffff;
-        --text: #ffffff;
-        --text-secondary: #ffffff;
-        --text-muted: #cccccc;
-        --accent: #ffff00;
-        --accent-on: #000000;
-        --danger: #ff5555;
+        --bg: #000; --bg-elevated: #0a0a0a; --surface: #141414;
+        --border: #fff; --text: #fff; --text-secondary: #fff;
+        --text-muted: #ccc; --accent: #ffff00; --accent-on: #000;
+        --danger: #ff5555; --success: #00ff88;
     }
-    [data-accent="indigo"] { --accent: #6366f1; }
+    [data-accent="indigo"]  { --accent: #6366f1; }
     [data-accent="emerald"] { --accent: #10b981; }
-    [data-accent="amber"] { --accent: #f59e0b; }
-    [data-accent="rose"] { --accent: #f43f5e; }
-    [data-accent="slate"] { --accent: #64748b; }
+    [data-accent="amber"]   { --accent: #f59e0b; }
+    [data-accent="rose"]    { --accent: #f43f5e; }
+    [data-accent="slate"]   { --accent: #64748b; }
     [data-font="sm"] { --font-scale: 0.9; }
     [data-font="md"] { --font-scale: 1; }
     [data-font="lg"] { --font-scale: 1.15; }
@@ -74,371 +59,530 @@
         -webkit-font-smoothing: antialiased;
     }
     body {
-        display: flex;
-        flex-direction: column;
-        max-width: 480px;
-        margin: 0 auto;
-        min-height: 100vh;
+        display: flex; flex-direction: column;
+        max-width: 480px; margin: 0 auto; min-height: 100vh;
         border-left: 1px solid var(--border);
         border-right: 1px solid var(--border);
     }
     .screen {
-        flex: 1;
-        display: none;
-        flex-direction: column;
-        padding: 24px;
-        padding-bottom: 88px;
-        overflow-y: auto;
+        flex: 1; display: none; flex-direction: column;
+        padding: 24px; padding-bottom: 88px; overflow-y: auto;
     }
     .screen.active { display: flex; }
-
     .tabbar {
-        position: sticky;
-        bottom: 0;
-        display: none;
-        background: var(--bg);
-        border-top: 1px solid var(--border);
+        position: sticky; bottom: 0; display: none;
+        background: var(--bg); border-top: 1px solid var(--border);
         padding: 8px 0 12px;
     }
     body.tabbar-visible .tabbar { display: flex; }
     .tab {
-        flex: 1;
-        background: none;
-        border: 0;
+        flex: 1; background: none; border: 0;
         color: var(--text-muted);
-        font-size: calc(12px * var(--font-scale));
-        font-weight: 500;
-        padding: 8px;
-        cursor: pointer;
-        transition: color .15s;
+        font-size: calc(11px * var(--font-scale));
+        font-weight: 500; padding: 8px; cursor: pointer; transition: color .15s;
     }
     .tab.active { color: var(--accent); }
 
-    h1 {
-        font-size: calc(28px * var(--font-scale));
-        font-weight: 700;
-        margin-bottom: 4px;
-    }
-    h2 {
-        font-size: calc(20px * var(--font-scale));
-        font-weight: 600;
-        margin-top: 28px;
-        margin-bottom: 8px;
-    }
-    .caption {
-        color: var(--text-secondary);
-        font-size: calc(14px * var(--font-scale));
-        margin-bottom: 16px;
-    }
-    .muted {
-        color: var(--text-muted);
-        font-size: calc(13px * var(--font-scale));
-    }
+    h1 { font-size: calc(28px * var(--font-scale)); font-weight: 700; margin-bottom: 4px; }
+    h2 { font-size: calc(17px * var(--font-scale)); font-weight: 600; margin-top: 28px; margin-bottom: 10px; }
+    .caption { color: var(--text-secondary); font-size: calc(14px * var(--font-scale)); margin-bottom: 16px; }
+    .muted { color: var(--text-muted); font-size: calc(13px * var(--font-scale)); }
 
     input[type="email"], input[type="text"] {
-        width: 100%;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        color: var(--text);
-        border-radius: var(--radius-md);
-        padding: 14px;
-        font-size: calc(16px * var(--font-scale));
-        margin-top: 16px;
+        width: 100%; background: var(--surface); border: 1px solid var(--border);
+        color: var(--text); border-radius: var(--radius-md); padding: 14px;
+        font-size: calc(16px * var(--font-scale)); margin-top: 16px;
     }
-    input[type="email"]::placeholder { color: var(--text-muted); }
+    input::placeholder { color: var(--text-muted); }
 
     button.primary {
-        width: 100%;
-        background: var(--accent);
-        color: var(--accent-on);
-        border: 0;
-        border-radius: var(--radius-md);
-        padding: 14px;
-        font-size: calc(16px * var(--font-scale));
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 12px;
-        transition: opacity .15s;
+        width: 100%; background: var(--accent); color: var(--accent-on);
+        border: 0; border-radius: var(--radius-md); padding: 14px;
+        font-size: calc(16px * var(--font-scale)); font-weight: 600;
+        cursor: pointer; margin-top: 12px; transition: opacity .15s;
     }
     button.primary:hover { opacity: 0.9; }
     button.primary:disabled { opacity: 0.4; cursor: not-allowed; }
-
     button.secondary {
-        width: 100%;
-        background: transparent;
-        color: var(--text-secondary);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        padding: 14px;
-        font-size: calc(15px * var(--font-scale));
-        cursor: pointer;
-        margin-top: 12px;
+        width: 100%; background: transparent; color: var(--text-secondary);
+        border: 1px solid var(--border); border-radius: var(--radius-md);
+        padding: 14px; font-size: calc(15px * var(--font-scale));
+        cursor: pointer; margin-top: 12px;
     }
     button.secondary:hover { background: var(--surface); }
-
     button.danger {
-        width: 100%;
-        background: transparent;
-        color: var(--danger);
-        border: 1px solid var(--danger);
-        border-radius: var(--radius-md);
-        padding: 14px;
-        font-size: calc(15px * var(--font-scale));
-        cursor: pointer;
-        margin-top: 12px;
+        width: 100%; background: transparent; color: var(--danger);
+        border: 1px solid var(--danger); border-radius: var(--radius-md);
+        padding: 14px; font-size: calc(15px * var(--font-scale));
+        cursor: pointer; margin-top: 12px;
     }
-
     .divider {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 24px 0 4px;
-        color: var(--text-muted);
+        display: flex; align-items: center; gap: 8px;
+        margin: 24px 0 4px; color: var(--text-muted);
         font-size: calc(12px * var(--font-scale));
     }
-    .divider::before, .divider::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: var(--border);
-    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .pref-row {
-        margin-top: 12px;
-    }
-    .pref-label {
-        font-size: calc(15px * var(--font-scale));
-        margin-bottom: 6px;
-    }
-    .chip-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-    }
+    .pref-row { margin-top: 14px; }
+    .pref-label { font-size: calc(14px * var(--font-scale)); color: var(--text-secondary); margin-bottom: 7px; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
     .chip {
-        background: transparent;
-        color: var(--text-secondary);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        padding: 6px 10px;
-        font-size: calc(13px * var(--font-scale));
-        cursor: pointer;
+        background: transparent; color: var(--text-secondary);
+        border: 1px solid var(--border); border-radius: var(--radius-sm);
+        padding: 6px 10px; font-size: calc(13px * var(--font-scale)); cursor: pointer;
+        transition: background .12s, color .12s;
     }
-    .chip.selected {
-        background: var(--accent);
-        color: var(--accent-on);
-        border-color: var(--accent);
-    }
+    .chip.selected { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
     .toggle {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-        cursor: pointer;
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 11px 0; cursor: pointer; border-bottom: 1px solid var(--border);
     }
+    .toggle:last-of-type { border-bottom: none; }
+    .toggle-label { font-size: calc(14px * var(--font-scale)); }
     .toggle-switch {
-        width: 44px;
-        height: 26px;
-        border-radius: 13px;
-        background: var(--border);
-        position: relative;
-        transition: background .15s;
+        width: 44px; height: 26px; border-radius: 13px;
+        background: var(--border); position: relative; transition: background .15s; flex-shrink: 0;
     }
     .toggle.on .toggle-switch { background: var(--accent); }
     .toggle-knob {
-        position: absolute;
-        top: 3px;
-        left: 3px;
-        width: 20px;
-        height: 20px;
-        border-radius: 10px;
-        background: var(--bg);
-        transition: left .15s;
+        position: absolute; top: 3px; left: 3px;
+        width: 20px; height: 20px; border-radius: 10px;
+        background: var(--bg); transition: left .15s;
     }
     .toggle.on .toggle-knob { left: 21px; }
 
-    .lang-item {
-        padding: 12px 0;
-        border-bottom: 1px solid var(--border);
-    }
+    .lang-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
     .lang-native { font-size: calc(18px * var(--font-scale)); }
     .lang-en { color: var(--text-muted); font-size: calc(13px * var(--font-scale)); margin-top: 2px; }
+    .info-banner {
+        background: var(--surface); border-radius: var(--radius-md);
+        padding: 13px; font-size: calc(13px * var(--font-scale));
+        color: var(--text-secondary); line-height: 1.5;
+    }
 
+    /* ─── Tactical Card ─── */
     .word-card {
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        padding: 16px;
-        margin-top: 12px;
+        background: var(--bg-elevated); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); padding: 20px; margin-top: 16px;
+        transition: opacity .2s;
+    }
+    .word-card.ink-faded { border-style: dashed; opacity: 0.62; }
+
+    .due-chip {
+        display: inline-flex; align-items: center; gap: 5px;
+        background: rgba(244,63,94,0.1); color: var(--danger);
+        border-radius: var(--radius-sm); padding: 3px 8px;
+        font-size: calc(10px * var(--font-scale));
+        letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px;
     }
     .word-native {
-        font-size: calc(32px * var(--font-scale));
-        font-weight: 600;
-        direction: rtl;
-        text-align: right;
+        font-size: calc(48px * var(--font-scale));
+        font-weight: 700; direction: rtl; text-align: right; line-height: 1.2;
     }
     .word-latin {
-        color: var(--text-secondary);
-        font-size: calc(16px * var(--font-scale));
-        margin-top: 4px;
+        color: var(--text-secondary); font-size: calc(14px * var(--font-scale)); margin-top: 6px;
     }
     .word-ipa {
-        color: var(--text-muted);
-        font-size: calc(14px * var(--font-scale));
-        margin-top: 2px;
+        color: var(--text-muted); font-size: calc(12px * var(--font-scale)); margin-top: 2px;
     }
-    .word-gloss {
-        margin-top: 12px;
-        font-size: calc(15px * var(--font-scale));
-    }
-    .word-meta {
-        margin-top: 8px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-    }
+    .word-meta { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
     .badge {
-        background: var(--surface);
-        color: var(--text-secondary);
-        border-radius: var(--radius-sm);
-        padding: 2px 8px;
+        background: var(--surface); color: var(--text-secondary);
+        border-radius: var(--radius-sm); padding: 2px 8px;
         font-size: calc(11px * var(--font-scale));
     }
-    .info-banner {
-        background: var(--surface);
-        border-radius: var(--radius-md);
-        padding: 12px;
-        margin-top: 12px;
-        font-size: calc(13px * var(--font-scale));
-        color: var(--text-secondary);
+    .word-gloss {
+        margin-top: 14px; font-size: calc(14px * var(--font-scale));
+        border-top: 1px solid var(--border); padding-top: 13px; line-height: 1.5;
     }
 
-    .word-card { position: relative; }
-    .star-btn {
-        position: absolute;
-        top: 12px;
-        left: 12px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        font-size: 22px;
-        color: var(--text-muted);
-        transition: color 0.2s, transform 0.15s;
-        padding: 4px;
-        line-height: 1;
+    /* Register Profile */
+    .register-section {
+        margin-top: 14px; border-top: 1px solid var(--border); padding-top: 13px;
     }
-    .star-btn:hover { transform: scale(1.15); }
-    .star-btn.saved { color: #f5b301; }
-    .saved-card {
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        padding: 16px;
-        margin-bottom: 12px;
-        position: relative;
+    .section-label {
+        font-size: calc(10px * var(--font-scale));
+        text-transform: uppercase; letter-spacing: 0.08em;
+        color: var(--text-muted); margin-bottom: 11px;
     }
-    .saved-card .word-native {
-        font-size: calc(22px * var(--font-scale));
-        text-align: right;
-        direction: rtl;
-        margin-bottom: 4px;
+    .register-row {
+        display: grid; grid-template-columns: 88px 1fr;
+        align-items: center; gap: 10px; margin-bottom: 11px;
     }
-    .saved-card .word-latin { color: var(--text-muted); font-size: calc(14px * var(--font-scale)); }
-    .saved-card .word-gloss { color: var(--text-secondary); margin-top: 6px; font-size: calc(14px * var(--font-scale)); }
-    .remove-btn {
-        position: absolute;
-        top: 12px;
-        left: 12px;
-        background: transparent;
-        border: none;
-        color: #f5b301;
-        cursor: pointer;
-        font-size: 18px;
+    .register-name { font-size: calc(12px * var(--font-scale)); color: var(--text-secondary); }
+    .register-slider-wrap { }
+    .register-track {
+        height: 3px; background: var(--border); border-radius: 2px; position: relative;
     }
+    .register-fill {
+        position: absolute; top: 0; left: 0; bottom: 0;
+        background: var(--accent); border-radius: 2px; opacity: 0.55;
+    }
+    .register-dot {
+        position: absolute; top: 50%;
+        transform: translate(-50%, -50%);
+        width: 9px; height: 9px; background: var(--accent);
+        border-radius: 50%; border: 2px solid var(--bg-elevated);
+    }
+    .register-poles {
+        display: flex; justify-content: space-between;
+        margin-top: 4px; font-size: calc(9px * var(--font-scale)); color: var(--text-muted);
+    }
+
+    /* Sample sentences */
+    .sentences-section {
+        margin-top: 14px; border-top: 1px solid var(--border); padding-top: 13px;
+    }
+    .sentence { margin-bottom: 13px; padding-bottom: 13px; border-bottom: 1px solid var(--border); }
+    .sentence:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .sentence-tag {
+        display: inline-block; padding: 2px 7px; border-radius: 4px;
+        font-size: calc(10px * var(--font-scale));
+        letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .tag-colloquial { background: rgba(16,185,129,0.12); color: #10b981; }
+    .tag-neutral     { background: var(--surface); color: var(--text-muted); }
+    .tag-formal      { background: rgba(99,102,241,0.12); color: var(--accent); }
+    .sentence-native {
+        font-size: calc(16px * var(--font-scale));
+        direction: rtl; text-align: right; line-height: 1.7; color: var(--text);
+    }
+    .sentence-latin {
+        font-size: calc(12px * var(--font-scale));
+        color: var(--text-muted); margin-top: 3px; font-style: italic;
+    }
+
+    /* Pin button */
+    .pin-btn {
+        width: 100%; margin-top: 14px; padding: 10px;
+        background: transparent; border: 1px solid var(--accent); color: var(--accent);
+        border-radius: var(--radius-md); font-size: calc(13px * var(--font-scale));
+        font-weight: 500; cursor: pointer; transition: background .15s, color .15s, opacity .15s;
+    }
+    .pin-btn:hover { background: rgba(99,102,241,0.08); }
+    .pin-btn.pinned { background: var(--accent); color: var(--accent-on); }
+    .pin-btn.pinned:hover { opacity: 0.85; }
+    .pin-btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--border); color: var(--text-muted); }
+
+    /* Inkwell tab */
+    .inkwell-cap {
+        display: flex; align-items: center; justify-content: space-between;
+        background: var(--surface); border-radius: var(--radius-md);
+        padding: 12px 14px; margin-bottom: 12px;
+    }
+    .inkwell-cap-label { font-size: calc(13px * var(--font-scale)); color: var(--text-secondary); }
+    .inkwell-slots { display: flex; gap: 5px; }
+    .inkwell-slot {
+        width: 14px; height: 14px; border-radius: 3px;
+        border: 1.5px solid var(--border); background: transparent;
+        transition: background .15s, border-color .15s;
+    }
+    .inkwell-slot.filled { background: var(--accent); border-color: var(--accent); }
+
+    .inkwell-card {
+        background: var(--bg-elevated); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); padding: 14px 14px 14px 12px;
+        margin-bottom: 10px; display: flex; align-items: stretch; gap: 12px;
+    }
+    .ink-column {
+        display: flex; flex-direction: column; align-items: center;
+        gap: 4px; flex-shrink: 0; padding-top: 2px;
+    }
+    .ink-bar {
+        width: 4px; flex: 1; min-height: 36px;
+        background: var(--border); border-radius: 2px;
+        position: relative; overflow: hidden;
+    }
+    .ink-fill {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        background: var(--accent); border-radius: 2px;
+    }
+    .ink-pct { font-size: calc(9px * var(--font-scale)); color: var(--text-muted); }
+    .inkwell-card-body { flex: 1; min-width: 0; }
+    .inkwell-native {
+        font-size: calc(24px * var(--font-scale));
+        direction: rtl; text-align: right; font-weight: 600; line-height: 1.3;
+    }
+    .inkwell-latin { font-size: calc(12px * var(--font-scale)); color: var(--text-muted); margin-top: 2px; }
+    .inkwell-gloss { font-size: calc(13px * var(--font-scale)); color: var(--text-secondary); margin-top: 5px; line-height: 1.4; }
+    .unpin-btn {
+        background: transparent; border: none; color: var(--text-muted);
+        cursor: pointer; font-size: 20px; padding: 4px; line-height: 1;
+        flex-shrink: 0; align-self: flex-start;
+    }
+    .unpin-btn:hover { color: var(--danger); }
 </style>
 </head>
 <body>
 
-<!-- Sign-in screen -->
+<!-- Sign-in -->
 <section id="screen-signin" class="screen active">
-    <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
-        <h1>Lexa</h1>
-        <p class="caption">Sign in to start wandering.</p>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+        <h1>Folio</h1>
+        <p class="caption">Sign in to start composing.</p>
         <input id="email" type="email" placeholder="you@example.com" autocomplete="email" />
         <button class="primary" id="btn-magic" disabled>Send magic link</button>
-        <p id="signin-note" class="muted" style="text-align:center; margin-top:12px; display:none;"></p>
+        <p id="signin-note" class="muted" style="text-align:center;margin-top:12px;display:none;"></p>
         <div class="divider">or</div>
         <button class="secondary" id="btn-preview">Preview without signing in</button>
-        <p class="muted" style="text-align:center; margin-top:8px;">Browse the UI without a backend. Nothing is saved.</p>
+        <p class="muted" style="text-align:center;margin-top:8px;">Browse the UI without a backend. Nothing is saved.</p>
     </div>
 </section>
 
-<!-- Today tab -->
+<!-- Today -->
 <section id="screen-today" class="screen">
     <h1>Today</h1>
-    <p class="caption">Your daily words will land here as notifications come in.</p>
-    <div class="info-banner">No notifications yet. Set a daily count per language on the Profile tab and we'll start sending you words to wander.</div>
+    <p class="caption">Your daily words land here as notifications come in.</p>
+    <div class="info-banner">No notifications yet. Set a daily count per language in Profile and we'll start sending words to wander.</div>
     <h2>Languages</h2>
-    <div class="lang-item">
-        <div class="lang-native">فارسی</div>
-        <div class="lang-en">Persian</div>
-    </div>
-    <div class="lang-item">
-        <div class="lang-native">Türkçe</div>
-        <div class="lang-en">Turkish</div>
-    </div>
-    <div class="lang-item">
-        <div class="lang-native">Español</div>
-        <div class="lang-en">Spanish</div>
-    </div>
+    <div class="lang-item"><div class="lang-native">فارسی</div><div class="lang-en">Persian</div></div>
+    <div class="lang-item"><div class="lang-native">Türkçe</div><div class="lang-en">Turkish</div></div>
+    <div class="lang-item"><div class="lang-native">Español</div><div class="lang-en">Spanish</div></div>
 </section>
 
-<!-- Browse tab -->
-<section id="screen-browse" class="screen">
-    <h1>Browse</h1>
-    <p class="caption">Search and wander the dictionary. Real data lands in M2 once the ingest pipeline populates words.</p>
-    <input type="text" placeholder="Search..." />
-    <h2>Sample word card</h2>
+<!-- Codex -->
+<section id="screen-codex" class="screen">
+    <h1>Codex</h1>
+    <p class="caption">Your dictionary as inventory. Pin words to the Inkwell; encounter them in lessons.</p>
+    <input type="text" placeholder="Search Persian, Turkish, Spanish…" />
+
+    <h2>Tactical Cards</h2>
+
+    <!-- کتاب -->
     <div class="word-card" data-id="fa-ketab">
         <div class="word-native">کتاب</div>
         <div class="word-latin">ketâb</div>
         <div class="word-ipa">/keˈtɒːb/</div>
-        <div class="word-gloss">book — a written or printed work consisting of pages glued or sewn together.</div>
         <div class="word-meta">
             <span class="badge">Arabic origin</span>
             <span class="badge">freq 47</span>
             <span class="badge">neutral</span>
-            <span class="badge">education</span>
         </div>
+        <div class="word-gloss">book — a written or printed work, bound along one edge.</div>
+
+        <div class="register-section">
+            <div class="section-label">Register Profile</div>
+            <div class="register-row">
+                <div class="register-name">Formality</div>
+                <div class="register-slider-wrap">
+                    <div class="register-track">
+                        <div class="register-fill" style="width:45%"></div>
+                        <div class="register-dot"  style="left:45%"></div>
+                    </div>
+                    <div class="register-poles"><span>casual</span><span>formal</span></div>
+                </div>
+            </div>
+            <div class="register-row">
+                <div class="register-name">Intensity</div>
+                <div class="register-slider-wrap">
+                    <div class="register-track">
+                        <div class="register-fill" style="width:28%"></div>
+                        <div class="register-dot"  style="left:28%"></div>
+                    </div>
+                    <div class="register-poles"><span>subtle</span><span>intense</span></div>
+                </div>
+            </div>
+            <div class="register-row">
+                <div class="register-name">Abstractness</div>
+                <div class="register-slider-wrap">
+                    <div class="register-track">
+                        <div class="register-fill" style="width:55%"></div>
+                        <div class="register-dot"  style="left:55%"></div>
+                    </div>
+                    <div class="register-poles"><span>concrete</span><span>abstract</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sentences-section">
+            <div class="section-label">In context</div>
+            <div class="sentence">
+                <span class="sentence-tag tag-colloquial">colloquial</span>
+                <div class="sentence-native">یه کتاب خوندم دیروز.</div>
+                <div class="sentence-latin">ye ketâb xundam diruz. — I read a book yesterday.</div>
+            </div>
+            <div class="sentence">
+                <span class="sentence-tag tag-neutral">neutral</span>
+                <div class="sentence-native">این کتاب را توصیه می‌کنم.</div>
+                <div class="sentence-latin">in ketâb râ towsiye mikonam. — I recommend this book.</div>
+            </div>
+            <div class="sentence">
+                <span class="sentence-tag tag-formal">formal</span>
+                <div class="sentence-native">کتاب، آینه‌ای است که در آن خویشتن را می‌توان دید.</div>
+                <div class="sentence-latin">ketâb, âyne-i ast ke dar ân xishtan râ mitavân did. — A book is a mirror in which one can see oneself.</div>
+            </div>
+        </div>
+
+        <button class="pin-btn" data-id="fa-ketab">Pin to Inkwell</button>
     </div>
+
+    <!-- خانه -->
     <div class="word-card" data-id="fa-xane">
         <div class="word-native">خانه</div>
         <div class="word-latin">xâne</div>
         <div class="word-ipa">/xɒːˈne/</div>
-        <div class="word-gloss">house, home — a building for human habitation.</div>
         <div class="word-meta">
             <span class="badge">Iranian origin</span>
             <span class="badge">freq 102</span>
             <span class="badge">neutral</span>
-            <span class="badge">home</span>
         </div>
+        <div class="word-gloss">house, home — a place of dwelling; also the abstract sense of belonging.</div>
+
+        <div class="register-section">
+            <div class="section-label">Register Profile</div>
+            <div class="register-row">
+                <div class="register-name">Formality</div>
+                <div class="register-slider-wrap">
+                    <div class="register-track">
+                        <div class="register-fill" style="width:30%"></div>
+                        <div class="register-dot"  style="left:30%"></div>
+                    </div>
+                    <div class="register-poles"><span>casual</span><span>formal</span></div>
+                </div>
+            </div>
+            <div class="register-row">
+                <div class="register-name">Intensity</div>
+                <div class="register-slider-wrap">
+                    <div class="register-track">
+                        <div class="register-fill" style="width:42%"></div>
+                        <div class="register-dot"  style="left:42%"></div>
+                    </div>
+                    <div class="register-poles"><span>subtle</span><span>intense</span></div>
+                </div>
+            </div>
+            <div class="register-row">
+                <div class="register-name">Abstractness</div>
+                <div class="register-slider-wrap">
+                    <div class="register-track">
+                        <div class="register-fill" style="width:33%"></div>
+                        <div class="register-dot"  style="left:33%"></div>
+                    </div>
+                    <div class="register-poles"><span>concrete</span><span>abstract</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sentences-section">
+            <div class="section-label">In context</div>
+            <div class="sentence">
+                <span class="sentence-tag tag-colloquial">colloquial</span>
+                <div class="sentence-native">خونه‌م خیلی دوره.</div>
+                <div class="sentence-latin">xune-m xeyli dure. — My place is really far.</div>
+            </div>
+            <div class="sentence">
+                <span class="sentence-tag tag-neutral">neutral</span>
+                <div class="sentence-native">به خانه برگشتم.</div>
+                <div class="sentence-latin">be xâne bargashtam. — I returned home.</div>
+            </div>
+            <div class="sentence">
+                <span class="sentence-tag tag-formal">formal</span>
+                <div class="sentence-native">هر کجا که باشی، خانه آن است که دل در آن بتپد.</div>
+                <div class="sentence-latin">har kojâ ke bâshi, xâne ân ast ke del dar ân betapad. — Wherever you are, home is where your heart beats.</div>
+            </div>
+        </div>
+
+        <button class="pin-btn" data-id="fa-xane">Pin to Inkwell</button>
+    </div>
+
+    <!-- دل — faded, already pinned at low ink -->
+    <div class="word-card ink-faded" data-id="fa-del">
+        <div class="due-chip">&#9679; due for review</div>
+        <div class="word-native">دل</div>
+        <div class="word-latin">del</div>
+        <div class="word-ipa">/del/</div>
+        <div class="word-meta">
+            <span class="badge">Iranian origin</span>
+            <span class="badge">freq 35</span>
+            <span class="badge">literary</span>
+        </div>
+        <div class="word-gloss">heart (emotional) — the seat of longing, love, and loss; distinct from قلب (the physical organ).</div>
+
+        <div class="register-section">
+            <div class="section-label">Register Profile</div>
+            <div class="register-row">
+                <div class="register-name">Formality</div>
+                <div class="register-slider-wrap">
+                    <div class="register-track">
+                        <div class="register-fill" style="width:22%"></div>
+                        <div class="register-dot"  style="left:22%"></div>
+                    </div>
+                    <div class="register-poles"><span>casual</span><span>formal</span></div>
+                </div>
+            </div>
+            <div class="register-row">
+                <div class="register-name">Intensity</div>
+                <div class="register-slider-wrap">
+                    <div class="register-track">
+                        <div class="register-fill" style="width:82%"></div>
+                        <div class="register-dot"  style="left:82%"></div>
+                    </div>
+                    <div class="register-poles"><span>subtle</span><span>intense</span></div>
+                </div>
+            </div>
+            <div class="register-row">
+                <div class="register-name">Abstractness</div>
+                <div class="register-slider-wrap">
+                    <div class="register-track">
+                        <div class="register-fill" style="width:68%"></div>
+                        <div class="register-dot"  style="left:68%"></div>
+                    </div>
+                    <div class="register-poles"><span>concrete</span><span>abstract</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sentences-section">
+            <div class="section-label">In context</div>
+            <div class="sentence">
+                <span class="sentence-tag tag-colloquial">colloquial</span>
+                <div class="sentence-native">دلم تنگته.</div>
+                <div class="sentence-latin">delam tangete. — I miss you (lit. my heart is tight).</div>
+            </div>
+            <div class="sentence">
+                <span class="sentence-tag tag-neutral">neutral</span>
+                <div class="sentence-native">دلم می‌خواد برگردم.</div>
+                <div class="sentence-latin">delam mixâd bargarde. — I want to go back.</div>
+            </div>
+            <div class="sentence">
+                <span class="sentence-tag tag-formal">formal</span>
+                <div class="sentence-native">دل به جایی بسته‌ام که دیگر نمی‌توان گریخت.</div>
+                <div class="sentence-latin">del be jâyi baste-am ke digar nemitavân gorikht. — I have tied my heart to a place from which there is no escape.</div>
+            </div>
+        </div>
+
+        <button class="pin-btn" data-id="fa-del">Pin to Inkwell</button>
     </div>
 </section>
 
-<!-- Saved tab -->
-<section id="screen-saved" class="screen">
-    <h1>Saved</h1>
-    <p class="caption">Words you tap-and-save from cards or notifications show up here.</p>
-    <div class="info-banner">You haven't saved any words yet. Tap the star on any word card to save it.</div>
+<!-- Inkwell -->
+<section id="screen-inkwell" class="screen">
+    <h1>Inkwell</h1>
+    <p class="caption">Your working set. Words fade as memory fades — pin them to keep them sharp.</p>
+    <div class="inkwell-cap">
+        <span class="inkwell-cap-label">Slots used</span>
+        <div class="inkwell-slots" id="inkwell-slots"></div>
+    </div>
+    <div id="inkwell-empty" class="info-banner" style="display:none;">The Inkwell is empty. Pin words from the Codex to start building your working set.</div>
+    <div id="inkwell-list"></div>
 </section>
 
-<!-- Profile tab -->
+<!-- Profile -->
 <section id="screen-profile" class="screen">
     <h1>Profile</h1>
     <p class="caption" id="profile-email">Preview mode (not signed in)</p>
 
-    <h2>Appearance</h2>
+    <h2>Your path</h2>
+    <div class="pref-row">
+        <div class="pref-label">How do you know this language?</div>
+        <div class="chip-row" data-pref="path">
+            <button class="chip" data-value="heritage">Heritage — family language</button>
+            <button class="chip selected" data-value="schoolbook">Schoolbook — studied formally</button>
+            <button class="chip" data-value="craftsman">Craftsman — already fluent</button>
+            <button class="chip" data-value="apprentice">Apprentice — starting fresh</button>
+        </div>
+    </div>
 
+    <h2>Appearance</h2>
     <div class="pref-row">
         <div class="pref-label">Theme</div>
         <div class="chip-row" data-pref="theme">
@@ -449,9 +593,8 @@
             <button class="chip" data-value="high-contrast">High contrast</button>
         </div>
     </div>
-
     <div class="pref-row">
-        <div class="pref-label">Accent color</div>
+        <div class="pref-label">Accent</div>
         <div class="chip-row" data-pref="accent">
             <button class="chip selected" data-value="indigo">Indigo</button>
             <button class="chip" data-value="emerald">Emerald</button>
@@ -460,7 +603,6 @@
             <button class="chip" data-value="slate">Slate</button>
         </div>
     </div>
-
     <div class="pref-row">
         <div class="pref-label">Font size</div>
         <div class="chip-row" data-pref="font">
@@ -472,9 +614,22 @@
     </div>
 
     <h2>Linguistic</h2>
-    <div class="toggle on" data-toggle="latin"><span>Show Latin romanization</span><span class="toggle-switch"><span class="toggle-knob"></span></span></div>
-    <div class="toggle on" data-toggle="ipa"><span>Show phonetic (IPA)</span><span class="toggle-switch"><span class="toggle-knob"></span></span></div>
-    <div class="toggle on" data-toggle="origin"><span>Show etymology badges</span><span class="toggle-switch"><span class="toggle-knob"></span></span></div>
+    <div class="toggle on" data-toggle="latin">
+        <span class="toggle-label">Show Latin romanization</span>
+        <span class="toggle-switch"><span class="toggle-knob"></span></span>
+    </div>
+    <div class="toggle on" data-toggle="ipa">
+        <span class="toggle-label">Show phonetic (IPA)</span>
+        <span class="toggle-switch"><span class="toggle-knob"></span></span>
+    </div>
+    <div class="toggle on" data-toggle="origin">
+        <span class="toggle-label">Show etymology badges</span>
+        <span class="toggle-switch"><span class="toggle-knob"></span></span>
+    </div>
+    <div class="toggle on" data-toggle="register">
+        <span class="toggle-label">Show Register Profile on cards</span>
+        <span class="toggle-switch"><span class="toggle-knob"></span></span>
+    </div>
 
     <button class="danger" id="btn-signout">Exit preview</button>
 </section>
@@ -482,33 +637,29 @@
 <!-- Tab bar -->
 <nav class="tabbar">
     <button class="tab active" data-screen="today">Today</button>
-    <button class="tab" data-screen="browse">Browse</button>
-    <button class="tab" data-screen="saved">Saved</button>
+    <button class="tab" data-screen="codex">Codex</button>
+    <button class="tab" data-screen="inkwell">Inkwell</button>
     <button class="tab" data-screen="profile">Profile</button>
 </nav>
 
 <script>
     const root = document.documentElement;
 
-    // Email input enables Send button
     const email = document.getElementById("email");
     const magic = document.getElementById("btn-magic");
-    const note = document.getElementById("signin-note");
+    const note  = document.getElementById("signin-note");
     email.addEventListener("input", () => { magic.disabled = !email.value.trim(); });
     magic.addEventListener("click", () => {
         note.textContent = "This preview has no backend — use 'Preview without signing in' below.";
         note.style.display = "block";
-        note.style.color = "var(--text-muted)";
     });
 
-    // Preview button enters tabs
     document.getElementById("btn-preview").addEventListener("click", () => {
         document.getElementById("screen-signin").classList.remove("active");
         document.getElementById("screen-today").classList.add("active");
         document.body.classList.add("tabbar-visible");
     });
 
-    // Sign out
     document.getElementById("btn-signout").addEventListener("click", () => {
         document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
         document.getElementById("screen-signin").classList.add("active");
@@ -516,7 +667,6 @@
         document.querySelectorAll(".tab").forEach((t, i) => t.classList.toggle("active", i === 0));
     });
 
-    // Tab switching
     document.querySelectorAll(".tab").forEach(tab => {
         tab.addEventListener("click", () => {
             document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -526,20 +676,17 @@
         });
     });
 
-    // Pref chip groups: theme / accent / font
     document.querySelectorAll("[data-pref]").forEach(group => {
         group.querySelectorAll(".chip").forEach(chip => {
             chip.addEventListener("click", () => {
                 group.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
                 chip.classList.add("selected");
-                const pref = group.dataset.pref;
-                const val = chip.dataset.value;
+                const { pref } = group.dataset, { value: val } = chip.dataset;
                 if (pref === "theme") {
-                    if (val === "system") {
-                        root.setAttribute("data-theme", matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-                    } else {
-                        root.setAttribute("data-theme", val);
-                    }
+                    root.setAttribute("data-theme",
+                        val === "system"
+                            ? (matchMedia("(prefers-color-scheme:dark)").matches ? "dark" : "light")
+                            : val);
                 } else if (pref === "accent") {
                     root.setAttribute("data-accent", val);
                 } else if (pref === "font") {
@@ -549,93 +696,114 @@
         });
     });
 
-    // Boolean toggles
     document.querySelectorAll(".toggle").forEach(t => {
         t.addEventListener("click", () => t.classList.toggle("on"));
     });
 
-    // Initial defaults
     root.setAttribute("data-theme", "dark");
     root.setAttribute("data-accent", "indigo");
     root.setAttribute("data-font", "md");
 </script>
 
 <script>
-(function() {
-    const SAVED_KEY = "savedWords";
-    let savedWords = JSON.parse(localStorage.getItem(SAVED_KEY) || "[]");
+(function () {
+    const KEY = "inkwell_v2", MAX = 5;
+    let inkwell = JSON.parse(localStorage.getItem(KEY) || "null");
 
-    const persist = () => localStorage.setItem(SAVED_KEY, JSON.stringify(savedWords));
-    const getId = card => card.dataset.id || card.querySelector(".word-native").innerText.trim();
-    const isSaved = id => savedWords.some(w => w.id === id);
+    // Pre-seed دل as already pinned at low ink to demonstrate the concept
+    if (!inkwell) {
+        inkwell = [{
+            id: "fa-del",
+            native: "دل",
+            latin: "del",
+            gloss: "heart (emotional) — the seat of longing, love, and loss.",
+            ink: 15,
+            pinnedAt: Date.now() - 8 * 24 * 60 * 60 * 1000
+        }];
+        localStorage.setItem(KEY, JSON.stringify(inkwell));
+    }
 
-    function renderSavedTab() {
-        const screen = document.getElementById("screen-saved");
-        const banner = screen.querySelector(".info-banner");
-        screen.querySelectorAll(".saved-card").forEach(el => el.remove());
+    const persist   = () => localStorage.setItem(KEY, JSON.stringify(inkwell));
+    const isPinned  = id => inkwell.some(w => w.id === id);
 
-        if (savedWords.length === 0) {
-            banner.style.display = "";
+    function renderInkwell() {
+        const list  = document.getElementById("inkwell-list");
+        const empty = document.getElementById("inkwell-empty");
+        const slots = document.getElementById("inkwell-slots");
+
+        slots.innerHTML = "";
+        for (let i = 0; i < MAX; i++) {
+            const d = document.createElement("div");
+            d.className = "inkwell-slot" + (i < inkwell.length ? " filled" : "");
+            slots.appendChild(d);
+        }
+
+        list.innerHTML = "";
+        if (inkwell.length === 0) {
+            empty.style.display = "";
         } else {
-            banner.style.display = "none";
-            savedWords.forEach(w => {
-                const div = document.createElement("div");
-                div.className = "saved-card";
-                div.innerHTML = `
-                    <button class="remove-btn" data-id="${w.id}" title="Remove">★</button>
-                    <div class="word-native">${w.native}</div>
-                    <div class="word-latin">${w.latin}</div>
-                    <div class="word-gloss">${w.gloss}</div>
+            empty.style.display = "none";
+            inkwell.forEach(w => {
+                const pct  = w.ink ?? 100;
+                const card = document.createElement("div");
+                card.className = "inkwell-card";
+                card.innerHTML = `
+                    <div class="ink-column">
+                        <div class="ink-bar"><div class="ink-fill" style="height:${pct}%"></div></div>
+                        <div class="ink-pct">${pct}%</div>
+                    </div>
+                    <div class="inkwell-card-body">
+                        <div class="inkwell-native">${w.native}</div>
+                        <div class="inkwell-latin">${w.latin}</div>
+                        <div class="inkwell-gloss">${w.gloss}</div>
+                    </div>
+                    <button class="unpin-btn" data-id="${w.id}" title="Unpin">&times;</button>
                 `;
-                screen.appendChild(div);
+                list.appendChild(card);
             });
-            screen.querySelectorAll(".remove-btn").forEach(btn => {
+            list.querySelectorAll(".unpin-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
-                    const id = btn.dataset.id;
-                    savedWords = savedWords.filter(w => w.id !== id);
-                    persist();
-                    renderSavedTab();
-                    syncStars();
+                    inkwell = inkwell.filter(w => w.id !== btn.dataset.id);
+                    persist(); renderInkwell(); syncPins();
                 });
             });
         }
     }
 
-    function syncStars() {
-        document.querySelectorAll(".word-card").forEach(card => {
-            const star = card.querySelector(".star-btn");
-            if (!star) return;
-            const saved = isSaved(getId(card));
-            star.classList.toggle("saved", saved);
-            star.innerHTML = saved ? "★" : "☆";
+    function syncPins() {
+        document.querySelectorAll(".pin-btn").forEach(btn => {
+            const id     = btn.dataset.id;
+            const pinned = isPinned(id);
+            const full   = !pinned && inkwell.length >= MAX;
+            btn.classList.toggle("pinned", pinned);
+            btn.textContent = pinned ? "Pinned to Inkwell" : "Pin to Inkwell";
+            btn.disabled = full;
         });
     }
 
-    document.querySelectorAll(".word-card").forEach(card => {
-        const star = document.createElement("button");
-        star.className = "star-btn";
-        star.setAttribute("aria-label", "Save word");
-        const id = getId(card);
-        star.innerHTML = isSaved(id) ? "★" : "☆";
-        if (isSaved(id)) star.classList.add("saved");
-
-        star.addEventListener("click", () => {
-            const native = card.querySelector(".word-native").innerText.trim();
-            const latin = card.querySelector(".word-latin").innerText.trim();
-            const gloss = card.querySelector(".word-gloss").innerText.trim();
-            if (isSaved(id)) {
-                savedWords = savedWords.filter(w => w.id !== id);
+    document.querySelectorAll(".pin-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            if (isPinned(id)) {
+                inkwell = inkwell.filter(w => w.id !== id);
             } else {
-                savedWords.push({ id, native, latin, gloss, savedAt: Date.now() });
+                if (inkwell.length >= MAX) return;
+                const card = btn.closest(".word-card");
+                inkwell.push({
+                    id,
+                    native:   card.querySelector(".word-native").innerText.trim(),
+                    latin:    card.querySelector(".word-latin").innerText.trim(),
+                    gloss:    card.querySelector(".word-gloss").innerText.trim(),
+                    ink:      100,
+                    pinnedAt: Date.now()
+                });
             }
-            persist();
-            syncStars();
-            renderSavedTab();
+            persist(); syncPins(); renderInkwell();
         });
-        card.appendChild(star);
     });
 
-    renderSavedTab();
+    renderInkwell();
+    syncPins();
 })();
 </script>
 
