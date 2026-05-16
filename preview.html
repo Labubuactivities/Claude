@@ -226,6 +226,47 @@
     }
     .register-seg-label.active { color: var(--accent); font-weight: 600; }
 
+    /* ─── Comments/Feedback ─── */
+    .comment-btn {
+        background: transparent; border: none; cursor: pointer;
+        font-size: 16px; padding: 4px 8px; color: var(--text-muted);
+        transition: color .15s; flex-shrink: 0;
+    }
+    .comment-btn:hover { color: var(--accent); }
+    .comment-btn.has-comment { color: var(--accent); }
+    .section-header {
+        display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .comment-zone {
+        margin-top: 10px; padding: 10px; background: var(--surface);
+        border-radius: var(--radius-sm); border-left: 2px solid var(--border);
+    }
+    .comment-box { display: none; }
+    .comment-box.open { display: block; }
+    .comment-input {
+        width: 100%; padding: 8px; background: var(--bg);
+        border: 1px solid var(--border); border-radius: var(--radius-sm);
+        color: var(--text); font-size: calc(12px * var(--font-scale));
+        resize: vertical; min-height: 50px; font-family: inherit;
+    }
+    .comment-input::placeholder { color: var(--text-muted); }
+    .comment-actions {
+        display: flex; gap: 6px; margin-top: 8px;
+    }
+    .comment-save, .comment-clear {
+        padding: 5px 10px; font-size: calc(12px * var(--font-scale));
+        border-radius: var(--radius-sm); border: none; cursor: pointer;
+    }
+    .comment-save { background: var(--accent); color: var(--accent-on); }
+    .comment-save:hover { opacity: 0.9; }
+    .comment-clear { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+    .comment-clear:hover { background: rgba(244,63,94,0.1); }
+    .comment-display {
+        margin-top: 8px; padding: 8px; background: var(--bg);
+        border-radius: var(--radius-sm); font-size: calc(12px * var(--font-scale));
+        color: var(--text-secondary); line-height: 1.5; white-space: pre-wrap;
+    }
+
     /* Sample sentences */
     .sentences-section {
         margin-top: 14px; border-top: 1px solid var(--border); padding-top: 13px;
@@ -358,7 +399,20 @@
         <div class="word-gloss">book — a written or printed work, bound along one edge.</div>
 
         <div class="register-section">
-            <div class="section-label">Register Profile</div>
+            <div class="section-header">
+                <div class="section-label">Register Profile</div>
+                <button class="comment-btn" data-comment="fa-ketab-register" title="Add comment">💬</button>
+            </div>
+            <div class="comment-zone" data-comment="fa-ketab-register">
+                <div class="comment-box">
+                    <textarea class="comment-input" placeholder="Feedback on Register Profile?"></textarea>
+                    <div class="comment-actions">
+                        <button class="comment-save">Save</button>
+                        <button class="comment-clear">Clear</button>
+                    </div>
+                </div>
+                <div class="comment-display"></div>
+            </div>
             <div class="register-row">
                 <div class="register-name">Formality</div>
                 <div>
@@ -419,7 +473,20 @@
         </div>
 
         <div class="sentences-section">
-            <div class="section-label">In context</div>
+            <div class="section-header">
+                <div class="section-label">In context</div>
+                <button class="comment-btn" data-comment="fa-ketab-sentences" title="Add comment">💬</button>
+            </div>
+            <div class="comment-zone" data-comment="fa-ketab-sentences">
+                <div class="comment-box">
+                    <textarea class="comment-input" placeholder="Feedback on sentences?"></textarea>
+                    <div class="comment-actions">
+                        <button class="comment-save">Save</button>
+                        <button class="comment-clear">Clear</button>
+                    </div>
+                </div>
+                <div class="comment-display"></div>
+            </div>
             <div class="sentence">
                 <span class="sentence-tag tag-colloquial">colloquial</span>
                 <div class="sentence-native">یه کتاب خوندم دیروز.</div>
@@ -453,7 +520,20 @@
         <div class="word-gloss">house, home — a place of dwelling; also the abstract sense of belonging.</div>
 
         <div class="register-section">
-            <div class="section-label">Register Profile</div>
+            <div class="section-header">
+                <div class="section-label">Register Profile</div>
+                <button class="comment-btn" data-comment="fa-xane-register" title="Add comment">💬</button>
+            </div>
+            <div class="comment-zone" data-comment="fa-xane-register">
+                <div class="comment-box">
+                    <textarea class="comment-input" placeholder="Feedback on Register Profile?"></textarea>
+                    <div class="comment-actions">
+                        <button class="comment-save">Save</button>
+                        <button class="comment-clear">Clear</button>
+                    </div>
+                </div>
+                <div class="comment-display"></div>
+            </div>
             <div class="register-row">
                 <div class="register-name">Formality</div>
                 <div>
@@ -514,7 +594,20 @@
         </div>
 
         <div class="sentences-section">
-            <div class="section-label">In context</div>
+            <div class="section-header">
+                <div class="section-label">In context</div>
+                <button class="comment-btn" data-comment="fa-xane-sentences" title="Add comment">💬</button>
+            </div>
+            <div class="comment-zone" data-comment="fa-xane-sentences">
+                <div class="comment-box">
+                    <textarea class="comment-input" placeholder="Feedback on sentences?"></textarea>
+                    <div class="comment-actions">
+                        <button class="comment-save">Save</button>
+                        <button class="comment-clear">Clear</button>
+                    </div>
+                </div>
+                <div class="comment-display"></div>
+            </div>
             <div class="sentence">
                 <span class="sentence-tag tag-colloquial">colloquial</span>
                 <div class="sentence-native">خونه‌م خیلی دوره.</div>
@@ -549,7 +642,20 @@
         <div class="word-gloss">heart (emotional) — the seat of longing, love, and loss; distinct from قلب (the physical organ).</div>
 
         <div class="register-section">
-            <div class="section-label">Register Profile</div>
+            <div class="section-header">
+                <div class="section-label">Register Profile</div>
+                <button class="comment-btn" data-comment="fa-del-register" title="Add comment">💬</button>
+            </div>
+            <div class="comment-zone" data-comment="fa-del-register">
+                <div class="comment-box">
+                    <textarea class="comment-input" placeholder="Feedback on Register Profile?"></textarea>
+                    <div class="comment-actions">
+                        <button class="comment-save">Save</button>
+                        <button class="comment-clear">Clear</button>
+                    </div>
+                </div>
+                <div class="comment-display"></div>
+            </div>
             <div class="register-row">
                 <div class="register-name">Formality</div>
                 <div>
@@ -610,7 +716,20 @@
         </div>
 
         <div class="sentences-section">
-            <div class="section-label">In context</div>
+            <div class="section-header">
+                <div class="section-label">In context</div>
+                <button class="comment-btn" data-comment="fa-del-sentences" title="Add comment">💬</button>
+            </div>
+            <div class="comment-zone" data-comment="fa-del-sentences">
+                <div class="comment-box">
+                    <textarea class="comment-input" placeholder="Feedback on sentences?"></textarea>
+                    <div class="comment-actions">
+                        <button class="comment-save">Save</button>
+                        <button class="comment-clear">Clear</button>
+                    </div>
+                </div>
+                <div class="comment-display"></div>
+            </div>
             <div class="sentence">
                 <span class="sentence-tag tag-colloquial">colloquial</span>
                 <div class="sentence-native">دلم تنگته.</div>
@@ -882,6 +1001,99 @@
 
     renderInkwell();
     syncPins();
+})();
+</script>
+
+<script>
+(function() {
+    const COMMENTS_KEY = "preview_comments";
+    let comments = JSON.parse(localStorage.getItem(COMMENTS_KEY) || "{}");
+
+    function loadComments() {
+        document.querySelectorAll("[data-comment]").forEach(zone => {
+            const id = zone.dataset.comment;
+            const input = zone.querySelector(".comment-input");
+            const display = zone.querySelector(".comment-display");
+            const btn = document.querySelector(`.comment-btn[data-comment="${id}"]`);
+
+            if (comments[id]) {
+                display.textContent = comments[id];
+                display.style.display = "block";
+                if (btn) btn.classList.add("has-comment");
+            }
+        });
+    }
+
+    function saveComment(id, text) {
+        if (text.trim()) {
+            comments[id] = text;
+        } else {
+            delete comments[id];
+        }
+        localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
+    }
+
+    document.querySelectorAll(".comment-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const id = btn.dataset.comment;
+            const zone = document.querySelector(`.comment-zone[data-comment="${id}"]`);
+            const box = zone.querySelector(".comment-box");
+            const input = zone.querySelector(".comment-input");
+
+            box.classList.toggle("open");
+            if (box.classList.contains("open")) {
+                input.focus();
+                input.value = comments[id] || "";
+            }
+        });
+    });
+
+    document.querySelectorAll(".comment-save").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const zone = btn.closest(".comment-zone");
+            const id = zone.dataset.comment;
+            const input = zone.querySelector(".comment-input");
+            const display = zone.querySelector(".comment-display");
+            const commentBtn = document.querySelector(`.comment-btn[data-comment="${id}"]`);
+
+            saveComment(id, input.value);
+
+            if (input.value.trim()) {
+                display.textContent = input.value;
+                display.style.display = "block";
+                commentBtn.classList.add("has-comment");
+            } else {
+                display.style.display = "none";
+                commentBtn.classList.remove("has-comment");
+            }
+
+            zone.querySelector(".comment-box").classList.remove("open");
+        });
+    });
+
+    document.querySelectorAll(".comment-clear").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const zone = btn.closest(".comment-zone");
+            const id = zone.dataset.comment;
+            const input = zone.querySelector(".comment-input");
+            const display = zone.querySelector(".comment-display");
+            const commentBtn = document.querySelector(`.comment-btn[data-comment="${id}"]`);
+
+            input.value = "";
+            saveComment(id, "");
+            display.style.display = "none";
+            commentBtn.classList.remove("has-comment");
+        });
+    });
+
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".comment-box.open").forEach(box => {
+            box.classList.remove("open");
+        });
+    });
+
+    loadComments();
 })();
 </script>
 
