@@ -312,6 +312,49 @@
         font-size: calc(13px * var(--font-scale));
         color: var(--text-secondary);
     }
+
+    .word-card { position: relative; }
+    .star-btn {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 22px;
+        color: var(--text-muted);
+        transition: color 0.2s, transform 0.15s;
+        padding: 4px;
+        line-height: 1;
+    }
+    .star-btn:hover { transform: scale(1.15); }
+    .star-btn.saved { color: #f5b301; }
+    .saved-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 16px;
+        margin-bottom: 12px;
+        position: relative;
+    }
+    .saved-card .word-native {
+        font-size: calc(22px * var(--font-scale));
+        text-align: right;
+        direction: rtl;
+        margin-bottom: 4px;
+    }
+    .saved-card .word-latin { color: var(--text-muted); font-size: calc(14px * var(--font-scale)); }
+    .saved-card .word-gloss { color: var(--text-secondary); margin-top: 6px; font-size: calc(14px * var(--font-scale)); }
+    .remove-btn {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: transparent;
+        border: none;
+        color: #f5b301;
+        cursor: pointer;
+        font-size: 18px;
+    }
 </style>
 </head>
 <body>
@@ -356,7 +399,7 @@
     <p class="caption">Search and wander the dictionary. Real data lands in M2 once the ingest pipeline populates words.</p>
     <input type="text" placeholder="Search..." />
     <h2>Sample word card</h2>
-    <div class="word-card">
+    <div class="word-card" data-id="fa-ketab">
         <div class="word-native">کتاب</div>
         <div class="word-latin">ketâb</div>
         <div class="word-ipa">/keˈtɒːb/</div>
@@ -368,7 +411,7 @@
             <span class="badge">education</span>
         </div>
     </div>
-    <div class="word-card">
+    <div class="word-card" data-id="fa-xane">
         <div class="word-native">خانه</div>
         <div class="word-latin">xâne</div>
         <div class="word-ipa">/xɒːˈne/</div>
@@ -515,6 +558,85 @@
     root.setAttribute("data-theme", "dark");
     root.setAttribute("data-accent", "indigo");
     root.setAttribute("data-font", "md");
+</script>
+
+<script>
+(function() {
+    const SAVED_KEY = "savedWords";
+    let savedWords = JSON.parse(localStorage.getItem(SAVED_KEY) || "[]");
+
+    const persist = () => localStorage.setItem(SAVED_KEY, JSON.stringify(savedWords));
+    const getId = card => card.dataset.id || card.querySelector(".word-native").innerText.trim();
+    const isSaved = id => savedWords.some(w => w.id === id);
+
+    function renderSavedTab() {
+        const screen = document.getElementById("screen-saved");
+        const banner = screen.querySelector(".info-banner");
+        screen.querySelectorAll(".saved-card").forEach(el => el.remove());
+
+        if (savedWords.length === 0) {
+            banner.style.display = "";
+        } else {
+            banner.style.display = "none";
+            savedWords.forEach(w => {
+                const div = document.createElement("div");
+                div.className = "saved-card";
+                div.innerHTML = `
+                    <button class="remove-btn" data-id="${w.id}" title="Remove">★</button>
+                    <div class="word-native">${w.native}</div>
+                    <div class="word-latin">${w.latin}</div>
+                    <div class="word-gloss">${w.gloss}</div>
+                `;
+                screen.appendChild(div);
+            });
+            screen.querySelectorAll(".remove-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const id = btn.dataset.id;
+                    savedWords = savedWords.filter(w => w.id !== id);
+                    persist();
+                    renderSavedTab();
+                    syncStars();
+                });
+            });
+        }
+    }
+
+    function syncStars() {
+        document.querySelectorAll(".word-card").forEach(card => {
+            const star = card.querySelector(".star-btn");
+            if (!star) return;
+            const saved = isSaved(getId(card));
+            star.classList.toggle("saved", saved);
+            star.innerHTML = saved ? "★" : "☆";
+        });
+    }
+
+    document.querySelectorAll(".word-card").forEach(card => {
+        const star = document.createElement("button");
+        star.className = "star-btn";
+        star.setAttribute("aria-label", "Save word");
+        const id = getId(card);
+        star.innerHTML = isSaved(id) ? "★" : "☆";
+        if (isSaved(id)) star.classList.add("saved");
+
+        star.addEventListener("click", () => {
+            const native = card.querySelector(".word-native").innerText.trim();
+            const latin = card.querySelector(".word-latin").innerText.trim();
+            const gloss = card.querySelector(".word-gloss").innerText.trim();
+            if (isSaved(id)) {
+                savedWords = savedWords.filter(w => w.id !== id);
+            } else {
+                savedWords.push({ id, native, latin, gloss, savedAt: Date.now() });
+            }
+            persist();
+            syncStars();
+            renderSavedTab();
+        });
+        card.appendChild(star);
+    });
+
+    renderSavedTab();
+})();
 </script>
 
 </body>
