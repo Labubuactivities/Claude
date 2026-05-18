@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flag Design Editor</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1419; color: #e5e5e7; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { margin-bottom: 30px; }
+    .header h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; color: #ffffff; }
+    .editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; margin-bottom: 40px; }
+    .editor-panel { background: #1a1f2b; border: 1px solid #2d3544; border-radius: 16px; padding: 24px; }
+    .editor-panel h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: #ffffff; }
+    .flag-preview { width: 120px; height: 96px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); }
+    .control-group { margin-bottom: 18px; }
+    .control-label { font-size: 12px; font-weight: 600; text-transform: uppercase; color: #8b92a6; margin-bottom: 8px; display: block; }
+    .color-input { width: 100%; height: 40px; border: 1px solid #3d4556; border-radius: 8px; cursor: pointer; }
+    .control-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .control-row input { flex: 1; padding: 8px 12px; background: #2d3544; border: 1px solid #3d4556; border-radius: 8px; color: #e5e5e7; font-size: 13px; }
+    .preview-label { font-size: 13px; font-weight: 600; color: #8b92a6; margin-top: 16px; margin-bottom: 8px; }
+    .export-btn { background: #8b5cf6; color: #ffffff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 12px; }
+    .export-btn:hover { background: #a78bfa; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel">
+
+
+
+
+const { useState } = React;
+
+const STYLE_PRESETS = {
+  duolingo: {
+    cornerRadius: 12,
+    trColors: { main: '#ef5350', symbol: '#ffffff' },
+    esColors: { red: '#e53935', yellow: '#fdd835', emblem: '#e53935', emblemnew: '#ffffff' },
+    faColors: { top: '#1aa856', middle: '#ffffff', bottom: '#d40000' },
+  },
+  classic: {
+    cornerRadius: 4,
+    trColors: { main: '#e30a17', symbol: '#ffffff' },
+    esColors: { red: '#c60b1e', yellow: '#ffc400', emblem: '#c60b1e', emblemnew: '#ffffff' },
+    faColors: { top: '#239f40', middle: '#ffffff', bottom: '#da0000' },
+  },
+  minimal: {
+    cornerRadius: 22,
+    trColors: { main: '#f48a89', symbol: '#ffffff' },
+    esColors: { red: '#e8897d', yellow: '#f5d98a', emblem: '#c77', emblemnew: '#fff' },
+    faColors: { top: '#7bc89b', middle: '#f5f5f5', bottom: '#e88a8a' },
+  }
+};
+
+function FlagEditor() {
+  const { tweaks, setTweak } = useTweaks(/*EDITMODE-BEGIN*/{
+    "style": "duolingo",
+    "symbolScale": 1,
+    "roundness": 12
+  }/*EDITMODE-END*/);
+
+  const [flagColors, setFlagColors] = useState({
+    fa: { top: '#1aa856', middle: '#ffffff', bottom: '#d40000' },
+    tr: { main: '#f31f1b', symbol: '#ffffff' },
+    es: { red: '#ee2420', yellow: '#fed316', emblem: '#e53935', emblemnew: '#ffffff' }
+  });
+
+  const [flagShapes, setFlagShapes] = useState({
+    fa: { cornerRadius: 14, stripeHeightRatio: 1 },
+    tr: { cornerRadius: 12, crescentSize: 22, crescentOffset: 10, starSize: 10, crescentX: 45, crescentY: 40, starX: 64 },
+    es: { cornerRadius: 12, yellowHeight: 32, emblmX: 30, emblmY: 39 }
+  });
+
+  const [selectedFlag, setSelectedFlag] = useState('fa');
+
+  // Apply style preset + tweaks
+  const safeTweaks = tweaks || { style: 'duolingo', symbolScale: 1, roundness: 12 };
+  const preset = STYLE_PRESETS[safeTweaks.style] || STYLE_PRESETS.duolingo;
+  const scale = safeTweaks.symbolScale || 1;
+  const rx = safeTweaks.roundness ?? 12;
+
+  const effectiveColors = {
+    fa: { ...preset.faColors, ...flagColors.fa },
+    tr: { ...preset.trColors, ...flagColors.tr },
+    es: { ...preset.esColors, ...flagColors.es },
+  };
+
+  const effectiveShapes = {
+    fa: { ...flagShapes.fa, cornerRadius: rx },
+    tr: { ...flagShapes.tr, cornerRadius: rx, crescentSize: flagShapes.tr.crescentSize * scale, crescentOffset: flagShapes.tr.crescentOffset * scale, starSize: flagShapes.tr.starSize * scale },
+    es: { ...flagShapes.es, cornerRadius: rx },
+  };
+
+  const updateShape = (flag, shapeKey, value) => {
+    setFlagShapes((prev) => ({
+      ...prev,
+      [flag]: { ...prev[flag], [shapeKey]: value }
+    }));
+  };
+
+  const updateColor = (flag, colorKey, value) => {
+    setFlagColors((prev) => ({
+      ...prev,
+      [flag]: { ...prev[flag], [colorKey]: value }
+    }));
+  };
+
+  // 5-pointed star using "skip one" connection with evenodd fill
+  const starPath = (R) => {
+    const r = R * 0.4;
+    let d = '';
+    for (let i = 0; i < 10; i++) {
+      const radius = i % 2 === 0 ? R : r;
+      const angle = i * Math.PI / 5 - Math.PI / 2;
+      d += (i === 0 ? 'M' : 'L') + (radius * Math.cos(angle)).toFixed(2) + ',' + (radius * Math.sin(angle)).toFixed(2);
+    }
+    return d + 'Z';
+  };
+
+  // Crescent using evenodd: two overlapping circles, offset inner cuts the shape
+  // Crescent via arc intersection — mathematically correct
+  const crescentPath = (cx, cy, OR, d) => {
+    const IR = OR - 2;
+    const ix = (OR * OR + d * d - IR * IR) / (2 * d);
+    const iy = Math.sqrt(Math.max(0, OR * OR - ix * ix));
+    if (iy < 0.1) return '';
+    const p1x = (cx + ix).toFixed(2),p1y = (cy - iy).toFixed(2);
+    const p2x = (cx + ix).toFixed(2),p2y = (cy + iy).toFixed(2);
+    return `M ${p1x} ${p1y} A ${OR} ${OR} 0 1 0 ${p2x} ${p2y} A ${IR} ${IR} 0 0 0 ${p1x} ${p1y} Z`;
+  };
+
+  const FlagPreview = ({ code, colors, shapes }) => {
+    const clipId = `clip-${code}`;
+    const filterId = `shadow-${code}`;
+    const rx = shapes.cornerRadius;
+
+    if (code === 'fa') {
+      const stripeH = 70 / 3;
+      return (
+        <svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+          <defs>
+            <filter id={filterId}><feDropShadow dx="0" dy="3" stdDeviation="2" floodOpacity="0.25" /></filter>
+            <clipPath id={clipId}><rect x="5" y="5" width="90" height="70" rx={rx} /></clipPath>
+          </defs>
+          <g filter={`url(#${filterId})`} clipPath={`url(#${clipId})`}>
+            <rect x="5" y="5" width="90" height={stripeH} fill={colors.top} />
+            <rect x="5" y={5 + stripeH} width="90" height={stripeH} fill={colors.middle} />
+            <rect x="5" y={5 + stripeH * 2} width="90" height={stripeH} fill={colors.bottom} />
+          </g>
+          <rect x="5" y="5" width="90" height="70" rx={rx} fill="none" stroke="rgba(0,0,0,0.08)" strokeWidth="1" />
+        </svg>);
+    }
+
+    if (code === 'tr') {
+      const R = shapes.starSize;
+      const innerR = shapes.crescentSize * 0.88;
+      return (
+        <svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: "95.9954px" }}>
+          <defs>
+            <filter id={filterId}><feDropShadow dx="0" dy="3" stdDeviation="2" floodOpacity="0.25" /></filter>
+            <clipPath id={clipId}><rect x="5" y="5" width="90" height="70" rx={rx} /></clipPath>
+          </defs>
+          <g filter={`url(#${filterId})`} clipPath={`url(#${clipId})`}>
+            <rect x="5" y="5" width="90" height="70" fill={colors.main} />
+            {/* Crescent: white outer circle, then background-colored inner circle offset right */}
+            <circle cx={shapes.crescentX} cy={shapes.crescentY} r={shapes.crescentSize} fill={colors.symbol} />
+            <circle cx={shapes.crescentX + shapes.crescentOffset} cy={shapes.crescentY} r={innerR} fill={colors.main} />
+            {/* Star in the crescent opening — vertically centered */}
+            <g transform={`translate(${shapes.starX}, ${shapes.crescentY})`}>
+              <path d={starPath(R)} fill={colors.symbol} />
+            </g>
+          </g>
+          <rect x="5" y="5" width="90" height="70" rx={rx} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" />
+        </svg>);
+    }
+
+    if (code === 'es') {
+      const yCenter = 40;
+      const yBandHalf = shapes.yellowHeight / 2;
+      const yStart = yCenter - yBandHalf;
+      const ex = shapes.emblmX,ey = shapes.emblmY;
+      return (
+        <svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+          <defs>
+            <filter id={filterId}><feDropShadow dx="0" dy="3" stdDeviation="2" floodOpacity="0.25" /></filter>
+            <clipPath id={clipId}><rect x="5" y="5" width="90" height="70" rx={rx} /></clipPath>
+          </defs>
+          <g filter={`url(#${filterId})`} clipPath={`url(#${clipId})`}>
+            <rect x="5" y="5" width="90" height="70" fill={colors.red} />
+            <rect x="5" y={yStart} width="90" height={shapes.yellowHeight} fill={colors.yellow} />
+            {/* Duolingo-style emblem: two white columns + red shield badge */}
+            <g transform={`translate(${ex}, ${ey})`}>
+              {/* Left column body */}
+              <rect x="-11" y="-3" width="4" height="10" rx="1.2" fill={colors.emblemnew} />
+              {/* Left column cap */}
+              <rect x="-13" y="-6" width="8" height="3" rx="1" fill={colors.emblemnew} />
+              {/* Right column body */}
+              <rect x="7" y="-3" width="4" height="10" rx="1.2" fill={colors.emblemnew} />
+              {/* Right column cap */}
+              <rect x="5" y="-6" width="8" height="3" rx="1" fill={colors.emblemnew} />
+              {/* Red shield badge — wider, slightly shorter */}
+              <path d="M-6,-6 a1.5,1.5 0 0 1 1.5,-1.5 h9 a1.5,1.5 0 0 1 1.5,1.5 v7 Q 6,7 0,9 Q -6,7 -6,2 Z" fill={colors.emblem} />
+            </g>
+          </g>
+          <rect x="5" y="5" width="90" height="70" rx={rx} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" />
+        </svg>);
+    }
+  };
+
+  const renderControls = (flagCode, colors, shapes) => {
+
+    if (flagCode === 'fa') {
+      return (
+        <>
+              <div className="control-group">
+                <label className="control-label">Top Stripe Color</label>
+                <input type="color" className="color-input" value={colors.top} onChange={(e) => updateColor('fa', 'top', e.target.value)} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Middle Stripe Color</label>
+                <input type="color" className="color-input" value={colors.middle} onChange={(e) => updateColor('fa', 'middle', e.target.value)} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Bottom Stripe Color</label>
+                <input type="color" className="color-input" value={colors.bottom} onChange={(e) => updateColor('fa', 'bottom', e.target.value)} />
+              </div>
+              <hr style={{ margin: '16px 0', borderColor: '#2d3544' }} />
+              <div className="control-group">
+                <label className="control-label">Corner Radius: {shapes.cornerRadius}px</label>
+                <input type="range" min="0" max="20" value={shapes.cornerRadius} onChange={(e) => updateShape('fa', 'cornerRadius', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Stripe Height: {(shapes.stripeHeightRatio * 100).toFixed(0)}%</label>
+                <input type="range" min="0.5" max="2" step="0.1" value={shapes.stripeHeightRatio} onChange={(e) => updateShape('fa', 'stripeHeightRatio', parseFloat(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+            </>);
+
+    }
+
+    if (flagCode === 'tr') {
+      return (
+        <>
+              <div className="control-group">
+                <label className="control-label">Main Background Color</label>
+                <input type="color" className="color-input" value={colors.main} onChange={(e) => updateColor('tr', 'main', e.target.value)} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Symbol Color (Crescent & Star)</label>
+                <input type="color" className="color-input" value={colors.symbol} onChange={(e) => updateColor('tr', 'symbol', e.target.value)} />
+              </div>
+              <hr style={{ margin: '16px 0', borderColor: '#2d3544' }} />
+              <div className="control-group">
+                <label className="control-label">Corner Radius: {shapes.cornerRadius}px</label>
+                <input type="range" min="0" max="20" value={shapes.cornerRadius} onChange={(e) => updateShape('tr', 'cornerRadius', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Crescent Size: {shapes.crescentSize}px</label>
+                <input type="range" min="12" max="26" value={shapes.crescentSize} onChange={(e) => updateShape('tr', 'crescentSize', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Crescent Offset (thickness): {shapes.crescentOffset}</label>
+                <input type="range" min="3" max="14" value={shapes.crescentOffset} onChange={(e) => updateShape('tr', 'crescentOffset', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Crescent X: {shapes.crescentX}</label>
+                <input type="range" min="20" max="55" value={shapes.crescentX} onChange={(e) => updateShape('tr', 'crescentX', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Star Size: {shapes.starSize}px</label>
+                <input type="range" min="4" max="12" value={shapes.starSize} onChange={(e) => updateShape('tr', 'starSize', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Star X: {shapes.starX}</label>
+                <input type="range" min="45" max="75" value={shapes.starX} onChange={(e) => updateShape('tr', 'starX', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+            </>);
+
+    }
+
+    if (flagCode === 'es') {
+      return (
+        <>
+              <div className="control-group">
+                <label className="control-label">Red Color</label>
+                <input type="color" className="color-input" value={colors.red} onChange={(e) => updateColor('es', 'red', e.target.value)} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Yellow Band Color</label>
+                <input type="color" className="color-input" value={colors.yellow} onChange={(e) => updateColor('es', 'yellow', e.target.value)} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Emblem Color</label>
+                <input type="color" className="color-input" value={colors.emblem} onChange={(e) => updateColor('es', 'emblem', e.target.value)} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Columns Color</label>
+                <input type="color" className="color-input" value={colors.emblemnew} onChange={(e) => updateColor('es', 'emblemnew', e.target.value)} />
+              </div>
+              <hr style={{ margin: '16px 0', borderColor: '#2d3544' }} />
+              <div className="control-group">
+                <label className="control-label">Corner Radius: {shapes.cornerRadius}px</label>
+                <input type="range" min="0" max="20" value={shapes.cornerRadius} onChange={(e) => updateShape('es', 'cornerRadius', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Yellow Band Height: {shapes.yellowHeight}px</label>
+                <input type="range" min="16" max="50" value={shapes.yellowHeight} onChange={(e) => updateShape('es', 'yellowHeight', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+              <div className="control-group">
+                <label className="control-label">Emblem X: {shapes.emblmX}</label>
+                <input type="range" min="20" max="80" value={shapes.emblmX} onChange={(e) => updateShape('es', 'emblmX', parseInt(e.target.value))} style={{ width: '100%', cursor: 'pointer' }} />
+              </div>
+            </>);
+
+    }
+  };
+
+  return (
+    <>
+    <div className="container">
+          <div className="header">
+            <h1>Flag Design Editor</h1>
+            <p>Customize each flag's colors and design elements</p>
+          </div>
+
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '30px' }}>
+            {['fa', 'tr', 'es'].map((code) =>
+        <button
+          key={code}
+          onClick={() => setSelectedFlag(code)}
+          style={{
+            padding: '10px 16px',
+            background: selectedFlag === code ? '#8b5cf6' : '#2d3544',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: '600'
+          }}>
+          
+                {code === 'fa' ? '🇮🇷 Persian' : code === 'tr' ? '🇹🇷 Turkish' : '🇪🇸 Spanish'}
+              </button>
+        )}
+          </div>
+
+          <div className="editor-grid">
+            <div className="editor-panel">
+              <h2>{selectedFlag === 'fa' ? 'Persian Flag' : selectedFlag === 'tr' ? 'Turkish Flag' : 'Spanish Flag'}</h2>
+              <div className="flag-preview">
+                <FlagPreview code={selectedFlag} colors={effectiveColors[selectedFlag]} shapes={effectiveShapes[selectedFlag]} />
+              </div>
+              <div className="preview-label">Live Preview</div>
+            </div>
+
+            <div className="editor-panel">
+              <h2>Edit Colors</h2>
+              {renderControls(selectedFlag, effectiveColors[selectedFlag], effectiveShapes[selectedFlag])}
+            </div>
+          </div>
+
+          <div className="editor-panel">
+            <h2>Export Configuration</h2>
+            <pre style={{ background: '#0f1419', padding: '12px', borderRadius: '8px', fontSize: '12px', overflow: 'auto', maxHeight: '200px' }}>
+{JSON.stringify(flagColors, null, 2)}
+            </pre>
+            <button className="export-btn" onClick={() => {
+          navigator.clipboard.writeText(JSON.stringify(flagColors, null, 2));
+          alert('Copied to clipboard!');
+        }}>Copy Configuration</button>
+          </div>
+        </div>
+
+        <TweaksPanel>
+          <TweakSection title="Style Preset">
+            <TweakRadio
+              label="Style"
+              value={safeTweaks.style}
+              options={['duolingo', 'classic', 'minimal']}
+              onChange={(v) => setTweak('style', v)}
+            />
+          </TweakSection>
+          <TweakSection title="Symbol Scale">
+            <TweakSlider
+              label="Scale"
+              value={safeTweaks.symbolScale}
+              min={0.6} max={1.5} step={0.05}
+              onChange={(v) => setTweak('symbolScale', v)}
+            />
+          </TweakSection>
+          <TweakSection title="Corner Roundness">
+            <TweakSlider
+              label="Radius"
+              value={safeTweaks.roundness}
+              min={0} max={24} step={1}
+              unit="px"
+              onChange={(v) => setTweak('roundness', v)}
+            />
+          </TweakSection>
+        </TweaksPanel>
+    </>
+      );
+
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<FlagEditor />);
+</script>
+</body>
+</html>

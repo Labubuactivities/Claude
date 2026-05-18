@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex Tab — Design Exploration</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter+Tight:wght@400;500;600;700&display=swap">
+<style>
+  /* ──────────────────────────────────────────────────────────────
+     CODEX TAB — three brand-coherent variants
+     Palette per Part II of the plan. No XP, no streaks, no purple,
+     no rank chips. Editor voice on every label.
+     ──────────────────────────────────────────────────────────── */
+  :root {
+    --sumi:        #1A1814;
+    --washi:       #F2EBDC;
+    --washi-warm:  #EFE6D2;
+    --washi-deep:  #E5DABF;
+    --vermillion:  #C73E2C;
+    --vermillion-soft: rgba(199,62,44,0.12);
+    --gold:        #D4A85A;
+    --gold-soft:   rgba(212,168,90,0.18);
+    --verdigris:   #5F8278;
+    --iron-gall:   #2C2F3D;
+    --ink-1:       rgba(26,24,20,0.92);
+    --ink-2:       rgba(26,24,20,0.62);
+    --ink-3:       rgba(26,24,20,0.38);
+    --ink-4:       rgba(26,24,20,0.18);
+    --serif:       'Source Serif 4','Source Serif Pro',Georgia,serif;
+    --sans:        'Inter Tight',-apple-system,system-ui,sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #d8d2c4;
+    font-family: var(--serif);
+    /* very subtle paper grain on the canvas behind the phones */
+    background-image:
+      radial-gradient(rgba(0,0,0,0.025) 1px, transparent 1px);
+    background-size: 4px 4px;
+  }
+
+  /* ── phone shell (light, washi-toned, no dark chrome) ── */
+  .phone {
+    width: 390px; height: 780px;
+    background: var(--washi);
+    border-radius: 40px;
+    overflow: hidden;
+    border: 1.5px solid rgba(26,24,20,0.08);
+    box-shadow: 0 28px 64px rgba(26,24,20,0.18), 0 0 0 1px rgba(26,24,20,0.04);
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  /* paper grain on the washi surface itself */
+  .phone::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(26,24,20,0.04) 1px, transparent 1px);
+    background-size: 3px 3px;
+    opacity: 0.6; mix-blend-mode: multiply;
+    z-index: 0;
+  }
+  .phone-bar {
+    height: 44px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 22px;
+    color: var(--sumi);
+    font-family: var(--sans);
+    z-index: 2;
+  }
+  .phone-bar-time { font-size: 15px; font-weight: 600; }
+  .phone-bar-icons { display: flex; gap: 6px; align-items: center; opacity: 0.75; }
+  .phone-content {
+    flex: 1; overflow-y: auto;
+    padding: 8px 22px 88px;
+    scrollbar-width: none;
+    color: var(--sumi);
+    z-index: 1; position: relative;
+  }
+  .phone-content::-webkit-scrollbar { display: none; }
+
+  /* ── bottom nav: Codex active (no purple) ── */
+  .phone-nav {
+    height: 78px; flex-shrink: 0;
+    background: rgba(242,235,220,0.92);
+    backdrop-filter: blur(14px);
+    border-top: 1px solid rgba(26,24,20,0.08);
+    display: flex; align-items: center; justify-content: space-around;
+    z-index: 2;
+  }
+  .nav-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    flex: 1; padding: 10px 4px;
+    background: none; border: none; cursor: pointer;
+    color: var(--ink-3);
+    font-family: var(--sans);
+    font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
+  }
+  .nav-btn.active { color: var(--vermillion); }
+  .nav-btn svg { width: 22px; height: 22px; }
+
+  /* ── header row: Glyph + tab title ── */
+  .codex-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0 14px;
+  }
+  .codex-tab-title {
+    font-family: var(--serif);
+    font-size: 13px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .glyph {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .glyph svg { width: 100%; height: 100%; overflow: visible; }
+  .glyph .stroke {
+    fill: none; stroke: var(--sumi);
+    stroke-linecap: round; stroke-linejoin: round;
+    animation: glyph-breathe 6s ease-in-out infinite;
+  }
+  .glyph .gold-tip {
+    fill: var(--gold);
+    opacity: 0.85;
+  }
+  @keyframes glyph-breathe {
+    0%, 100% { stroke-width: 2.2; opacity: 0.92; }
+    50%      { stroke-width: 2.6; opacity: 1; }
+  }
+
+  /* ── Editor copy line ── */
+  .editor-line {
+    font-family: var(--serif);
+    font-size: 14px; line-height: 1.55;
+    color: var(--ink-2);
+    font-style: italic;
+    margin-bottom: 18px;
+  }
+  .editor-line em { color: var(--sumi); font-style: italic; }
+
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  REGION 1 — THE VOLUME SPINE                              ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .spine-frame {
+    background: var(--washi-warm);
+    border: 1px solid rgba(26,24,20,0.10);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-bottom: 18px;
+    position: relative;
+    box-shadow: inset 0 0 24px rgba(26,24,20,0.04);
+  }
+  .spine-frame-label {
+    font-family: var(--serif);
+    font-size: 11px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+  }
+  .spine-frame-title {
+    font-family: var(--serif);
+    font-size: 22px; font-weight: 600;
+    color: var(--sumi);
+    margin-bottom: 2px;
+    letter-spacing: -0.01em;
+  }
+  .spine-frame-meta {
+    font-family: var(--serif);
+    font-size: 13px; font-style: italic;
+    color: var(--ink-2);
+    margin-bottom: 14px;
+  }
+
+  /* The spine itself — vertical ribbon with seal marks ascending */
+  .spine-body {
+    display: flex; gap: 14px;
+    height: 220px;
+  }
+  .spine-ribbon {
+    width: 38px;
+    background: linear-gradient(180deg,
+      var(--washi-deep) 0%,
+      var(--washi-warm) 40%,
+      var(--washi-deep) 100%);
+    border: 1px solid rgba(26,24,20,0.18);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      inset 1.5px 0 0 rgba(26,24,20,0.06),
+      inset -1.5px 0 0 rgba(26,24,20,0.06),
+      0 1px 2px rgba(26,24,20,0.06);
+  }
+  .spine-volume-num {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    font-family: var(--serif);
+    font-size: 18px; font-weight: 600;
+    color: var(--sumi);
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+    opacity: 0.85;
+  }
+
+  /* Seal marks list — most recent at top */
+  .spine-seals {
+    flex: 1;
+    display: flex; flex-direction: column-reverse;
+    gap: 0;
+    padding: 4px 0;
+    position: relative;
+  }
+  .seal-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 3px 0;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .seal-row:hover { transform: translateX(2px); }
+  .seal-mark {
+    width: 14px; height: 14px; flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--vermillion);
+    box-shadow:
+      inset 0 0 0 1.5px rgba(0,0,0,0.12),
+      0 0 0 1px rgba(199,62,44,0.18);
+    position: relative;
+  }
+  .seal-mark.ignition {
+    background: var(--gold);
+    box-shadow:
+      inset 0 0 0 1.5px rgba(0,0,0,0.18),
+      0 0 0 1px rgba(212,168,90,0.28),
+      0 0 8px rgba(212,168,90,0.45);
+  }
+  .seal-mark.letter {
+    width: 18px; height: 18px;
+    background: var(--vermillion);
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.18),
+      inset 0 0 0 3px var(--vermillion),
+      0 0 0 1px rgba(199,62,44,0.25);
+  }
+  .seal-mark.latest {
+    animation: seal-pulse 6s ease-in-out infinite;
+  }
+  @keyframes seal-pulse {
+    0%, 90%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.12); filter: brightness(1.12); }
+  }
+  .seal-meta {
+    font-family: var(--serif);
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0;
+  }
+  .seal-meta .seal-snip {
+    color: var(--sumi);
+    font-style: italic;
+    display: block;
+    overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .seal-meta .seal-date {
+    color: var(--ink-3);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  REGION 2 — MODULE CHAPTER MAP                            ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .module-strip {
+    margin-bottom: 18px;
+  }
+  .module-strip-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .module-name {
+    font-family: var(--serif);
+    font-size: 15px; font-weight: 600;
+    color: var(--sumi);
+    letter-spacing: -0.005em;
+  }
+  .module-progress {
+    font-family: var(--serif);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+  }
+  .character-row {
+    display: flex; gap: 8px; align-items: center;
+    margin-bottom: 10px;
+  }
+  .character-mark {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--washi-deep);
+    border: 1px solid rgba(26,24,20,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--sumi);
+    cursor: pointer;
+  }
+  .character-tag {
+    font-family: var(--serif);
+    font-size: 11.5px;
+    color: var(--ink-2);
+    font-style: italic;
+  }
+  .chapter-scroll {
+    display: flex; gap: 8px;
+    overflow-x: auto;
+    padding: 4px 0 8px;
+    scrollbar-width: none;
+    margin: 0 -22px;
+    padding-left: 22px; padding-right: 22px;
+  }
+  .chapter-scroll::-webkit-scrollbar { display: none; }
+  .chapter {
+    flex-shrink: 0;
+    width: 102px;
+    background: var(--washi-warm);
+    border: 1px solid rgba(26,24,20,0.10);
+    border-radius: 5px;
+    padding: 10px 11px;
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .chapter:hover { transform: translateY(-1px); }
+  .chapter.done {
+    background: var(--washi);
+    border-color: rgba(26,24,20,0.12);
+  }
+  .chapter.active {
+    background: var(--washi);
+    border: 1.5px solid var(--vermillion);
+    box-shadow: 0 4px 14px rgba(199,62,44,0.12);
+  }
+  .chapter.future {
+    background: transparent;
+    border: 1px dashed rgba(26,24,20,0.16);
+  }
+  .chapter-num {
+    font-family: var(--serif);
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .chapter-title {
+    font-family: var(--serif);
+    font-size: 12.5px; font-weight: 500;
+    color: var(--sumi);
+    line-height: 1.32;
+    height: 48px;
+    overflow: hidden;
+  }
+  .chapter.future .chapter-title { color: var(--ink-3); font-style: italic; }
+  .chapter-seal {
+    margin-top: 6px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--vermillion);
+    opacity: 0.6;
+  }
+  .chapter.future .chapter-seal { background: transparent; }
+  .chapter.active .chapter-seal {
+    background: transparent;
+    border: 1px dashed var(--vermillion);
+  }
+
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  REGION 3 — THE INKWELL, EXPANDED                         ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .inkwell {
+    margin-bottom: 18px;
+  }
+  .inkwell-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .inkwell-title {
+    font-family: var(--serif);
+    font-size: 15px; font-weight: 600;
+    color: var(--sumi);
+  }
+  .inkwell-cap {
+    font-family: var(--serif);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+  }
+  .inkwell-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .ink-drop {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 11px;
+    background: var(--washi-warm);
+    border: 1px solid rgba(26,24,20,0.08);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .ink-drop:hover { transform: translateX(1px); background: var(--washi-deep); }
+  .ink-drop.fresh   { background: var(--washi); }
+  .ink-drop.faded   { background: transparent; border-style: dashed; }
+  .drop-dot {
+    width: 14px; height: 14px; flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--sumi);
+  }
+  .ink-drop.fresh   .drop-dot { background: var(--sumi); }
+  .ink-drop.mid     .drop-dot { background: var(--ink-2); }
+  .ink-drop.faded   .drop-dot { background: var(--ink-4); border: 1px dashed var(--ink-3); }
+  .drop-word {
+    font-family: var(--serif);
+    font-size: 14px; font-weight: 500;
+    color: var(--sumi);
+    line-height: 1.2;
+  }
+  .ink-drop.faded .drop-word { color: var(--ink-2); }
+  .drop-word .gloss {
+    display: block;
+    font-size: 10.5px; font-weight: 400;
+    color: var(--ink-3);
+    font-style: italic;
+    letter-spacing: 0.02em;
+  }
+  .ink-drop.empty {
+    background: transparent;
+    border: 1px dashed rgba(26,24,20,0.14);
+    color: var(--ink-3);
+    font-style: italic;
+    font-size: 12px;
+    justify-content: center;
+    padding: 11px;
+  }
+
+  /* ╔══════════════════════════════════════════════════════════╗
+     ║  REGION 4 — THE BECKON                                    ║
+     ╚══════════════════════════════════════════════════════════╝ */
+  .beckon {
+    background: var(--sumi);
+    color: var(--washi);
+    border-radius: 6px;
+    padding: 14px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(26,24,20,0.18);
+    transition: transform 0.15s ease;
+  }
+  .beckon:hover { transform: translateY(-1px); }
+  .beckon-text {
+    font-family: var(--serif);
+    font-size: 14px; font-style: italic;
+    line-height: 1.4;
+  }
+  .beckon-meta {
+    font-family: var(--serif);
+    font-size: 11px;
+    color: rgba(242,235,220,0.6);
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+    font-style: normal;
+  }
+  .beckon-arrow {
+    flex-shrink: 0;
+    color: var(--vermillion);
+    font-family: var(--serif);
+    font-size: 18px;
+  }
+
+  /* ── Variant B specifics — module hero ── */
+  .var-b .spine-frame {
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .var-b .spine-body { height: 56px; }
+  .var-b .spine-volume-num { font-size: 14px; }
+  .var-b .spine-seals { flex-direction: row; align-items: center; gap: 6px; padding: 0; }
+  .var-b .seal-row { padding: 0; }
+  .var-b .seal-meta { display: none; }
+  .var-b .module-strip { margin-bottom: 16px; }
+  .var-b .chapter { width: 132px; }
+  .var-b .chapter-title { font-size: 13.5px; height: 56px; }
+  .var-b .module-name { font-size: 18px; }
+
+  /* ── Variant C specifics — inkwell hero ── */
+  .var-c .spine-frame { padding: 10px 14px; margin-bottom: 12px; }
+  .var-c .spine-body { height: 0; display: none; }
+  .var-c .spine-frame-title { font-size: 15px; display: inline; margin-right: 8px; }
+  .var-c .spine-frame-meta { display: inline; font-size: 12px; }
+  .var-c .spine-frame-label { display: none; }
+  .var-c .module-strip { margin-bottom: 14px; }
+  .var-c .chapter { width: 92px; padding: 8px 9px; }
+  .var-c .chapter-title { font-size: 11.5px; height: 42px; }
+  .var-c .inkwell-grid { grid-template-columns: 1fr; }
+  .var-c .ink-drop { padding: 11px 13px; }
+  .var-c .drop-word { font-size: 15px; }
+
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+/* ──────────────────────────────────────────────────────────────
+   Shared building-block components
+   ─────────────────────────────────────────────────────────── */
+
+// The Glyph in its Stroke state — single calligraphic ribbon with
+// a thicker downstroke and a hair-thin lift, gold residue at the tip
+// because the user had an Ignition recently.
+function GlyphStroke() {
+  return (
+    <div className="glyph">
+      <svg viewBox="0 0 40 40">
+        <path className="stroke"
+          d="M 8 12 C 11 9, 16 11, 18 18 C 20 25, 24 30, 32 28"
+          strokeWidth="2.4"/>
+        <circle className="gold-tip" cx="32" cy="28" r="1.6"/>
+      </svg>
+    </div>
+  );
+}
+
+function PhoneBar() {
+  return (
+    <div className="phone-bar">
+      <div className="phone-bar-time">9:41</div>
+      <div className="phone-bar-icons">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor">
+          <rect x="0"  y="6" width="2.5" height="5" rx="0.6"/>
+          <rect x="4"  y="4" width="2.5" height="7" rx="0.6"/>
+          <rect x="8"  y="2" width="2.5" height="9" rx="0.6"/>
+          <rect x="12" y="0" width="2.5" height="11" rx="0.6"/>
+        </svg>
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="none" stroke="currentColor" strokeWidth="1.2">
+          <rect x="1" y="1" width="12" height="9" rx="1.6"/>
+          <rect x="2.2" y="2.2" width="9.6" height="6.6" rx="0.8" fill="currentColor"/>
+          <rect x="14" y="3.5" width="1.6" height="4" rx="0.5" fill="currentColor"/>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function PhoneNav() {
+  // Per the prior analysis: tab is "Codex", not "Quests".
+  const tabs = ['Today','Words','Codex','Saved','Profile'];
+  return (
+    <div className="phone-nav">
+      {tabs.map((t,i) => (
+        <button key={t} className={`nav-btn${i===2?' active':''}`}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            {i===0 && <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>}
+            {i===1 && <><path d="M4 5a2 2 0 0 1 2-2h12v17H6a2 2 0 0 1-2-2V5z"/><path d="M8 7h6M8 11h5"/></>}
+            {/* Codex: an open book with a vermillion seal on the right page */}
+            {i===2 && <>
+              <path d="M3 5.5C5.5 4.2 9 4.2 12 5.6V20c-3-1.4-6.5-1.4-9-0.2V5.5z"/>
+              <path d="M21 5.5c-2.5-1.3-6-1.3-9 0.1V20c3-1.4 6.5-1.4 9-0.2V5.5z"/>
+              <circle cx="16.5" cy="12.5" r="1.4" fill="currentColor" stroke="none"/>
+            </>}
+            {i===3 && <><ellipse cx="12" cy="6" rx="6" ry="1.6"/><path d="M6 6v9c0 1.5 2.7 3 6 3s6-1.5 6-3V6"/></>}
+            {i===4 && <><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-3.5 4-5 7-5s5.8 1.5 7 5"/></>}
+          </svg>
+          {t}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Demo data — a single composite user across all three variants
+   so the variants are comparing layout, not content.
+
+   User: Heritage Return, Persian. Hand (B2) tier, Volume II in
+   progress (17 pages bound), four lessons into The Diplomat.
+   ─────────────────────────────────────────────────────────── */
+
+const SEALS = [
+  // most recent first; type: 'page' | 'letter'; ignition: bool
+  { id: 17, type:'page',   ignition:true,  snip:'دلتنگش هستی…',           date:'today' },
+  { id: 16, type:'page',   ignition:false, snip:'کاش می‌توانستم برگردم',  date:'yesterday' },
+  { id: 15, type:'letter', ignition:false, snip:'مادر عزیزم،',             date:'2d' },
+  { id: 14, type:'page',   ignition:false, snip:'صبح زود بیدار شدم',       date:'4d' },
+  { id: 13, type:'page',   ignition:true,  snip:'هنوز همان کوچه را',       date:'5d' },
+  { id: 12, type:'page',   ignition:false, snip:'برف می‌بارید آرام',        date:'6d' },
+  { id: 11, type:'page',   ignition:false, snip:'چای را دم کرد و…',         date:'1w' },
+];
+
+const CHAPTERS = [
+  { n:1, title:'The first email',             state:'done' },
+  { n:2, title:"Amu Reza's call",             state:'done' },
+  { n:3, title:"The friend's wedding",        state:'done' },
+  { n:4, title:'The promotion you can\'t take', state:'active' },
+  { n:5, title:'A second call',               state:'future' },
+  { n:6, title:'—',                           state:'future' },
+  { n:7, title:'—',                           state:'future' },
+];
+
+const INKWELL = [
+  // capacity 10 at Hand (B2) tier. 8 pinned, 2 empty slots.
+  { word:'کاش',         gloss:'if only / would that',   sat:'fresh' },
+  { word:'دلتنگ',       gloss:'longing for',            sat:'fresh' },
+  { word:'برگشتن',      gloss:'to return',              sat:'mid'   },
+  { word:'فرصت',        gloss:'opportunity',            sat:'mid'   },
+  { word:'حتی',         gloss:'even',                   sat:'fresh' },
+  { word:'سکوت',        gloss:'silence',                sat:'faded' },
+  { word:'گذشته',       gloss:'past, what has gone',    sat:'faded' },
+  { word:'یادآوری',     gloss:'reminding, recollection',sat:'faded' },
+];
+
+/* ──────────────────────────────────────────────────────────────
+   Region components — composed differently per variant
+   ─────────────────────────────────────────────────────────── */
+
+function CodexHead({ tabLabel = 'Codex' }) {
+  return (
+    <div className="codex-head">
+      <div className="codex-tab-title">{tabLabel}</div>
+      <GlyphStroke />
+    </div>
+  );
+}
+
+function EditorLine({ children }) {
+  return <div className="editor-line">{children}</div>;
+}
+
+function VolumeSpine({ compact = false }) {
+  return (
+    <div className="spine-frame">
+      <div className="spine-frame-label">Current volume</div>
+      <div className="spine-frame-title">Volume II</div>
+      <div className="spine-frame-meta">Seventeen pages bound.</div>
+      <div className="spine-body">
+        <div className="spine-ribbon">
+          <div className="spine-volume-num">II</div>
+        </div>
+        {!compact && (
+          <div className="spine-seals">
+            {SEALS.map((s,i) => (
+              <div key={s.id} className="seal-row">
+                <div className={[
+                    'seal-mark',
+                    s.ignition ? 'ignition' : '',
+                    s.type === 'letter' ? 'letter' : '',
+                    i === 0 ? 'latest' : ''
+                  ].join(' ').trim()}/>
+                <div className="seal-meta">
+                  <span className="seal-snip">{s.snip}</span>
+                  <span className="seal-date">page {s.id} · {s.date}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function VolumeSpineCompact() {
+  // For variant B — spine reduced to a single horizontal row of recent seals
+  return (
+    <div className="spine-frame">
+      <div className="spine-frame-title">Volume II — 17 pages bound</div>
+      <div className="spine-body">
+        <div className="spine-ribbon">
+          <div className="spine-volume-num">II</div>
+        </div>
+        <div className="spine-seals">
+          {SEALS.slice(0,7).map((s,i) => (
+            <div key={s.id} className="seal-row">
+              <div className={[
+                  'seal-mark',
+                  s.ignition ? 'ignition' : '',
+                  s.type === 'letter' ? 'letter' : '',
+                  i === 0 ? 'latest' : ''
+                ].join(' ').trim()}/>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VolumeSpineInline() {
+  // For variant C — spine collapsed to a single line
+  return (
+    <div className="spine-frame">
+      <span className="spine-frame-title">Volume II</span>
+      <span className="spine-frame-meta">— seventeen pages bound.</span>
+    </div>
+  );
+}
+
+function ModuleStrip({ wide = false }) {
+  return (
+    <div className="module-strip">
+      <div className="module-strip-head">
+        <div className="module-name">The Diplomat</div>
+        <div className="module-progress">chapter 4 of 12</div>
+      </div>
+      <div className="character-row">
+        <div className="character-mark">ر</div>
+        <div className="character-tag"><em>Amu Reza is waiting.</em></div>
+      </div>
+      <div className="chapter-scroll">
+        {CHAPTERS.map(c => (
+          <div key={c.n} className={`chapter ${c.state}`}>
+            <div className="chapter-num">Ch. {c.n.toString().padStart(2,'0')}</div>
+            <div className="chapter-title">{c.title}</div>
+            <div className="chapter-seal"/>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Inkwell({ heroLayout = false }) {
+  const capacity = 10; // Hand (B2) tier
+  const filled = INKWELL.length;
+  return (
+    <div className="inkwell">
+      <div className="inkwell-head">
+        <div className="inkwell-title">Inkwell</div>
+        <div className="inkwell-cap">{filled} of {capacity} · 3 fading</div>
+      </div>
+      <div className="inkwell-grid">
+        {INKWELL.map((w,i) => (
+          <div key={i} className={`ink-drop ${w.sat}`}>
+            <div className="drop-dot"/>
+            <div className="drop-word">
+              {w.word}
+              <span className="gloss">{w.gloss}</span>
+            </div>
+          </div>
+        ))}
+        {Array.from({length: capacity - filled}).map((_,i) => (
+          <div key={'e'+i} className="ink-drop empty">+ pin from Codex</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Beckon({ text, meta }) {
+  return (
+    <div className="beckon">
+      <div>
+        <div className="beckon-text">{text}</div>
+        {meta && <div className="beckon-meta">{meta}</div>}
+      </div>
+      <div className="beckon-arrow">→</div>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   The three variants
+   Each variant tests a different hypothesis about which region
+   should anchor the screen when the user is not in a lesson.
+   ─────────────────────────────────────────────────────────── */
+
+function VariantA_SpineDominant() {
+  return (
+    <div className="var-a phone-content">
+      <CodexHead/>
+      <EditorLine>
+        <em>Volume II, page seventeen — sealed today.</em> The stroke held.
+      </EditorLine>
+      <VolumeSpine/>
+      <ModuleStrip/>
+      <Inkwell/>
+      <Beckon
+        text={<>Amu Reza's call is waiting.</>}
+        meta="THE DIPLOMAT · CH. 4 · ~6 MIN"/>
+    </div>
+  );
+}
+
+function VariantB_ModuleDominant() {
+  return (
+    <div className="var-b phone-content">
+      <CodexHead/>
+      <EditorLine>
+        <em>The diplomat keeps the door open.</em> Chapter four is on the threshold.
+      </EditorLine>
+      <VolumeSpineCompact/>
+      <ModuleStrip wide/>
+      <Inkwell/>
+      <Beckon
+        text={<>Amu Reza's call is waiting.</>}
+        meta="THE DIPLOMAT · CH. 4 · ~6 MIN"/>
+    </div>
+  );
+}
+
+function VariantC_InkwellDominant() {
+  return (
+    <div className="var-c phone-content">
+      <CodexHead/>
+      <EditorLine>
+        <em>Three words are asking to be used.</em> Tap any to reach them.
+      </EditorLine>
+      <VolumeSpineInline/>
+      <ModuleStrip/>
+      <Inkwell heroLayout/>
+      <Beckon
+        text={<>Anything you want to write to someone in Persian?</>}
+        meta="THE LETTER · YOU DON'T HAVE TO SEND IT"/>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Phone shell — three artboards on the canvas
+   ─────────────────────────────────────────────────────────── */
+
+function PhoneShell({ children, label }) {
+  return (
+    <div className="phone" data-screen-label={label}>
+      <PhoneBar/>
+      {children}
+      <PhoneNav/>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection
+        id="codex"
+        title="Codex Tab — three directions"
+        subtitle="Same regions, different hero. Tests which one earns the top of the screen.">
+        <DCArtboard id="var-a" label="A · Spine-dominant" width={390} height={780}>
+          <PhoneShell label="A · Spine-dominant">
+            <VariantA_SpineDominant/>
+          </PhoneShell>
+        </DCArtboard>
+        <DCArtboard id="var-b" label="B · Module arc dominant" width={390} height={780}>
+          <PhoneShell label="B · Module arc dominant">
+            <VariantB_ModuleDominant/>
+          </PhoneShell>
+        </DCArtboard>
+        <DCArtboard id="var-c" label="C · Inkwell dominant" width={390} height={780}>
+          <PhoneShell label="C · Inkwell dominant">
+            <VariantC_InkwellDominant/>
+          </PhoneShell>
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>
