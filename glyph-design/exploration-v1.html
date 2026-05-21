@@ -1,0 +1,1657 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1200" />
+<title>Glyph · Design forks v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Vazirmatn:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!--
+  Anti-slop checklist for this artifact:
+  · No purple→pink gradients. Palette is Editorial Monocle-adjacent, locked per brief.
+  · No stock or AI illustrations. Zero raster imagery; mascot is a reserved 96×96 anchor with a notional outline only.
+  · No lorem ipsum. Persian copy is real. No invented user identity (name, ambition) — greetings are name-free; middle slot carries session rationale, not a prescribed quote.
+  · No 4-equal-column layouts. Inkwell uses 5-wide irregular; Stripe-stacked composer is 1-col; Today variants asymmetric.
+  · Nothing center-aligned by default; centering is reserved for the closing-ring numeral only.
+  · Font families: Inter (Latin, Söhne fallback role), Vazirmatn (Persian), JetBrains Mono (Berkeley Mono fallback role for metadata). Three families correspond to the brief's three functional roles, not stylistic redundancy.
+  · Palette is locked. No freestyle hex.
+-->
+<style>
+  :root {
+    --paper:        #F5EFE6;
+    --paper-2:      #EBE4D6;
+    --paper-3:      #E1D8C4;
+    --ink:          #1A2138;
+    --ink-2:        #3A4060;
+    --ink-mid:      #6B6F85;
+    --ink-soft:     #9A9DAE;
+    --hair:         #D9D2C3;
+    --hair-2:       #C9C0AC;
+    --coral:        #C44536;
+    --coral-soft:   #D87363;
+    --ochre:        #B8826A;
+    --gold:         #D4AF7A;
+
+    --sans:  'Inter', 'Söhne', system-ui, -apple-system, sans-serif;
+    --fa:    'Vazirmatn', 'Inter', system-ui, sans-serif;
+    --mono:  'JetBrains Mono', 'Berkeley Mono', ui-monospace, monospace;
+
+    --ease:  cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--ochre); color: var(--paper); }
+
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 64px 48px 120px; }
+
+  /* ───────── Document chrome ───────── */
+  .doc-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 32px;
+    border-bottom: 1px solid var(--hair);
+    padding-bottom: 28px;
+    margin-bottom: 56px;
+  }
+  .doc-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    margin-bottom: 14px;
+  }
+  .doc-title {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .doc-title em {
+    font-style: normal;
+    color: var(--ink-mid);
+    font-weight: 400;
+  }
+  .doc-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mid);
+    text-align: right;
+    line-height: 1.8;
+  }
+  .doc-meta b { color: var(--ink); font-weight: 500; }
+
+  .doc-howto {
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    padding: 22px 24px;
+    margin-bottom: 72px;
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .doc-howto .lab {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    padding-top: 2px;
+  }
+  .doc-howto p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--ink-2);
+    line-height: 1.6;
+    max-width: 70ch;
+  }
+  .doc-howto code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--paper-3);
+    padding: 1px 6px;
+    color: var(--ink);
+  }
+
+  /* ───────── Section / fork ───────── */
+  .fork { margin-bottom: 96px; }
+  .fork-head {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 24px;
+    align-items: baseline;
+    border-bottom: 1px solid var(--hair);
+    padding-bottom: 16px;
+    margin-bottom: 36px;
+  }
+  .fork-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--coral);
+  }
+  .fork-title {
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+  }
+  .fork-title small {
+    display: block;
+    font-weight: 400;
+    color: var(--ink-mid);
+    font-size: 14px;
+    letter-spacing: 0;
+    margin-top: 4px;
+    max-width: 70ch;
+  }
+  .fork-pick {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ───────── Variant card ───────── */
+  .variant {
+    margin-bottom: 28px;
+    border: 1px solid var(--hair);
+    background: var(--paper);
+  }
+  .variant-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--hair);
+    background: var(--paper-2);
+  }
+  .variant-bar .id {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--coral);
+    letter-spacing: 0.08em;
+  }
+  .variant-bar .id b {
+    color: var(--ink);
+    font-weight: 500;
+    margin-left: 10px;
+  }
+  .variant-bar .note {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-mid);
+  }
+  .variant-body {
+    padding: 0;
+    background: var(--paper);
+  }
+
+  /* ═══════════════════════════════════════
+     FORK A — TODAY GREETING TONE
+     ═══════════════════════════════════════ */
+
+  /* A1 — Sober editorial */
+  .a1 { padding: 80px 80px 64px; }
+  .a1 .stamp {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mid);
+    letter-spacing: 0.08em;
+    margin-bottom: 48px;
+  }
+  .a1 .greeting {
+    font-family: var(--fa);
+    direction: rtl;
+    font-size: 64px;
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+  .a1 .greeting-en {
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    margin-bottom: 56px;
+    letter-spacing: 0.02em;
+  }
+  .a1 .l2 {
+    font-size: 24px;
+    line-height: 1.45;
+    font-weight: 400;
+    color: var(--ink-2);
+    max-width: 32ch;
+    border-left: 1px solid var(--ochre);
+    padding-left: 22px;
+    margin-bottom: 56px;
+  }
+  .a1 .l2 i { font-style: italic; color: var(--ink); }
+  .a1 .meta-row {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+    border-top: 1px solid var(--hair);
+    padding-top: 20px;
+    display: flex;
+    gap: 28px;
+  }
+  .a1 .meta-row span b { color: var(--ink); font-weight: 500; }
+  .a1 .begin {
+    display: inline-block;
+    margin-top: 40px;
+    font-size: 16px;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+    transition: color 0.22s var(--ease);
+  }
+  .a1 .begin:hover { color: var(--coral); border-color: var(--coral); }
+
+  /* A2 — Author companion */
+  .a2 {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 0;
+    min-height: 520px;
+  }
+  .a2-left {
+    padding: 64px 48px 48px 80px;
+    border-right: 1px solid var(--hair);
+  }
+  .a2 .ribbon {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-mid);
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+  }
+  .a2 .ribbon .dot { color: var(--coral); }
+  .a2 h1 {
+    font-family: var(--fa);
+    direction: rtl;
+    text-align: right;
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 6px;
+  }
+  .a2 .subline {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: 44px;
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+  .a2 .pinned-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 12px;
+  }
+  .a2 .pinned {
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink);
+    max-width: 30ch;
+    margin-bottom: 8px;
+  }
+  .a2 .pinned em { font-style: italic; color: var(--ink-2); }
+  .a2 .pinned-src {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .a2-right {
+    padding: 64px 48px 48px;
+    background: var(--paper-2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .a2-card-eyebrow {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    margin-bottom: 18px;
+  }
+  .a2-card h3 {
+    font-size: 28px;
+    font-weight: 500;
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
+  }
+  .a2-bars { display: grid; gap: 14px; margin-bottom: 32px; }
+  .a2-bar { display: grid; grid-template-columns: 110px 1fr 44px; align-items: center; gap: 14px; }
+  .a2-bar .lab { font-family: var(--mono); font-size: 10.5px; color: var(--ink-mid); letter-spacing: 0.04em; }
+  .a2-bar .track { height: 2px; background: var(--hair); position: relative; }
+  .a2-bar .fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--ink-2); }
+  .a2-bar .fill.weak { background: var(--coral); }
+  .a2-bar .val { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); text-align: right; }
+  .a2 .a2-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mid);
+    letter-spacing: 0.02em;
+    border-top: 1px solid var(--hair-2);
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .a2 .a2-meta b { color: var(--ink); font-weight: 500; }
+  .a2 .begin-pill {
+    align-self: flex-start;
+    margin-top: 28px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 14px;
+    padding: 12px 22px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.22s var(--ease);
+  }
+  .a2 .begin-pill:hover { background: var(--coral); }
+  .mascot-anchor {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    width: 96px;
+    height: 96px;
+    border: 1px dashed var(--hair-2);
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 6px;
+  }
+  .a2-right { position: relative; }
+
+  /* A3 — Stripe-precise */
+  .a3 { padding: 56px 64px; }
+  .a3-top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .a3 .date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mid);
+    letter-spacing: 0.06em;
+  }
+  .a3 .date b { color: var(--ink); font-weight: 500; }
+  .a3 .ring {
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .a3 .ring svg { display: block; transform: rotate(-90deg); }
+  .a3 .ring-num {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .a3 h1 {
+    font-family: var(--fa);
+    direction: rtl;
+    text-align: right;
+    font-size: 56px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .a3 .greeting-translit {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-align: right;
+    margin-bottom: 56px;
+  }
+  .a3-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.1fr;
+    gap: 0;
+    border-top: 1px solid var(--hair);
+  }
+  .a3-cell {
+    padding: 28px 24px 28px 0;
+    border-right: 1px solid var(--hair);
+  }
+  .a3-cell:last-child { border-right: none; padding-right: 0; padding-left: 24px; }
+  .a3-cell:nth-child(2) { padding-left: 24px; }
+  .a3-cell .num {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--coral);
+    margin-bottom: 6px;
+  }
+  .a3-cell .num b { color: var(--ink); font-weight: 500; margin-left: 8px; }
+  .a3-cell .head {
+    font-size: 16px;
+    color: var(--ink-mid);
+    margin-bottom: 18px;
+  }
+  .a3-cell .body {
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+  }
+  .a3-cell .body em { font-style: italic; color: var(--ink-2); }
+  .a3-cell .micro {
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+  }
+  .a3-cell .micro b { color: var(--ink); font-weight: 500; }
+  .a3-axes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+    margin-top: 4px;
+  }
+  .a3-axes .axis {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-mid);
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+  }
+  .a3-axes .axis b { color: var(--ink); font-weight: 500; }
+  .a3-axes .axis.weak b { color: var(--coral); }
+
+  /* ═══════════════════════════════════════
+     FORK B — INKWELL FSRS INK DECAY
+     ═══════════════════════════════════════ */
+
+  /* shared inkwell typography */
+  .ink-fa { font-family: var(--fa); direction: rtl; font-weight: 500; }
+  .ink-en { font-family: var(--sans); font-weight: 400; }
+  .ink-mono-cap {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--ink-mid);
+  }
+
+  /* B1 — Pure opacity decay */
+  .b1 {
+    padding: 56px 72px;
+    display: grid;
+    gap: 0;
+  }
+  .b1-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    margin-bottom: 36px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .b1-head h2 { margin: 0; font-size: 22px; font-weight: 500; letter-spacing: -0.01em; }
+  .b1-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); letter-spacing: 0.04em; }
+  .b1-head .meta b { color: var(--ink); font-weight: 500; }
+  .b1-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 56px;
+    row-gap: 32px;
+  }
+  .b1-word {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid transparent;
+    position: relative;
+  }
+  .b1-word .fa { font-family: var(--fa); direction: rtl; font-size: 28px; line-height: 1; color: var(--ink); font-weight: 500; }
+  .b1-word .en { font-family: var(--sans); font-size: 13px; color: var(--ink-2); line-height: 1.3; margin-top: 4px; }
+  .b1-word .sr {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .b1-word.over { border-bottom-color: var(--coral); }
+
+  /* opacity tiers — driven by R per spec */
+  .r98 { opacity: 1.00; }
+  .r96 { opacity: 0.94; }
+  .r94 { opacity: 0.86; }
+  .r92 { opacity: 0.78; }
+  .r90 { opacity: 0.70; }
+  .r88 { opacity: 0.55; filter: saturate(0.7); }
+  .r86 { opacity: 0.55; filter: saturate(0.65); }
+  .r83 { opacity: 0.55; filter: saturate(0.55); }
+
+  /* B2 — Card grid with chroma reduction */
+  .b2 { padding: 48px 56px 56px; }
+  .b2-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .b2-head h2 { margin: 0; font-size: 22px; font-weight: 500; }
+  .b2-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); }
+  .b2-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .b2-card {
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    padding: 22px 18px 14px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 10px;
+    min-height: 138px;
+  }
+  .b2-card.over { border-color: var(--coral); }
+  .b2-card .fa { font-family: var(--fa); direction: rtl; font-size: 30px; line-height: 1.1; color: var(--ink); font-weight: 500; }
+  .b2-card .en { font-size: 13.5px; color: var(--ink-2); }
+  .b2-card .meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--hair);
+    padding-top: 8px;
+  }
+  .b2-card.over .meta { color: var(--coral); border-top-color: var(--coral); }
+
+  /* B3 — Manuscript margin */
+  .b3 { padding: 56px 80px 64px; }
+  .b3-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    margin-bottom: 32px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .b3-head h2 { margin: 0; font-size: 22px; font-weight: 500; }
+  .b3-head .meta { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); }
+  .b3-list { display: grid; gap: 0; }
+  .b3-row {
+    display: grid;
+    grid-template-columns: 44px 130px 190px 1fr 150px 110px;
+    align-items: center;
+    gap: 22px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .b3-row:last-child { border-bottom: none; }
+  .b3-row .idx { font-family: var(--mono); font-size: 10.5px; color: var(--ink-soft); letter-spacing: 0.04em; }
+  .b3-row .fa { font-family: var(--fa); direction: rtl; font-size: 26px; line-height: 1; color: var(--ink); font-weight: 500; }
+  .b3-row .gloss { display: flex; flex-direction: column; gap: 3px; }
+  .b3-row .gloss .en { font-size: 15px; color: var(--ink); }
+  .b3-row .gloss .en em { color: var(--ink-mid); font-style: italic; font-size: 12.5px; margin-left: 4px; }
+  .b3-row .gloss .ipa { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); letter-spacing: 0.02em; }
+  .b3-row .ex { display: flex; flex-direction: column; gap: 3px; }
+  .b3-row .ex .ex-fa { font-family: var(--fa); direction: rtl; font-size: 17px; color: var(--ink-2); line-height: 1.2; }
+  .b3-row .ex .ex-en { font-family: var(--sans); font-size: 12.5px; color: var(--ink-mid); font-style: italic; }
+  .b3-row .ety {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+    border: 1px solid var(--hair-2);
+    padding: 4px 8px;
+    justify-self: start;
+    line-height: 1.2;
+  }
+  .b3-row .sr { font-family: var(--mono); font-size: 10.5px; color: var(--ink-mid); letter-spacing: 0.04em; text-align: right; line-height: 1.5; }
+  .b3-row .sr b { display: block; color: var(--ink); font-weight: 500; }
+  .b3-row.over .fa { border-bottom: 1px solid var(--coral); padding-bottom: 2px; }
+  .b3-row.over .gloss .en { border-bottom: 1px solid var(--coral); padding-bottom: 1px; align-self: flex-start; }
+  .b3-row.over .sr, .b3-row.over .sr b { color: var(--coral); }
+
+  /* ═══════════════════════════════════════
+     FORK C — 5-AXIS FILTER CHIPS
+     ═══════════════════════════════════════ */
+
+  /* C1 — Linear pill row */
+  .c1 { padding: 48px 56px 52px; }
+  .c1-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mid);
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+  }
+  .c1-title { font-size: 22px; font-weight: 500; margin: 0 0 28px; letter-spacing: -0.01em; }
+  .c1-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 22px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper-2);
+    border: 1px solid var(--hair-2);
+    padding: 7px 10px 7px 12px;
+    font-size: 13px;
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1;
+  }
+  .pill .axis-lab { font-family: var(--mono); font-size: 10.5px; color: var(--ink-mid); letter-spacing: 0.04em; text-transform: uppercase; }
+  .pill .val { color: var(--ink); font-weight: 500; }
+  .pill .x {
+    display: inline-block;
+    width: 14px; height: 14px;
+    line-height: 14px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 11px;
+    margin-left: 2px;
+    cursor: pointer;
+  }
+  .pill.add { background: transparent; border: 1px dashed var(--hair-2); color: var(--ink-mid); }
+  .c1-count {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+    border-top: 1px solid var(--hair);
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .c1-count b { color: var(--ink); font-weight: 500; }
+
+  /* C2 — Stripe-stacked composer */
+  .c2 { padding: 40px 56px 48px; display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: start; }
+  .c2-main { min-width: 0; }
+  .c2-title { font-size: 22px; font-weight: 500; margin: 0 0 6px; }
+  .c2-sub { color: var(--ink-mid); font-size: 14px; margin-bottom: 32px; }
+  .c2-section {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .c2-section .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--coral);
+    letter-spacing: 0.04em;
+  }
+  .c2-section .num b { color: var(--ink-mid); font-weight: 400; margin-left: 6px; }
+  .c2-section .label {
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .c2-section .label small { display: block; color: var(--ink-mid); font-size: 12px; margin-top: 2px; }
+  .c2-section .chip {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--paper-2);
+    border: 1px solid var(--hair-2);
+    padding: 6px 12px;
+    line-height: 1;
+  }
+  .c2-section .chip.empty { color: var(--ink-soft); border-style: dashed; }
+  .c2-footer {
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .c2-footer .count {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .c2-footer .count small { color: var(--ink-mid); margin-left: 6px; }
+  .c2-footer .go {
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 13px;
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-weight: 500;
+  }
+  .c2-preview {
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    padding: 20px 22px;
+    align-self: stretch;
+  }
+  .c2-preview .pv-eyebrow {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-mid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .c2-preview .pv-eyebrow b { color: var(--ochre); font-weight: 500; }
+  .c2-preview .pv-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    padding: 9px 0;
+    border-top: 1px solid var(--hair-2);
+    gap: 12px;
+  }
+  .c2-preview .pv-row:first-of-type { border-top: 1px solid var(--hair); }
+  .c2-preview .pv-fa { font-family: var(--fa); direction: rtl; font-size: 19px; color: var(--ink); font-weight: 500; line-height: 1.2; }
+  .c2-preview .pv-fa small { display: block; font-family: var(--sans); font-size: 12px; color: var(--ink-mid); margin-top: 1px; direction: ltr; }
+  .c2-preview .pv-rank { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); letter-spacing: 0.02em; text-align: right; white-space: nowrap; }
+  .c2-preview .pv-more {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+    padding-top: 14px;
+    border-top: 1px solid var(--hair);
+    margin-top: 4px;
+    text-align: right;
+  }
+  .c2-preview .pv-more a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 1px; }
+
+  /* C3 — Balatro loadout */
+  .c3 { padding: 44px 56px 52px; }
+  .c3-head { display: grid; grid-template-columns: 1fr auto; align-items: baseline; margin-bottom: 22px; }
+  .c3-head h2 { margin: 0; font-size: 22px; font-weight: 500; }
+  .c3-head .stamp {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--ochre);
+    text-transform: uppercase;
+  }
+  .c3-slots {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .c3-slot {
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    padding: 14px 14px 12px;
+    min-height: 140px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 8px;
+  }
+  .c3-slot.empty { background: transparent; border-style: dashed; color: var(--ink-soft); }
+  .c3-slot.rare { background: var(--paper); border-color: var(--ochre); }
+  .c3-slot .lab {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+  .c3-slot .val {
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.3;
+    font-weight: 500;
+  }
+  .c3-slot.empty .val { color: var(--ink-soft); font-style: italic; font-weight: 400; }
+  .c3-slot .meta {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    border-top: 1px solid var(--hair);
+    padding-top: 6px;
+  }
+  .c3-slot.rare .meta { color: var(--ochre); border-top-color: var(--ochre); }
+  .c3-readout {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    background: var(--paper-2);
+    padding: 14px 18px;
+    border: 1px solid var(--hair);
+  }
+  .c3-readout .left { font-family: var(--mono); font-size: 11.5px; color: var(--ink); letter-spacing: 0.04em; }
+  .c3-readout .left b { color: var(--ochre); font-weight: 500; }
+  .c3-readout .left small { display: block; color: var(--ink-mid); margin-top: 4px; font-size: 11px; }
+  .c3-readout .go {
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 13px;
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-weight: 500;
+  }
+
+  /* ═══════════════════════════════════════
+     FORK D — TOKEN-LEVEL DIFF FEEDBACK
+     ═══════════════════════════════════════ */
+
+  .d-frame { position: relative; padding: 48px 64px 64px; }
+  .d-eyebrow {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-mid);
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+  }
+  .d-eyebrow b { color: var(--coral); }
+  .d-prompt {
+    font-size: 15px;
+    color: var(--ink-2);
+    margin-bottom: 24px;
+    max-width: 60ch;
+  }
+  .d-prompt em { color: var(--ink-mid); font-style: italic; }
+
+  /* D1 — strike & slide */
+  .d1-sent {
+    font-family: var(--fa);
+    direction: rtl;
+    font-size: 28px;
+    line-height: 1.7;
+    color: var(--ink);
+    font-weight: 500;
+    border-top: 1px solid var(--hair);
+    padding-top: 24px;
+    margin-bottom: 8px;
+  }
+  .d1-sent .strike { color: var(--coral); text-decoration: line-through; text-decoration-color: var(--coral); }
+  .d1-correct {
+    font-family: var(--fa);
+    direction: rtl;
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--ink);
+    border-left: none;
+    border-right: 2px solid var(--ochre);
+    padding-right: 14px;
+    margin-bottom: 28px;
+    display: inline-block;
+  }
+  .d1-correct .new { color: var(--ink); font-weight: 500; background: linear-gradient(transparent 65%, color-mix(in oklch, var(--gold) 60%, transparent) 65%); }
+  .d1-note {
+    background: var(--paper-2);
+    border-left: 2px solid var(--ink-2);
+    padding: 16px 20px;
+    font-size: 15px;
+    color: var(--ink);
+    max-width: 60ch;
+    margin-bottom: 28px;
+  }
+  .d1-note .tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-mid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .d1-foot {
+    border-top: 1px solid var(--hair);
+    padding-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .d1-foot .stat {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+  }
+  .d1-foot .stat b { color: var(--ink); font-weight: 500; }
+  .d1-foot .next {
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 13.5px;
+    padding: 11px 22px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-weight: 500;
+  }
+
+  /* D2 — margin reformulation */
+  .d2-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; padding-top: 12px; border-top: 1px solid var(--hair); }
+  .d2-text {
+    font-family: var(--fa);
+    direction: rtl;
+    font-size: 28px;
+    line-height: 1.7;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .d2-text .mark { background: linear-gradient(transparent 70%, color-mix(in oklch, var(--coral) 40%, transparent) 70%); }
+  .d2-margin {
+    border-left: 1px solid var(--hair-2);
+    padding-left: 24px;
+    padding-top: 8px;
+  }
+  .d2-margin .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ochre);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .d2-margin .word-row { font-family: var(--mono); font-size: 13px; color: var(--ink); margin-bottom: 14px; }
+  .d2-margin .word-row .from { color: var(--ink-soft); text-decoration: line-through; }
+  .d2-margin .word-row .arr { color: var(--ink-mid); margin: 0 6px; }
+  .d2-margin .word-row .to { color: var(--ink); }
+  .d2-margin .gloss {
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+  .d2-margin .gloss b { color: var(--ink); font-weight: 500; }
+  .d2-margin .rule {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    background: var(--paper-2);
+    border-left: 2px solid var(--ochre);
+    padding: 10px 12px;
+    margin-bottom: 16px;
+  }
+  .d2-margin .rule .rk { font-family: var(--mono); font-size: 10px; color: var(--ochre); letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .d2-margin .ex {
+    font-family: var(--fa);
+    direction: rtl;
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.45;
+    margin-bottom: 4px;
+  }
+  .d2-margin .ex .hi { background: linear-gradient(transparent 65%, color-mix(in oklch, var(--gold) 55%, transparent) 65%); }
+  .d2-margin .ex-gloss { font-size: 12.5px; color: var(--ink-mid); font-style: italic; margin-bottom: 16px; }
+  .d2-margin .micro {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+  }
+  .d2-margin .micro b { color: var(--ink); font-weight: 500; }
+  .d2-margin .micro .row { display: flex; justify-content: space-between; }
+  .d2-foot {
+    border-top: 1px solid var(--hair);
+    margin-top: 28px;
+    padding-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .d2-foot .stat { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); }
+  .d2-foot .stat b { color: var(--ink); font-weight: 500; }
+  .d2-foot .next {
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 13.5px;
+    padding: 11px 22px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-weight: 500;
+  }
+
+  /* ═══════════════════════════════════════
+     Critique block
+     ═══════════════════════════════════════ */
+  .critique {
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    padding: 32px 36px;
+    margin-top: 24px;
+  }
+  .critique h3 { margin: 0 0 18px; font-size: 18px; font-weight: 500; letter-spacing: -0.01em; }
+  .critique .row {
+    display: grid;
+    grid-template-columns: 130px 50px 1fr;
+    gap: 18px;
+    padding: 12px 0;
+    border-top: 1px dashed var(--hair-2);
+    align-items: baseline;
+  }
+  .critique .row:first-of-type { border-top: 1px solid var(--hair); }
+  .critique .dim { font-family: var(--mono); font-size: 11.5px; color: var(--ink); letter-spacing: 0.04em; text-transform: uppercase; }
+  .critique .score { font-family: var(--mono); font-size: 16px; font-weight: 500; color: var(--coral); }
+  .critique .just { font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+  .critique .verdict {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--hair);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+  }
+  .critique .verdict b { color: var(--ink); font-weight: 500; }
+
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <!-- DOCUMENT HEAD -->
+  <header class="doc-head">
+    <div>
+      <div class="doc-eyebrow">Glyph · design forks · v1</div>
+      <h1 class="doc-title">Pick the parts you want — <em>I'll build the screens.</em></h1>
+    </div>
+    <div class="doc-meta">
+      <div><b>FA · TR · ES</b> · v1</div>
+      <div>palette · ed. monocle</div>
+      <div>2026·05·21</div>
+    </div>
+  </header>
+
+  <div class="doc-howto">
+    <div class="lab">How to pick</div>
+    <p>
+      Four design forks below — <b>A · Today greeting</b>, <b>B · Inkwell FSRS ink decay</b>, <b>C · 5-axis filter chips</b>, <b>D · Token-level diff feedback</b>. Each variant has an ID in the top-left of its bar. Reply with a string like <code>A2 · B1 · C3 · D2</code> and I'll build the full screen at production fidelity with those choices locked in. Notes welcome alongside picks.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       FORK A — TODAY GREETING TONE
+       ═══════════════════════════════════════ -->
+  <section class="fork" id="fork-a">
+    <div class="fork-head">
+      <div class="fork-id">FORK A</div>
+      <div class="fork-title">
+        Today screen · greeting tone
+        <small>The first impression every day. Same content in all three: greeting, session rationale, session preview, weakest-axis cue. Different posture.</small>
+      </div>
+      <div class="fork-pick">pick one</div>
+    </div>
+
+    <!-- A1 — Sober editorial -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">A1 <b>Sober editorial</b></div>
+        <div class="note">Linear / Things calm · single column · metadata footnoted</div>
+      </div>
+      <div class="variant-body">
+        <div class="a1">
+          <div class="stamp">THU · 21 MAY · 06:42</div>
+          <h1 class="greeting">صبح بخیر</h1>
+          <div class="greeting-en">sob'h be-kheyr · good morning</div>
+          <div class="l2">
+            <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ochre);display:block;margin-bottom:14px">— Today · targeting mediation</span>
+            Today wraps an <i>Edit-the-Text</i> task in a casual register. Three Arabic-origin words from your Inkwell are pulled forward for review; the rest tighten last week's overdue cards.
+            <span style="display:block;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:0.04em;margin-top:14px">composed by session engine · calibrated to ~80% success · adjustable at Settings · 04</span>
+          </div>
+          <div class="meta-row">
+            <span>session · <b>14 items</b></span>
+            <span>est · <b>~8 min</b></span>
+            <span>weakest axis · <b style="color:var(--coral)">mediation</b></span>
+            <span>retrievability · <b>0.86</b></span>
+          </div>
+          <a href="#" class="begin">Begin today's session →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- A2 — Author companion -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">A2 <b>Author companion</b></div>
+        <div class="note">Two-column asymmetric · session rationale on the left · session card carries the metrics on the right</div>
+      </div>
+      <div class="variant-body">
+        <div class="a2">
+          <div class="a2-left">
+            <div class="ribbon">THU 21 MAY <span class="dot">·</span> week 6 <span class="dot">·</span> Persian</div>
+            <h1>صبح بخیر</h1>
+            <div class="subline">sob'h be-kheyr · good morning</div>
+            <div class="pinned-label">— TODAY · WHY THIS SESSION</div>
+            <div class="pinned">
+              Mediation is your weakest of the six CEFR axes. Today's fourteen items pull three Arabic-origin words from your Inkwell forward, wrapped in an <em>Edit-the-Text</em> task in a casual register.
+            </div>
+            <div class="pinned-src">composed by session engine · calibrated to ~80% · adjustable at Settings · 04</div>
+          </div>
+          <div class="a2-right">
+            <div>
+              <div class="a2-card-eyebrow">TODAY'S SESSION</div>
+              <h3>14 items · ~8 min</h3>
+              <div class="a2-bars">
+                <div class="a2-bar">
+                  <span class="lab">reception</span>
+                  <div class="track"><div class="fill" style="width:62%"></div></div>
+                  <span class="val">B1.3</span>
+                </div>
+                <div class="a2-bar">
+                  <span class="lab">production</span>
+                  <div class="track"><div class="fill" style="width:44%"></div></div>
+                  <span class="val">A2.4</span>
+                </div>
+                <div class="a2-bar">
+                  <span class="lab">mediation</span>
+                  <div class="track"><div class="fill weak" style="width:28%"></div></div>
+                  <span class="val">A2.1</span>
+                </div>
+                <div class="a2-bar">
+                  <span class="lab">interaction</span>
+                  <div class="track"><div class="fill" style="width:49%"></div></div>
+                  <span class="val">A2.5</span>
+                </div>
+              </div>
+              <div class="a2-meta">
+                <span>targeting · <b>mediation</b></span>
+                <span>R target · <b>0.85</b></span>
+              </div>
+              <a href="#" class="begin-pill">Begin →</a>
+            </div>
+            <div class="mascot-anchor">96 × 96 · mascot</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A3 — Stripe-precise -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">A3 <b>Stripe-precise</b></div>
+        <div class="note">Numbered sections · power-view metadata visible immediately · closing ring inline</div>
+      </div>
+      <div class="variant-body">
+        <div class="a3">
+          <div class="a3-top">
+            <div>
+              <div class="date">THU · 21 · MAY · 2026 &nbsp;·&nbsp; <b>week 6 of Persian</b></div>
+            </div>
+            <div class="ring" title="Closing ring · 62% of session target">
+              <svg width="64" height="64" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="28" fill="none" stroke="#D9D2C3" stroke-width="3"/>
+                <circle cx="32" cy="32" r="28" fill="none" stroke="#1A2138" stroke-width="3"
+                  stroke-dasharray="175.93" stroke-dashoffset="66.85" stroke-linecap="butt"/>
+              </svg>
+              <div class="ring-num">62%</div>
+            </div>
+          </div>
+          <h1>صبح بخیر</h1>
+          <div class="greeting-translit">sob'h be-kheyr · 06:42</div>
+
+          <div class="a3-grid">
+            <div class="a3-cell">
+              <div class="num">01 ·<b>TODAY</b></div>
+              <div class="head">A short session, targeted.</div>
+              <div class="body">
+                14 items, around 8 minutes. Three edit-the-text, eight cloze, three pick-better-word.
+              </div>
+              <div class="micro">est · <b>8m 12s</b> &nbsp; · &nbsp; R target · <b>0.85</b></div>
+            </div>
+            <div class="a3-cell">
+              <div class="num">02 ·<b>WHY THIS SESSION</b></div>
+              <div class="head">Targeting your weakest axis.</div>
+              <div class="body">
+                Mediation lags one CEFR sub-band behind your reception. Today's task envelope: <em>Edit-the-Text</em> in a casual register, Arabic-origin lemma focus.
+              </div>
+              <div class="micro">composer · <b>session engine</b> &nbsp; · &nbsp; calibrated to <b>~80%</b> &nbsp; · &nbsp; adjustable · <b>04</b></div>
+            </div>
+            <div class="a3-cell">
+              <div class="num">03 ·<b>WHERE YOU ARE</b></div>
+              <div class="head">CEFR-anchored estimate.</div>
+              <div class="a3-axes">
+                <div class="axis"><span>reception</span><b>B1.3</b></div>
+                <div class="axis"><span>production</span><b>A2.4</b></div>
+                <div class="axis weak"><span>mediation</span><b>A2.1</b></div>
+                <div class="axis"><span>interaction</span><b>A2.5</b></div>
+                <div class="axis"><span>plurilingual</span><b>A2.3</b></div>
+                <div class="axis"><span>strategies</span><b>B1.0</b></div>
+              </div>
+              <div class="micro" style="margin-top:14px">SE(θ) · <b>0.27</b> &nbsp; · &nbsp; targeting · <b style="color:var(--coral)">mediation</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FORK B — INKWELL FSRS INK DECAY
+       ═══════════════════════════════════════ -->
+  <section class="fork" id="fork-b">
+    <div class="fork-head">
+      <div class="fork-id">FORK B</div>
+      <div class="fork-title">
+        Inkwell · FSRS ink-desaturation rendering
+        <small>Same twelve pinned Persian words at varying R-values. Three visual treatments of the signature pattern. The 1px coral underline marks R&lt;0.9 in all three; opacity floors at 0.55.</small>
+      </div>
+      <div class="fork-pick">pick one</div>
+    </div>
+
+    <!-- B1 — Pure opacity decay -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">B1 <b>Pure opacity decay</b></div>
+        <div class="note">Floating typography · no boxes · decay is the only signal · spec default</div>
+      </div>
+      <div class="variant-body">
+        <div class="b1">
+          <div class="b1-head">
+            <h2>Inkwell · 12 of 287 pinned</h2>
+            <div class="meta">sort · <b>retrievability ↓</b> &nbsp; · &nbsp; lang · <b>Persian</b></div>
+          </div>
+          <div class="b1-grid">
+            <div class="b1-word r98"><div><div class="fa">صبح</div><div class="en">morning</div></div><div class="sr">S 42d · R 0.98</div></div>
+            <div class="b1-word r97"><div><div class="fa">شب</div><div class="en">night</div></div><div class="sr">S 38d · R 0.97</div></div>
+            <div class="b1-word r96"><div><div class="fa">صدا</div><div class="en">voice, sound</div></div><div class="sr">S 31d · R 0.96</div></div>
+            <div class="b1-word r96"><div><div class="fa">کتاب</div><div class="en">book</div></div><div class="sr">S 29d · R 0.95</div></div>
+            <div class="b1-word r94"><div><div class="fa">نامه</div><div class="en">letter</div></div><div class="sr">S 22d · R 0.94</div></div>
+            <div class="b1-word r94"><div><div class="fa">باران</div><div class="en">rain</div></div><div class="sr">S 19d · R 0.93</div></div>
+            <div class="b1-word r92"><div><div class="fa">خاطره</div><div class="en">memory</div></div><div class="sr">S 14d · R 0.92</div></div>
+            <div class="b1-word r90"><div><div class="fa">دلتنگ</div><div class="en">longing, homesick</div></div><div class="sr">S 9d · R 0.91</div></div>
+            <div class="b1-word over r88"><div><div class="fa">آرزو</div><div class="en">wish, longing</div></div><div class="sr" style="color:var(--coral)">S 7d · R 0.88</div></div>
+            <div class="b1-word over r88"><div><div class="fa">آغوش</div><div class="en">embrace</div></div><div class="sr" style="color:var(--coral)">S 6d · R 0.89</div></div>
+            <div class="b1-word over r86"><div><div class="fa">پنجره</div><div class="en">window</div></div><div class="sr" style="color:var(--coral)">S 5d · R 0.86</div></div>
+            <div class="b1-word over r83"><div><div class="fa">یاد</div><div class="en">remembrance</div></div><div class="sr" style="color:var(--coral)">S 3d · R 0.83</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B2 — Card grid with chroma -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">B2 <b>Card grid · ink + stroke decay</b></div>
+        <div class="note">Each word an object · stroke and content fade together · S/R always visible</div>
+      </div>
+      <div class="variant-body">
+        <div class="b2">
+          <div class="b2-head">
+            <h2>Inkwell · 12 of 287 pinned</h2>
+            <div class="meta">filter · <b>none</b> &nbsp; · &nbsp; view · <b>card</b></div>
+          </div>
+          <div class="b2-grid">
+            <div class="b2-card r98"><div class="fa">صبح</div><div class="en">morning</div><div class="meta"><span>S 42d</span><span>R 0.98</span></div></div>
+            <div class="b2-card r97"><div class="fa">شب</div><div class="en">night</div><div class="meta"><span>S 38d</span><span>R 0.97</span></div></div>
+            <div class="b2-card r96"><div class="fa">صدا</div><div class="en">voice, sound</div><div class="meta"><span>S 31d</span><span>R 0.96</span></div></div>
+            <div class="b2-card r96"><div class="fa">کتاب</div><div class="en">book</div><div class="meta"><span>S 29d</span><span>R 0.95</span></div></div>
+            <div class="b2-card r94"><div class="fa">نامه</div><div class="en">letter</div><div class="meta"><span>S 22d</span><span>R 0.94</span></div></div>
+            <div class="b2-card r94"><div class="fa">باران</div><div class="en">rain</div><div class="meta"><span>S 19d</span><span>R 0.93</span></div></div>
+            <div class="b2-card r92"><div class="fa">خاطره</div><div class="en">memory</div><div class="meta"><span>S 14d</span><span>R 0.92</span></div></div>
+            <div class="b2-card r90"><div class="fa">دلتنگ</div><div class="en">longing</div><div class="meta"><span>S 9d</span><span>R 0.91</span></div></div>
+            <div class="b2-card over r88"><div class="fa">آرزو</div><div class="en">wish</div><div class="meta"><span>S 7d</span><span>R 0.88</span></div></div>
+            <div class="b2-card over r88"><div class="fa">آغوش</div><div class="en">embrace</div><div class="meta"><span>S 6d</span><span>R 0.89</span></div></div>
+            <div class="b2-card over r86"><div class="fa">پنجره</div><div class="en">window</div><div class="meta"><span>S 5d</span><span>R 0.86</span></div></div>
+            <div class="b2-card over r83"><div class="fa">یاد</div><div class="en">remembrance</div><div class="meta"><span>S 3d</span><span>R 0.83</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B3 — Manuscript margin -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">B3 <b>Manuscript margin · notebook</b></div>
+        <div class="note">Vertical reading rhythm · etymology pill visible · feels like a writer's commonplace book</div>
+      </div>
+      <div class="variant-body">
+        <div class="b3">
+          <div class="b3-head">
+            <h2>Inkwell · 12 of 287 pinned</h2>
+            <div class="meta">sort · <b>R ↓</b> &nbsp; · &nbsp; view · <b>list</b></div>
+          </div>
+          <div class="b3-list">
+            <div class="b3-row r98"><div class="idx">001</div><div class="fa">صبح</div><div class="gloss"><span class="en">morning <em>· n.</em></span><span class="ipa">sobh</span></div><div class="ex"><span class="ex-fa">صبح زود</span><span class="ex-en">early morning</span></div><div class="ety">Middle Persian · #412</div><div class="sr"><b>R 0.98</b>S 42d</div></div>
+            <div class="b3-row r97"><div class="idx">002</div><div class="fa">شب</div><div class="gloss"><span class="en">night <em>· n.</em></span><span class="ipa">shab</span></div><div class="ex"><span class="ex-fa">شب طولانی</span><span class="ex-en">a long night</span></div><div class="ety">Middle Persian · #338</div><div class="sr"><b>R 0.97</b>S 38d</div></div>
+            <div class="b3-row r96"><div class="idx">003</div><div class="fa">صدا</div><div class="gloss"><span class="en">voice, sound <em>· n.</em></span><span class="ipa">sedâ</span></div><div class="ex"><span class="ex-fa">صدای پرنده</span><span class="ex-en">the bird's voice</span></div><div class="ety">Arabic-origin · #621</div><div class="sr"><b>R 0.96</b>S 31d</div></div>
+            <div class="b3-row r96"><div class="idx">004</div><div class="fa">کتاب</div><div class="gloss"><span class="en">book <em>· n.</em></span><span class="ipa">ketâb</span></div><div class="ex"><span class="ex-fa">کتاب باز</span><span class="ex-en">an open book</span></div><div class="ety">Arabic-origin · #289</div><div class="sr"><b>R 0.95</b>S 29d</div></div>
+            <div class="b3-row r94"><div class="idx">005</div><div class="fa">نامه</div><div class="gloss"><span class="en">letter <em>· n.</em></span><span class="ipa">nâmeh</span></div><div class="ex"><span class="ex-fa">نامه‌ی عاشقانه</span><span class="ex-en">a love letter</span></div><div class="ety">Middle Persian · #1 204</div><div class="sr"><b>R 0.94</b>S 22d</div></div>
+            <div class="b3-row r94"><div class="idx">006</div><div class="fa">باران</div><div class="gloss"><span class="en">rain <em>· n.</em></span><span class="ipa">bârân</span></div><div class="ex"><span class="ex-fa">باران تابستانی</span><span class="ex-en">summer rain</span></div><div class="ety">Middle Persian · #1 087</div><div class="sr"><b>R 0.93</b>S 19d</div></div>
+            <div class="b3-row r92"><div class="idx">007</div><div class="fa">خاطره</div><div class="gloss"><span class="en">memory <em>· n.</em></span><span class="ipa">khâtereh</span></div><div class="ex"><span class="ex-fa">خاطره‌ی شیرین</span><span class="ex-en">a sweet memory</span></div><div class="ety">Arabic-origin · #2 314</div><div class="sr"><b>R 0.92</b>S 14d</div></div>
+            <div class="b3-row r90"><div class="idx">008</div><div class="fa">دلتنگ</div><div class="gloss"><span class="en">longing <em>· adj.</em></span><span class="ipa">deltang</span></div><div class="ex"><span class="ex-fa">دلتنگ خانه</span><span class="ex-en">homesick for home</span></div><div class="ety">Compound · NP · #4 192</div><div class="sr"><b>R 0.91</b>S 9d</div></div>
+            <div class="b3-row over r88"><div class="idx">009</div><div class="fa">آرزو</div><div class="gloss"><span class="en">wish, longing <em>· n.</em></span><span class="ipa">ârezu</span></div><div class="ex"><span class="ex-fa">آرزوی دور</span><span class="ex-en">a distant wish</span></div><div class="ety">Middle Persian · #1 644</div><div class="sr"><b>R 0.88</b>S 7d</div></div>
+            <div class="b3-row over r88"><div class="idx">010</div><div class="fa">آغوش</div><div class="gloss"><span class="en">embrace <em>· n.</em></span><span class="ipa">âghush</span></div><div class="ex"><span class="ex-fa">در آغوش گرفتن</span><span class="ex-en">to embrace (lit. take in arms)</span></div><div class="ety">Middle Persian · #3 928</div><div class="sr"><b>R 0.89</b>S 6d</div></div>
+            <div class="b3-row over r86"><div class="idx">011</div><div class="fa">پنجره</div><div class="gloss"><span class="en">window <em>· n.</em></span><span class="ipa">panjereh</span></div><div class="ex"><span class="ex-fa">پنجره‌ی باز</span><span class="ex-en">an open window</span></div><div class="ety">Middle Persian · #2 871</div><div class="sr"><b>R 0.86</b>S 5d</div></div>
+            <div class="b3-row over r83"><div class="idx">012</div><div class="fa">یاد</div><div class="gloss"><span class="en">remembrance <em>· n.</em></span><span class="ipa">yâd</span></div><div class="ex"><span class="ex-fa">به یاد آوردن</span><span class="ex-en">to call to mind</span></div><div class="ety">Middle Persian · #1 528</div><div class="sr"><b>R 0.83</b>S 3d</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FORK C — 5-AXIS FILTER CHIPS
+       ═══════════════════════════════════════ -->
+  <section class="fork" id="fork-c">
+    <div class="fork-head">
+      <div class="fork-id">FORK C</div>
+      <div class="fork-title">
+        5-axis filter chips · the signature mechanic
+        <small>Same loadout in all three: Arabic-origin Persian · 5K–10K frequency · literary register · concrete · nature. Match count: 287 words.</small>
+      </div>
+      <div class="fork-pick">pick one</div>
+    </div>
+
+    <!-- C1 — Linear pill row -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">C1 <b>Linear pill row</b></div>
+        <div class="note">Familiar · compact · scans like a query · best for Dictionary screen</div>
+      </div>
+      <div class="variant-body">
+        <div class="c1">
+          <div class="c1-eyebrow">DICTIONARY · 5-AXIS FILTER</div>
+          <h2 class="c1-title">Filter the lexicon</h2>
+          <div class="c1-row">
+            <span class="pill"><span class="axis-lab">etym</span> <span class="val">Arabic-origin</span> <span class="x">×</span></span>
+            <span class="pill"><span class="axis-lab">freq</span> <span class="val">5K–10K</span> <span class="x">×</span></span>
+            <span class="pill"><span class="axis-lab">reg</span> <span class="val">literary</span> <span class="x">×</span></span>
+            <span class="pill"><span class="axis-lab">abst</span> <span class="val">concrete</span> <span class="x">×</span></span>
+            <span class="pill"><span class="axis-lab">topic</span> <span class="val">nature</span> <span class="x">×</span></span>
+            <span class="pill add">+ refine</span>
+          </div>
+          <div class="c1-count">
+            <span>matching · <b>287 words</b> &nbsp; · &nbsp; of <b>4 812</b> in band</span>
+            <span>combo rarity · <b style="color:var(--ochre)">uncommon</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C2 — Stripe stacked composer -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">C2 <b>Stripe-stacked composer</b></div>
+        <div class="note">Vertical · each axis a numbered section · best for Settings or onboarding compose flow</div>
+      </div>
+      <div class="variant-body">
+        <div class="c2">
+          <div class="c2-main">
+            <h2 class="c2-title">Compose this session</h2>
+            <div class="c2-sub">Five axes. Pick what you're working on — leave any blank.</div>
+
+            <div class="c2-section">
+              <div class="num">01 <b>etym</b></div>
+              <div class="label">Etymology origin <small>where the word came from</small></div>
+              <div class="chip">Arabic-origin</div>
+            </div>
+            <div class="c2-section">
+              <div class="num">02 <b>freq</b></div>
+              <div class="label">Frequency band <small>how common in the corpus</small></div>
+              <div class="chip">5K–10K</div>
+            </div>
+            <div class="c2-section">
+              <div class="num">03 <b>reg</b></div>
+              <div class="label">Register <small>formality / context</small></div>
+              <div class="chip">literary</div>
+            </div>
+            <div class="c2-section">
+              <div class="num">04 <b>abst</b></div>
+              <div class="label">Abstraction <small>concrete ↔ abstract</small></div>
+              <div class="chip">concrete</div>
+            </div>
+            <div class="c2-section">
+              <div class="num">05 <b>topic</b></div>
+              <div class="label">Topic <small>semantic field</small></div>
+              <div class="chip">nature</div>
+            </div>
+
+            <div class="c2-footer">
+              <div class="count">287 words <small>of 4 812 in band</small></div>
+              <button class="go">Run session →</button>
+            </div>
+          </div>
+
+          <aside class="c2-preview">
+            <div class="pv-eyebrow"><span>— Preview · 6 of 287</span> <b>uncommon</b></div>
+            <div class="pv-row"><div class="pv-fa">شفق<small>shafaq · twilight glow</small></div><div class="pv-rank">#6 214</div></div>
+            <div class="pv-row"><div class="pv-fa">گلستان<small>golestân · rose garden</small></div><div class="pv-rank">#7 802</div></div>
+            <div class="pv-row"><div class="pv-fa">مهتاب<small>mahtâb · moonlight</small></div><div class="pv-rank">#8 449</div></div>
+            <div class="pv-row"><div class="pv-fa">نسیم<small>nasim · gentle breeze</small></div><div class="pv-rank">#5 928</div></div>
+            <div class="pv-row"><div class="pv-fa">شبنم<small>shabnam · dew</small></div><div class="pv-rank">#9 117</div></div>
+            <div class="pv-row"><div class="pv-fa">سحر<small>sahar · dawn</small></div><div class="pv-rank">#6 740</div></div>
+            <div class="pv-more"><a href="#">see all 287 →</a></div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <!-- C3 — Balatro loadout -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">C3 <b>Loadout slots · Filter Jokers</b></div>
+        <div class="note">Five visible slots · rare-combo state · primary play surface in Refinery (Phase 2)</div>
+      </div>
+      <div class="variant-body">
+        <div class="c3">
+          <div class="c3-head">
+            <h2>Session loadout</h2>
+            <div class="stamp">UNCOMMON COMBO · ×1.4 RETRIEVAL</div>
+          </div>
+          <div class="c3-slots">
+            <div class="c3-slot">
+              <div class="lab">01 · ETYM</div>
+              <div class="val">Arabic-origin Persian</div>
+              <div class="meta">layer · borrowing</div>
+            </div>
+            <div class="c3-slot">
+              <div class="lab">02 · FREQ</div>
+              <div class="val">5K – 10K</div>
+              <div class="meta">mid-band</div>
+            </div>
+            <div class="c3-slot rare">
+              <div class="lab">03 · REG</div>
+              <div class="val">literary</div>
+              <div class="meta">rare for level</div>
+            </div>
+            <div class="c3-slot">
+              <div class="lab">04 · ABST</div>
+              <div class="val">concrete</div>
+              <div class="meta">image-bearing</div>
+            </div>
+            <div class="c3-slot">
+              <div class="lab">05 · TOPIC</div>
+              <div class="val">nature</div>
+              <div class="meta">mountain · river · weather</div>
+            </div>
+          </div>
+          <div class="c3-readout">
+            <div class="left">
+              287 words match this loadout &nbsp;·&nbsp; <b>uncommon combo</b>
+              <small>Rare encounters unlock a distinct Codex framing on first contact.</small>
+            </div>
+            <button class="go">Run loadout →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FORK D — TOKEN-LEVEL DIFF FEEDBACK
+       ═══════════════════════════════════════ -->
+  <section class="fork" id="fork-d">
+    <div class="fork-head">
+      <div class="fork-id">FORK D</div>
+      <div class="fork-title">
+        Token-level diff · failure framing
+        <small>User wrote the perfective <span style="font-family:var(--fa)">خریدم</span> ("I bought"); habitual past needs the imperfective <span style="font-family:var(--fa)">می‌خریدم</span>. Same correction, two ways of delivering it.</small>
+      </div>
+      <div class="fork-pick">pick one</div>
+    </div>
+
+    <!-- D1 — Strike and slide -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">D1 <b>Strike-and-slide</b></div>
+        <div class="note">Wrong token strikes through · correction slides in below · note in margin · the spec default</div>
+      </div>
+      <div class="variant-body">
+        <div class="d-frame">
+          <div class="d-eyebrow">REFINERY · EDIT-THE-TEXT · ITEM 7 OF 14 &nbsp; <b>· close</b></div>
+          <div class="d-prompt">
+            You wrote <em>"every morning I bought fruit at the bazaar"</em> — but this is a habit, not a single past event. Persian marks habitual past on the verb itself.
+          </div>
+
+          <div class="d1-sent">هر روز صبح از بازار میوه <span class="strike">خریدم</span>.</div>
+          <div class="d1-correct">هر روز صبح از بازار میوه <span class="new">می‌خریدم</span>.</div>
+
+          <div class="d1-note">
+            <div class="tag">metalinguistic · A2→B1</div>
+            Close — that's the perfective stem (a single completed event). You want the <b>imperfective</b>: prefix <span style="font-family:var(--fa)">می‍-</span> attaches to the past stem for habitual, ongoing, or repeated past action.
+          </div>
+
+          <div class="d1-foot">
+            <div class="stat">FSRS · this card retightened &nbsp; · &nbsp; next review <b>~2d</b></div>
+            <button class="next">Continue →</button>
+          </div>
+
+          <div class="mascot-anchor">96 × 96 · mascot</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D2 — Margin reformulation -->
+    <div class="variant">
+      <div class="variant-bar">
+        <div class="id">D2 <b>Margin reformulation</b></div>
+        <div class="note">User's sentence stays clean · correction in the margin like an editor's pencil · "author not tourist" embodied</div>
+      </div>
+      <div class="variant-body">
+        <div class="d-frame">
+          <div class="d-eyebrow">REFINERY · EDIT-THE-TEXT · ITEM 7 OF 14 &nbsp; <b>· close</b></div>
+          <div class="d-prompt">
+            You wrote <em>"every morning I bought fruit at the bazaar"</em> — but this is a habit, not a single past event.
+          </div>
+
+          <div class="d2-grid">
+            <div>
+              <div class="d2-text">هر روز صبح از بازار میوه <span class="mark">خریدم</span>.</div>
+            </div>
+            <div class="d2-margin">
+              <div class="tag">— EDITOR'S NOTE</div>
+              <div class="word-row"><span class="from">خریدم</span><span class="arr">→</span><span class="to">می‌خریدم</span></div>
+              <div class="gloss">
+                That's the <b>perfective</b> stem — one completed event. For habits, ongoing, or repeated past action, prefix <span style="font-family:var(--fa)">می‍-</span> to the past stem.
+              </div>
+
+              <div class="rule">
+                <span class="rk">Rule · imperfective past</span>
+                <b style="color:var(--ink);font-weight:500">می +</b> past stem &nbsp;→&nbsp; habitual / continuous past. Persian marks aspect, not tense alone — the same past stem can read as completed or habitual depending on this prefix.
+              </div>
+
+              <div class="ex">دیروز سه کتاب <span class="hi">خریدم</span>.</div>
+              <div class="ex-gloss">yesterday I bought three books · perfective, one event</div>
+              <div class="ex">هر هفته یک کتاب <span class="hi">می‌خریدم</span>.</div>
+              <div class="ex-gloss">every week I would buy a book · imperfective, habit</div>
+
+              <div class="micro">
+                <div class="row"><span>tag</span><b>habitual past</b></div>
+                <div class="row"><span>CEFR</span><b>A2 → B1</b></div>
+                <div class="row"><span>seen in your Inkwell</span><b>3 cards</b></div>
+                <div class="row"><span>next encounter</span><b>~2d</b></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d2-foot">
+            <div class="stat">FSRS · retightened &nbsp; · &nbsp; next review <b>~2d</b></div>
+            <button class="next">Continue →</button>
+          </div>
+
+          <div class="mascot-anchor">96 × 96 · mascot</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SELF-CRITIQUE
+       ═══════════════════════════════════════ -->
+  <section class="critique">
+    <h3>Self-critique · 1–5</h3>
+    <div class="row">
+      <div class="dim">Philosophy</div>
+      <div class="score">5</div>
+      <div class="just">Every variant carries a point of view drawn straight from the brief — author not tourist, calm not slot-machine, expertise respected. No variant is neutral.</div>
+    </div>
+    <div class="row">
+      <div class="dim">Hierarchy</div>
+      <div class="score">4</div>
+      <div class="just">Persian script gets primacy in greetings and Inkwell, metadata recedes to mono. A3 packs three columns of metadata that could read as flat if the closing ring weren't visually load-bearing.</div>
+    </div>
+    <div class="row">
+      <div class="dim">Detail</div>
+      <div class="score">5</div>
+      <div class="just">Real Persian words, accurate etymology tags, FSRS opacity table tied to spec, +0.1 line-height handled in Vazirmatn-loaded blocks, coral underline only when R&lt;0.9, mascot anchor reserved only in Refinery contexts (Fork D), not in Today (correct per brief).</div>
+    </div>
+    <div class="row">
+      <div class="dim">Function</div>
+      <div class="score">5</div>
+      <div class="just">Each fork isolates one decision and gives identifiable IDs to pick by. Same content across variants so the comparison is honest. Stated goal of the artifact (let user pick) is the artifact's structure.</div>
+    </div>
+    <div class="row">
+      <div class="dim">Innovation</div>
+      <div class="score">4</div>
+      <div class="just">B3's manuscript-margin Inkwell and C3's Filter-Jokers loadout slots are the genuinely novel proposals. A1–A3 are well-trodden archetypes deliberately; the point is for you to pick a posture, not for me to invent one.</div>
+    </div>
+    <div class="verdict">All dimensions ≥ 4. <b>Shipping without iteration.</b> Awaiting selection.</div>
+  </section>
+
+</main>
+
+</body>
+</html>
