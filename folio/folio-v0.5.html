@@ -8520,4 +8520,148 @@ ${renderInkwellDrawer()}`;
   }, 1200);
 })();
 </script>
+
+<script id="glyph-picks-render-overrides">
+/* ═══════════════════════════════════════════════════════════════
+   Glyph picks render overrides.
+   Folio's runtime sets screen.innerHTML on #screen-today, -inkwell,
+   -lesson through window.Folio.renderToday/Inkwell/Lesson, which
+   clobbers the static Glyph markup baked into the HTML. This script
+   replaces those render functions and watches for screen activation
+   so the Glyph designs (A3, B3, D1) win.
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var TODAY_HTML = '' +
+    '<div class="gt-stamp">THU · 21 · MAY · 2026 &nbsp;·&nbsp; <b>week 6 of Persian</b></div>' +
+    '<h1 class="gt-greeting">صبح بخیر</h1>' +
+    '<div class="gt-translit">sob\'h be-kheyr · 06:42</div>' +
+    '<div class="gt-grid">' +
+      '<div class="gt-cell">' +
+        '<div class="gt-num">01 ·<b>TODAY</b></div>' +
+        '<div class="gt-head">A short session, targeted.</div>' +
+        '<div class="gt-body">14 items, around 8 minutes. Three edit-the-text, eight cloze, three pick-better-word.</div>' +
+        '<div class="gt-micro">est · <b>8m 12s</b> &nbsp; · &nbsp; R target · <b>0.85</b></div>' +
+      '</div>' +
+      '<div class="gt-cell">' +
+        '<div class="gt-num">02 ·<b>WHY THIS SESSION</b></div>' +
+        '<div class="gt-head">Targeting your weakest axis.</div>' +
+        '<div class="gt-body">Mediation lags one CEFR sub-band behind your reception. Today\'s task envelope: <em>Edit-the-Text</em> in a casual register, Arabic-origin lemma focus.</div>' +
+        '<div class="gt-micro">composer · <b>session engine</b> &nbsp; · &nbsp; calibrated to <b>~80%</b></div>' +
+      '</div>' +
+      '<div class="gt-cell">' +
+        '<div class="gt-num">03 ·<b>WHERE YOU ARE</b></div>' +
+        '<div class="gt-head">CEFR-anchored estimate.</div>' +
+        '<div class="gt-axes">' +
+          '<div class="gt-axis"><span>reception</span><b>B1.3</b></div>' +
+          '<div class="gt-axis"><span>production</span><b>A2.4</b></div>' +
+          '<div class="gt-axis weak"><span>mediation</span><b>A2.1</b></div>' +
+          '<div class="gt-axis"><span>interaction</span><b>A2.5</b></div>' +
+          '<div class="gt-axis"><span>plurilingual</span><b>A2.3</b></div>' +
+          '<div class="gt-axis"><span>strategies</span><b>B1.0</b></div>' +
+        '</div>' +
+        '<div class="gt-micro" style="margin-top:14px">SE(θ) · <b>0.27</b> &nbsp; · &nbsp; targeting · <b style="color:var(--glyph-coral)">mediation</b></div>' +
+      '</div>' +
+    '</div>' +
+    '<button class="gt-begin" id="today-cta-lesson">Begin today\'s session →</button>';
+
+  var INKWELL_HTML = '' +
+    '<div class="gi-head">' +
+      '<h2>Inkwell · 12 of 287 pinned</h2>' +
+      '<div class="meta">sort · <b>R ↓</b> &nbsp; · &nbsp; view · <b>list</b></div>' +
+    '</div>' +
+    '<div class="gi-row r98"><div class="idx">001</div><div class="fa">صبح</div><div class="gloss">morning <em>· n.</em><span class="ipa">sobh</span></div><div class="ex">صبح زود<small>early morning</small></div><div class="ety">Middle Persian · #412</div><div class="sr"><b>R 0.98</b>S 42d</div></div>' +
+    '<div class="gi-row r97"><div class="idx">002</div><div class="fa">شب</div><div class="gloss">night <em>· n.</em><span class="ipa">shab</span></div><div class="ex">شب طولانی<small>a long night</small></div><div class="ety">Middle Persian · #338</div><div class="sr"><b>R 0.97</b>S 38d</div></div>' +
+    '<div class="gi-row r96"><div class="idx">003</div><div class="fa">صدا</div><div class="gloss">voice, sound <em>· n.</em><span class="ipa">sedâ</span></div><div class="ex">صدای پرنده<small>the bird\'s voice</small></div><div class="ety">Arabic-origin · #621</div><div class="sr"><b>R 0.96</b>S 31d</div></div>' +
+    '<div class="gi-row r95"><div class="idx">004</div><div class="fa">کتاب</div><div class="gloss">book <em>· n.</em><span class="ipa">ketâb</span></div><div class="ex">کتاب باز<small>an open book</small></div><div class="ety">Arabic-origin · #289</div><div class="sr"><b>R 0.95</b>S 29d</div></div>' +
+    '<div class="gi-row r94"><div class="idx">005</div><div class="fa">نامه</div><div class="gloss">letter <em>· n.</em><span class="ipa">nâmeh</span></div><div class="ex">نامه‌ی عاشقانه<small>a love letter</small></div><div class="ety">Middle Persian · #1 204</div><div class="sr"><b>R 0.94</b>S 22d</div></div>' +
+    '<div class="gi-row r93"><div class="idx">006</div><div class="fa">باران</div><div class="gloss">rain <em>· n.</em><span class="ipa">bârân</span></div><div class="ex">باران تابستانی<small>summer rain</small></div><div class="ety">Middle Persian · #1 087</div><div class="sr"><b>R 0.93</b>S 19d</div></div>' +
+    '<div class="gi-row r92"><div class="idx">007</div><div class="fa">خاطره</div><div class="gloss">memory <em>· n.</em><span class="ipa">khâtereh</span></div><div class="ex">خاطره‌ی شیرین<small>a sweet memory</small></div><div class="ety">Arabic-origin · #2 314</div><div class="sr"><b>R 0.92</b>S 14d</div></div>' +
+    '<div class="gi-row r91"><div class="idx">008</div><div class="fa">دلتنگ</div><div class="gloss">longing <em>· adj.</em><span class="ipa">deltang</span></div><div class="ex">دلتنگ خانه<small>homesick for home</small></div><div class="ety">Compound · NP · #4 192</div><div class="sr"><b>R 0.91</b>S 9d</div></div>' +
+    '<div class="gi-row over r88"><div class="idx">009</div><div class="fa">آرزو</div><div class="gloss">wish, longing <em>· n.</em><span class="ipa">ârezu</span></div><div class="ex">آرزوی دور<small>a distant wish</small></div><div class="ety">Middle Persian · #1 644</div><div class="sr"><b>R 0.88</b>S 7d</div></div>' +
+    '<div class="gi-row over r89"><div class="idx">010</div><div class="fa">آغوش</div><div class="gloss">embrace <em>· n.</em><span class="ipa">âghush</span></div><div class="ex">در آغوش گرفتن<small>to embrace</small></div><div class="ety">Middle Persian · #3 928</div><div class="sr"><b>R 0.89</b>S 6d</div></div>' +
+    '<div class="gi-row over r86"><div class="idx">011</div><div class="fa">پنجره</div><div class="gloss">window <em>· n.</em><span class="ipa">panjereh</span></div><div class="ex">پنجره‌ی باز<small>an open window</small></div><div class="ety">Middle Persian · #2 871</div><div class="sr"><b>R 0.86</b>S 5d</div></div>' +
+    '<div class="gi-row over r83"><div class="idx">012</div><div class="fa">یاد</div><div class="gloss">remembrance <em>· n.</em><span class="ipa">yâd</span></div><div class="ex">به یاد آوردن<small>to call to mind</small></div><div class="ety">Middle Persian · #1 528</div><div class="sr"><b>R 0.83</b>S 3d</div></div>';
+
+  var LESSON_HTML = '' +
+    '<div id="lesson-phase-editor" class="lesson-phase">' +
+      '<div class="gd-eyebrow">REFINERY · EDIT-THE-TEXT · ITEM 7 OF 14 &nbsp;<b>· close</b></div>' +
+      '<p class="gd-prompt">You wrote <em>"every morning I bought fruit at the bazaar"</em> — but this is a habit, not a single past event. Persian marks habitual past on the verb itself.</p>' +
+      '<div class="gd-sent">هر روز صبح از بازار میوه <span class="strike">خریدم</span>.</div>' +
+      '<div class="gd-correct">هر روز صبح از بازار میوه <span class="new">می‌خریدم</span>.</div>' +
+      '<div class="gd-note">' +
+        '<span class="tag">metalinguistic · A2→B1</span>' +
+        'Close — that\'s the perfective stem (a single completed event). You want the <b>imperfective</b>: prefix <span style="font-family:var(--glyph-fa)">می‍-</span> attaches to the past stem for habitual, ongoing, or repeated past action.' +
+      '</div>' +
+      '<div class="gd-foot">' +
+        '<div class="stat">FSRS · retightened &nbsp;·&nbsp; next review <b>~2d</b></div>' +
+        '<button class="next">Continue →</button>' +
+      '</div>' +
+      '<div class="gd-mascot">72 × 72 · mascot</div>' +
+    '</div>';
+
+  function paint(id, html) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  }
+
+  function paintCurrent() {
+    var a = document.querySelector('.screen.active');
+    if (!a) return;
+    if (a.id === 'screen-today') paint('screen-today', TODAY_HTML);
+    else if (a.id === 'screen-inkwell') paint('screen-inkwell', INKWELL_HTML);
+    else if (a.id === 'screen-lesson') paint('screen-lesson', LESSON_HTML);
+  }
+
+  function installOverrides() {
+    if (!window.Folio) return false;
+    window.Folio.renderToday = function () { paint('screen-today', TODAY_HTML); };
+    window.Folio.renderInkwell = function () { paint('screen-inkwell', INKWELL_HTML); };
+    window.Folio.renderLesson = function () { paint('screen-lesson', LESSON_HTML); };
+    return true;
+  }
+
+  function observeScreens() {
+    var screens = document.querySelectorAll('.screen');
+    if (!screens.length) return;
+    var obs = new MutationObserver(function (muts) {
+      for (var i = 0; i < muts.length; i++) {
+        var m = muts[i];
+        if (m.attributeName === 'class' && m.target.classList.contains('active')) {
+          paintCurrent();
+          break;
+        }
+      }
+    });
+    screens.forEach(function (s) {
+      obs.observe(s, { attributes: true, attributeFilter: ['class'] });
+    });
+  }
+
+  function init() {
+    // Retry until Folio is ready (it may load after this script)
+    var tries = 0;
+    function tick() {
+      tries++;
+      var ok = installOverrides();
+      paintCurrent();
+      if (!ok && tries < 40) setTimeout(tick, 150);
+    }
+    tick();
+    observeScreens();
+    // Also repaint after a delay in case other JS runs after activation
+    setTimeout(paintCurrent, 250);
+    setTimeout(paintCurrent, 1000);
+    setTimeout(paintCurrent, 2500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
 </body></html>
