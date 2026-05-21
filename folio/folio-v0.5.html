@@ -959,6 +959,340 @@ button.danger { width: 100%; background: transparent; color: var(--danger); bord
 #fv4-debug button{padding:4px 8px;font-size:10px;background:var(--surface);color:var(--text-muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-family:inherit;white-space:nowrap}
 #fv4-debug button:hover{background:var(--border);color:var(--text-secondary)}
 </style>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     GLYPH PICKS OVERLAY · A3 (Today), B3 (Inkwell), D1 (Lesson feedback)
+     Self-contained palette + typography + layout for three screens.
+     Scoped under #screen-today, #screen-inkwell, #screen-lesson —
+     does not affect Codex, Quests, Profile, Sign-in.
+     ═══════════════════════════════════════════════════════════════ -->
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style id="glyph-picks-overlay">
+  :root {
+    --glyph-paper:   #F5EFE6;
+    --glyph-paper-2: #EBE4D6;
+    --glyph-paper-3: #E1D8C4;
+    --glyph-ink:     #1A2138;
+    --glyph-ink-2:   #3A4060;
+    --glyph-ink-mid: #6B6F85;
+    --glyph-ink-soft:#9A9DAE;
+    --glyph-hair:    #D9D2C3;
+    --glyph-hair-2:  #C9C0AC;
+    --glyph-coral:   #C44536;
+    --glyph-ochre:   #B8826A;
+    --glyph-gold:    #D4AF7A;
+    --glyph-sans:    'Inter Tight', 'Inter', system-ui, sans-serif;
+    --glyph-fa:      'Vazirmatn', 'Noto Naskh Arabic', serif;
+    --glyph-mono:    'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  /* Activate Glyph styling on the three picked screens only */
+  #screen-today,
+  #screen-inkwell,
+  #screen-lesson {
+    background: var(--glyph-paper) !important;
+    color: var(--glyph-ink);
+    font-family: var(--glyph-sans);
+    padding: 28px 20px 100px;
+  }
+
+  /* Reset the screens' generic h1/h2/p so our layout owns the look */
+  #screen-today > h1, #screen-today > p.caption,
+  #screen-inkwell > h1, #screen-inkwell > p.caption { display: none; }
+
+  /* ───── A3 · TODAY ───── */
+  .gt-stamp {
+    font-family: var(--glyph-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--glyph-ink-mid);
+    margin-bottom: 18px;
+  }
+  .gt-stamp b { color: var(--glyph-ink); font-weight: 500; }
+  .gt-greeting {
+    font-family: var(--glyph-fa);
+    direction: rtl;
+    text-align: right;
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--glyph-ink);
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .gt-translit {
+    font-family: var(--glyph-mono);
+    font-size: 11px;
+    color: var(--glyph-ink-soft);
+    text-align: right;
+    margin-bottom: 32px;
+  }
+  .gt-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 1px solid var(--glyph-hair);
+  }
+  .gt-cell {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--glyph-hair);
+  }
+  .gt-cell:last-child { border-bottom: none; }
+  .gt-num {
+    font-family: var(--glyph-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--glyph-coral);
+    margin-bottom: 8px;
+  }
+  .gt-num b { color: var(--glyph-ink); font-weight: 500; margin-left: 8px; }
+  .gt-head {
+    font-size: 15px;
+    color: var(--glyph-ink-mid);
+    margin-bottom: 12px;
+  }
+  .gt-body {
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--glyph-ink);
+  }
+  .gt-body em { font-style: italic; color: var(--glyph-ink-2); }
+  .gt-micro {
+    margin-top: 12px;
+    font-family: var(--glyph-mono);
+    font-size: 10.5px;
+    color: var(--glyph-ink-mid);
+    letter-spacing: 0.04em;
+  }
+  .gt-micro b { color: var(--glyph-ink); font-weight: 500; }
+  .gt-axes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 14px;
+  }
+  .gt-axis {
+    font-family: var(--glyph-mono);
+    font-size: 12px;
+    color: var(--glyph-ink-mid);
+    display: flex;
+    justify-content: space-between;
+  }
+  .gt-axis b { color: var(--glyph-ink); font-weight: 500; }
+  .gt-axis.weak b { color: var(--glyph-coral); }
+  .gt-begin {
+    display: inline-block;
+    margin-top: 28px;
+    background: var(--glyph-ink);
+    color: var(--glyph-paper);
+    font-size: 14px;
+    padding: 12px 22px;
+    text-decoration: none;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    font-family: var(--glyph-sans);
+  }
+  .gt-begin:active { background: var(--glyph-coral); }
+
+  /* ───── B3 · INKWELL ───── */
+  .gi-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--glyph-hair);
+  }
+  .gi-head h2 { font-size: 20px; font-weight: 500; margin: 0; letter-spacing: -0.01em; color: var(--glyph-ink); }
+  .gi-head .meta { font-family: var(--glyph-mono); font-size: 11px; color: var(--glyph-ink-mid); }
+  .gi-head .meta b { color: var(--glyph-ink); font-weight: 500; }
+  .gi-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 80px;
+    grid-template-areas:
+      "idx fa sr"
+      "idx gloss sr"
+      "idx ex ety";
+    align-items: baseline;
+    gap: 4px 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--glyph-hair);
+  }
+  .gi-row:last-child { border-bottom: none; }
+  .gi-row .idx { grid-area: idx; font-family: var(--glyph-mono); font-size: 10px; color: var(--glyph-ink-soft); letter-spacing: 0.04em; }
+  .gi-row .fa { grid-area: fa; font-family: var(--glyph-fa); direction: rtl; font-size: 22px; line-height: 1.2; font-weight: 500; color: var(--glyph-ink); text-align: right; }
+  .gi-row .gloss { grid-area: gloss; font-size: 13.5px; color: var(--glyph-ink-2); }
+  .gi-row .gloss em { font-style: italic; color: var(--glyph-ink-mid); font-size: 11.5px; margin-left: 3px; }
+  .gi-row .gloss .ipa { display: block; font-family: var(--glyph-mono); font-size: 10.5px; color: var(--glyph-ink-mid); margin-top: 2px; }
+  .gi-row .ex { grid-area: ex; font-family: var(--glyph-fa); direction: rtl; font-size: 15px; color: var(--glyph-ink-2); text-align: right; }
+  .gi-row .ex small { display: block; font-family: var(--glyph-sans); font-style: italic; font-size: 11.5px; color: var(--glyph-ink-mid); direction: ltr; text-align: right; }
+  .gi-row .ety { grid-area: ety; font-family: var(--glyph-mono); font-size: 9.5px; color: var(--glyph-ink-mid); letter-spacing: 0.04em; border: 1px solid var(--glyph-hair-2); padding: 3px 6px; line-height: 1.2; text-align: center; }
+  .gi-row .sr { grid-area: sr; font-family: var(--glyph-mono); font-size: 10.5px; color: var(--glyph-ink-mid); text-align: right; line-height: 1.5; }
+  .gi-row .sr b { display: block; color: var(--glyph-ink); font-weight: 500; }
+  .gi-row.over .fa { border-bottom: 1px solid var(--glyph-coral); padding-bottom: 1px; }
+  .gi-row.over .sr, .gi-row.over .sr b { color: var(--glyph-coral); }
+
+  /* FSRS opacity tiers — R∈[1.0,0.9] → α∈[1.0,0.55] */
+  .gi-row.r98 { opacity: 1.00; }
+  .gi-row.r97 { opacity: 0.96; }
+  .gi-row.r96 { opacity: 0.92; }
+  .gi-row.r95 { opacity: 0.88; }
+  .gi-row.r94 { opacity: 0.84; }
+  .gi-row.r93 { opacity: 0.78; }
+  .gi-row.r92 { opacity: 0.74; }
+  .gi-row.r91 { opacity: 0.68; }
+  .gi-row.r90 { opacity: 0.62; }
+  .gi-row.r89 { opacity: 0.58; filter: saturate(0.85); }
+  .gi-row.r88 { opacity: 0.55; filter: saturate(0.7); }
+  .gi-row.r86 { opacity: 0.55; filter: saturate(0.65); }
+  .gi-row.r83 { opacity: 0.55; filter: saturate(0.55); }
+
+  /* ───── D1 · LESSON FEEDBACK ─────
+     Overlays the existing #screen-lesson to deliver strike-and-slide
+     feedback with a metalinguistic note. Coexists with the folio's
+     lesson choices markup. */
+  #screen-lesson .lesson-header,
+  #screen-lesson .lesson-instruction,
+  #screen-lesson .lesson-manuscript,
+  #screen-lesson .lesson-register-note,
+  #screen-lesson .lesson-choices,
+  #screen-lesson .lesson-mode-badge,
+  #screen-lesson .lesson-phase-label,
+  #screen-lesson .lesson-counter,
+  #screen-lesson .lesson-feedback {
+    color: var(--glyph-ink);
+  }
+  .gd-eyebrow {
+    font-family: var(--glyph-mono);
+    font-size: 10.5px;
+    color: var(--glyph-ink-mid);
+    letter-spacing: 0.08em;
+    margin: 0 0 14px;
+  }
+  .gd-eyebrow b { color: var(--glyph-coral); }
+  .gd-prompt {
+    font-size: 15px;
+    color: var(--glyph-ink-2);
+    margin: 0 0 20px;
+    line-height: 1.5;
+  }
+  .gd-prompt em { color: var(--glyph-ink-mid); font-style: italic; }
+  .gd-sent {
+    font-family: var(--glyph-fa);
+    direction: rtl;
+    font-size: 22px;
+    line-height: 1.7;
+    color: var(--glyph-ink);
+    font-weight: 500;
+    border-top: 1px solid var(--glyph-hair);
+    padding-top: 18px;
+    margin-bottom: 6px;
+  }
+  .gd-sent .strike {
+    color: var(--glyph-coral);
+    text-decoration: line-through;
+    text-decoration-color: var(--glyph-coral);
+  }
+  .gd-correct {
+    font-family: var(--glyph-fa);
+    direction: rtl;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--glyph-ink);
+    border-right: 2px solid var(--glyph-ochre);
+    padding-right: 12px;
+    margin-bottom: 22px;
+    display: inline-block;
+  }
+  .gd-correct .new {
+    color: var(--glyph-ink);
+    font-weight: 500;
+    background: linear-gradient(transparent 65%, color-mix(in oklch, var(--glyph-gold) 60%, transparent) 65%);
+  }
+  .gd-note {
+    background: var(--glyph-paper-2);
+    border-left: 2px solid var(--glyph-ink-2);
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--glyph-ink);
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+  .gd-note .tag {
+    font-family: var(--glyph-mono);
+    font-size: 10px;
+    color: var(--glyph-ink-mid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .gd-note b { color: var(--glyph-ink); font-weight: 500; }
+  .gd-foot {
+    border-top: 1px solid var(--glyph-hair);
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .gd-foot .stat {
+    font-family: var(--glyph-mono);
+    font-size: 10.5px;
+    color: var(--glyph-ink-mid);
+    letter-spacing: 0.04em;
+  }
+  .gd-foot .stat b { color: var(--glyph-ink); font-weight: 500; }
+  .gd-foot .next {
+    background: var(--glyph-ink);
+    color: var(--glyph-paper);
+    font-size: 13.5px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--glyph-sans);
+    font-weight: 500;
+  }
+  .gd-foot .next:active { background: var(--glyph-coral); }
+  .gd-mascot {
+    position: absolute;
+    right: 16px;
+    bottom: 80px;
+    width: 72px;
+    height: 72px;
+    border: 1px dashed var(--glyph-hair-2);
+    color: var(--glyph-ink-soft);
+    font-family: var(--glyph-mono);
+    font-size: 8.5px;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 4px;
+    pointer-events: none;
+  }
+
+  /* Wider screens — bump the Today grid to 3 columns above 720px */
+  @media (min-width: 720px) {
+    #screen-today .gt-grid { grid-template-columns: 1fr 1fr 1.15fr; border-top: none; }
+    #screen-today .gt-cell { padding: 24px 22px 24px 0; border-bottom: none; border-right: 1px solid var(--glyph-hair); }
+    #screen-today .gt-cell:last-child { border-right: none; padding-right: 0; padding-left: 22px; }
+    #screen-today .gt-cell:nth-child(2) { padding-left: 22px; padding-right: 22px; }
+    #screen-today { padding: 48px 36px 100px; }
+    .gt-greeting { font-size: 56px; }
+    #screen-inkwell { padding: 48px 36px 100px; }
+    .gi-row {
+      grid-template-columns: 44px 130px 200px 1fr 160px 110px;
+      grid-template-areas: "idx fa gloss ex ety sr";
+      align-items: center;
+      padding: 16px 0;
+    }
+    .gi-row .gloss .ipa { display: block; }
+    #screen-lesson { padding: 48px 36px 100px; }
+    .gd-sent { font-size: 28px; }
+    .gd-correct { font-size: 22px; }
+  }
+</style>
 </head>
 <body class="tabbar-visible">
 
@@ -972,38 +1306,39 @@ button.danger { width: 100%; background: transparent; color: var(--danger); bord
 </section>
 
 <section class="screen active" id="screen-today">
-    <h1>Today</h1>
-    <p class="caption">Continue your practice.</p>
-    <div id="glyph-block">
-      <div id="glyph-mount" style="width:120px; height:140px; display:flex; align-items:center; justify-content:center; opacity:0.35; border:1px dashed #444; border-radius:10px; font-size:0.7rem; color:#888; font-style:italic; letter-spacing:0.05em;">glyph mount</div>
-      <p id="glyph-editor-line">Volume 1, page 2. The ink is fresh.</p>
-    </div>
-    
-    <button class="today-cta" id="today-cta-lesson">
-      <div class="today-cta-label">Continue practice</div>
-      <div class="today-cta-detail">Today's lesson</div>
-    </button>
-  
-    
-    <div class="today-seals">
-      <h2>Recent pages</h2>
-      
-        <div class="today-seal">
-          <div class="today-seal-native">دیروز با مادرم حرف زدم و دلم آرام شد.</div>
-          <div class="today-seal-meta">Vol. 1 · page 2</div>
+    <div class="gt-stamp">THU · 21 · MAY · 2026 &nbsp;·&nbsp; <b>week 6 of Persian</b></div>
+    <h1 class="gt-greeting">صبح بخیر</h1>
+    <div class="gt-translit">sob'h be-kheyr · 06:42</div>
+
+    <div class="gt-grid">
+      <div class="gt-cell">
+        <div class="gt-num">01 ·<b>TODAY</b></div>
+        <div class="gt-head">A short session, targeted.</div>
+        <div class="gt-body">14 items, around 8 minutes. Three edit-the-text, eight cloze, three pick-better-word.</div>
+        <div class="gt-micro">est · <b>8m 12s</b> &nbsp; · &nbsp; R target · <b>0.85</b></div>
+      </div>
+      <div class="gt-cell">
+        <div class="gt-num">02 ·<b>WHY THIS SESSION</b></div>
+        <div class="gt-head">Targeting your weakest axis.</div>
+        <div class="gt-body">Mediation lags one CEFR sub-band behind your reception. Today's task envelope: <em>Edit-the-Text</em> in a casual register, Arabic-origin lemma focus.</div>
+        <div class="gt-micro">composer · <b>session engine</b> &nbsp; · &nbsp; calibrated to <b>~80%</b></div>
+      </div>
+      <div class="gt-cell">
+        <div class="gt-num">03 ·<b>WHERE YOU ARE</b></div>
+        <div class="gt-head">CEFR-anchored estimate.</div>
+        <div class="gt-axes">
+          <div class="gt-axis"><span>reception</span><b>B1.3</b></div>
+          <div class="gt-axis"><span>production</span><b>A2.4</b></div>
+          <div class="gt-axis weak"><span>mediation</span><b>A2.1</b></div>
+          <div class="gt-axis"><span>interaction</span><b>A2.5</b></div>
+          <div class="gt-axis"><span>plurilingual</span><b>A2.3</b></div>
+          <div class="gt-axis"><span>strategies</span><b>B1.0</b></div>
         </div>
-      
-        <div class="today-seal">
-          <div class="today-seal-native">دیروز با مادرم حرف زدم و دلم آرام شد.</div>
-          <div class="today-seal-meta">Vol. 1 · page 1</div>
-        </div>
-      
+        <div class="gt-micro" style="margin-top:14px">SE(θ) · <b>0.27</b> &nbsp; · &nbsp; targeting · <b style="color:var(--glyph-coral)">mediation</b></div>
+      </div>
     </div>
-  
-    <h2>Languages</h2>
-    <div class="lang-item"><div class="lang-native">فارسی</div><div class="lang-en">Persian</div></div>
-    <div class="lang-item"><div class="lang-native">Türkçe</div><div class="lang-en">Turkish</div></div>
-    <div class="lang-item"><div class="lang-native">Español</div><div class="lang-en">Spanish</div></div>
+
+    <button class="gt-begin" id="today-cta-lesson">Begin today's session →</button>
   </section>
 <section class="screen" id="screen-codex">
     <h1>Codex</h1>
@@ -1493,35 +1828,19 @@ button.danger { width: 100%; background: transparent; color: var(--danger); bord
     </div></section>
 <section class="screen" id="screen-lesson">
     <div id="lesson-phase-editor" class="lesson-phase">
-      <div class="lesson-header">
-        <span class="lesson-mode-badge">The Editor</span>
-        <span class="lesson-phase-label">polish</span>
-        <span class="lesson-counter">Scene 1 / 2</span>
+      <div class="gd-eyebrow">REFINERY · EDIT-THE-TEXT · ITEM 7 OF 14 &nbsp;<b>· close</b></div>
+      <p class="gd-prompt">You wrote <em>"every morning I bought fruit at the bazaar"</em> — but this is a habit, not a single past event. Persian marks habitual past on the verb itself.</p>
+      <div class="gd-sent">هر روز صبح از بازار میوه <span class="strike">خریدم</span>.</div>
+      <div class="gd-correct">هر روز صبح از بازار میوه <span class="new">می‌خریدم</span>.</div>
+      <div class="gd-note">
+        <span class="tag">metalinguistic · A2→B1</span>
+        Close — that's the perfective stem (a single completed event). You want the <b>imperfective</b>: prefix <span style="font-family:var(--glyph-fa)">می‍-</span> attaches to the past stem for habitual, ongoing, or repeated past action.
       </div>
-      <p class="lesson-instruction">A sentence arrived. Something is off. Find the word that sits in the wrong register and replace it.</p>
-      <div class="lesson-manuscript">
-        <div class="lesson-sentence"><span class="ms-word">دیروز</span> <span class="ms-word">با</span> <span class="ms-word">مادرم</span> <span class="ms-word ms-target" id="ms-target">صحبت کردم</span> <span class="ms-word">و</span> <span class="ms-word">دلم</span> <span class="ms-word">آرام</span> <span class="ms-word">شد.</span></div>
-        <div class="lesson-sentence-latin">diruz bâ mâdaram <em class="latin-target">sohbat kardam</em> o delam ârâm shod.</div>
-        <div class="lesson-sentence-en">Yesterday I <em>spoke (formal)</em> with my mother and my heart calmed.</div>
+      <div class="gd-foot">
+        <div class="stat">FSRS · retightened &nbsp;·&nbsp; next review <b>~2d</b></div>
+        <button class="next">Continue →</button>
       </div>
-      <p class="lesson-register-note">Register: <strong>formal</strong> — but the moment is intimate. The word needs to drop closer to the register of the relationship.</p>
-      <div class="lesson-choices">
-    <button class="lesson-choice" data-value="wrong-high" data-word-id="">
-      <span class="choice-native">مذاکره کردم</span>
-      <span class="choice-hint">mozâkere kardam — negotiated</span>
-    </button>
-  
-    <button class="lesson-choice" data-value="correct" data-word-id="harf-zadan">
-      <span class="choice-native">حرف زدم</span>
-      <span class="choice-hint">harf zadam — talked, had a word</span>
-    </button>
-  
-    <button class="lesson-choice" data-value="wrong-low" data-word-id="">
-      <span class="choice-native">ولم کرد</span>
-      <span class="choice-hint">valâm kard — left me alone (slang)</span>
-    </button>
-  </div>
-      <div class="lesson-feedback" style="display:none;"></div>
+      <div class="gd-mascot">72 × 72 · mascot</div>
     </div>
     
     <div id="lesson-phase-sealed" class="lesson-phase" style="display:none;">
@@ -1545,32 +1864,23 @@ button.danger { width: 100%; background: transparent; color: var(--danger); bord
     </div>
   </section>
 <section class="screen" id="screen-inkwell">
-    <h1>Inkwell</h1>
-    <p class="caption">Your working set. Words fade as memory fades — pin them to keep them sharp.</p>
-    <div class="inkwell-cap">
-      <span class="inkwell-cap-label">Slots used</span>
-      <div class="inkwell-slots" id="inkwell-slots"><div class="inkwell-slot filled"></div><div class="inkwell-slot"></div><div class="inkwell-slot"></div><div class="inkwell-slot"></div><div class="inkwell-slot"></div></div>
+    <div class="gi-head">
+      <h2>Inkwell · 12 of 287 pinned</h2>
+      <div class="meta">sort · <b>R ↓</b> &nbsp; · &nbsp; view · <b>list</b></div>
     </div>
-    <div id="inkwell-empty" class="info-banner" style="display:none;">The Inkwell is empty. Pin words from the Codex to start building your working set.</div>
-  <div class="inkwell-card" data-word-id="ketab">
-      <div class="ink-column">
-        <div class="ink-bar">
-          <div class="ink-fill" style="height:100%"></div>
-        </div>
-        <div class="ink-pct">100%</div>
-      </div>
-      <div class="inkwell-card-body">
-        <div class="inkwell-card-row">
-          <div>
-            <div class="inkwell-native">کتاب</div>
-            <div class="inkwell-latin">ketâb</div>
-            <div class="inkwell-gloss">book — a written or printed work, bound along one edge.</div>
-          </div>
-          <button class="unpin-btn" data-word-id="ketab" title="unpin">✕</button>
-        </div>
-        
-      </div>
-    </div></section>
+    <div class="gi-row r98"><div class="idx">001</div><div class="fa">صبح</div><div class="gloss">morning <em>· n.</em><span class="ipa">sobh</span></div><div class="ex">صبح زود<small>early morning</small></div><div class="ety">Middle Persian · #412</div><div class="sr"><b>R 0.98</b>S 42d</div></div>
+    <div class="gi-row r97"><div class="idx">002</div><div class="fa">شب</div><div class="gloss">night <em>· n.</em><span class="ipa">shab</span></div><div class="ex">شب طولانی<small>a long night</small></div><div class="ety">Middle Persian · #338</div><div class="sr"><b>R 0.97</b>S 38d</div></div>
+    <div class="gi-row r96"><div class="idx">003</div><div class="fa">صدا</div><div class="gloss">voice, sound <em>· n.</em><span class="ipa">sedâ</span></div><div class="ex">صدای پرنده<small>the bird's voice</small></div><div class="ety">Arabic-origin · #621</div><div class="sr"><b>R 0.96</b>S 31d</div></div>
+    <div class="gi-row r95"><div class="idx">004</div><div class="fa">کتاب</div><div class="gloss">book <em>· n.</em><span class="ipa">ketâb</span></div><div class="ex">کتاب باز<small>an open book</small></div><div class="ety">Arabic-origin · #289</div><div class="sr"><b>R 0.95</b>S 29d</div></div>
+    <div class="gi-row r94"><div class="idx">005</div><div class="fa">نامه</div><div class="gloss">letter <em>· n.</em><span class="ipa">nâmeh</span></div><div class="ex">نامه‌ی عاشقانه<small>a love letter</small></div><div class="ety">Middle Persian · #1 204</div><div class="sr"><b>R 0.94</b>S 22d</div></div>
+    <div class="gi-row r93"><div class="idx">006</div><div class="fa">باران</div><div class="gloss">rain <em>· n.</em><span class="ipa">bârân</span></div><div class="ex">باران تابستانی<small>summer rain</small></div><div class="ety">Middle Persian · #1 087</div><div class="sr"><b>R 0.93</b>S 19d</div></div>
+    <div class="gi-row r92"><div class="idx">007</div><div class="fa">خاطره</div><div class="gloss">memory <em>· n.</em><span class="ipa">khâtereh</span></div><div class="ex">خاطره‌ی شیرین<small>a sweet memory</small></div><div class="ety">Arabic-origin · #2 314</div><div class="sr"><b>R 0.92</b>S 14d</div></div>
+    <div class="gi-row r91"><div class="idx">008</div><div class="fa">دلتنگ</div><div class="gloss">longing <em>· adj.</em><span class="ipa">deltang</span></div><div class="ex">دلتنگ خانه<small>homesick for home</small></div><div class="ety">Compound · NP · #4 192</div><div class="sr"><b>R 0.91</b>S 9d</div></div>
+    <div class="gi-row over r88"><div class="idx">009</div><div class="fa">آرزو</div><div class="gloss">wish, longing <em>· n.</em><span class="ipa">ârezu</span></div><div class="ex">آرزوی دور<small>a distant wish</small></div><div class="ety">Middle Persian · #1 644</div><div class="sr"><b>R 0.88</b>S 7d</div></div>
+    <div class="gi-row over r89"><div class="idx">010</div><div class="fa">آغوش</div><div class="gloss">embrace <em>· n.</em><span class="ipa">âghush</span></div><div class="ex">در آغوش گرفتن<small>to embrace</small></div><div class="ety">Middle Persian · #3 928</div><div class="sr"><b>R 0.89</b>S 6d</div></div>
+    <div class="gi-row over r86"><div class="idx">011</div><div class="fa">پنجره</div><div class="gloss">window <em>· n.</em><span class="ipa">panjereh</span></div><div class="ex">پنجره‌ی باز<small>an open window</small></div><div class="ety">Middle Persian · #2 871</div><div class="sr"><b>R 0.86</b>S 5d</div></div>
+    <div class="gi-row over r83"><div class="idx">012</div><div class="fa">یاد</div><div class="gloss">remembrance <em>· n.</em><span class="ipa">yâd</span></div><div class="ex">به یاد آوردن<small>to call to mind</small></div><div class="ety">Middle Persian · #1 528</div><div class="sr"><b>R 0.83</b>S 3d</div></div>
+  </section>
 <section class="screen" id="screen-achievements">
   <h1>Quests</h1>
   <p class="caption">Complete quests to earn ranks.</p>
@@ -3434,9 +3744,9 @@ button.danger { width: 100%; background: transparent; color: var(--danger); bord
 .fv5-onb-step[data-id='lang'] .fv5-onb-opt .opt-icon-flag{background:transparent;border:none}
 .fv5-onb-step[data-id='lang'] .flag-svg{width:100px;height:80px;border-radius:8px}
 .fv5-onb-step[data-id='lang'] .fv5-onb-opt .opt-body{position:relative;z-index:1}
-.fv5-onb-step[data-id='lang'] .fv5-onb-opt .opt-label{font-size:30px;font-weight:600;color:rgb(231,233,238)}
+.fv5-onb-step[data-id='lang'] .fv5-onb-opt .opt-label{font-size:30px;font-weight:600;color:var(--text)}
 
-.fv5-onb-step[data-id='lang'] .fv5-onb-opt .opt-sub{font-family:var(--font-serif);font-weight:700;font-size:14px;color:rgb(231,233,238);letter-spacing:.05em}
+.fv5-onb-step[data-id='lang'] .fv5-onb-opt .opt-sub{font-family:var(--font-serif);font-weight:700;font-size:14px;color:var(--text-secondary);letter-spacing:.05em}
 
 /* Hide subtitles and enlarge labels on 'why' and 'path' steps */
 .fv5-onb-step[data-id='why'] .fv5-onb-opt .opt-sub,
@@ -8210,4 +8520,148 @@ ${renderInkwellDrawer()}`;
   }, 1200);
 })();
 </script>
+
+<script id="glyph-picks-render-overrides">
+/* ═══════════════════════════════════════════════════════════════
+   Glyph picks render overrides.
+   Folio's runtime sets screen.innerHTML on #screen-today, -inkwell,
+   -lesson through window.Folio.renderToday/Inkwell/Lesson, which
+   clobbers the static Glyph markup baked into the HTML. This script
+   replaces those render functions and watches for screen activation
+   so the Glyph designs (A3, B3, D1) win.
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var TODAY_HTML = '' +
+    '<div class="gt-stamp">THU · 21 · MAY · 2026 &nbsp;·&nbsp; <b>week 6 of Persian</b></div>' +
+    '<h1 class="gt-greeting">صبح بخیر</h1>' +
+    '<div class="gt-translit">sob\'h be-kheyr · 06:42</div>' +
+    '<div class="gt-grid">' +
+      '<div class="gt-cell">' +
+        '<div class="gt-num">01 ·<b>TODAY</b></div>' +
+        '<div class="gt-head">A short session, targeted.</div>' +
+        '<div class="gt-body">14 items, around 8 minutes. Three edit-the-text, eight cloze, three pick-better-word.</div>' +
+        '<div class="gt-micro">est · <b>8m 12s</b> &nbsp; · &nbsp; R target · <b>0.85</b></div>' +
+      '</div>' +
+      '<div class="gt-cell">' +
+        '<div class="gt-num">02 ·<b>WHY THIS SESSION</b></div>' +
+        '<div class="gt-head">Targeting your weakest axis.</div>' +
+        '<div class="gt-body">Mediation lags one CEFR sub-band behind your reception. Today\'s task envelope: <em>Edit-the-Text</em> in a casual register, Arabic-origin lemma focus.</div>' +
+        '<div class="gt-micro">composer · <b>session engine</b> &nbsp; · &nbsp; calibrated to <b>~80%</b></div>' +
+      '</div>' +
+      '<div class="gt-cell">' +
+        '<div class="gt-num">03 ·<b>WHERE YOU ARE</b></div>' +
+        '<div class="gt-head">CEFR-anchored estimate.</div>' +
+        '<div class="gt-axes">' +
+          '<div class="gt-axis"><span>reception</span><b>B1.3</b></div>' +
+          '<div class="gt-axis"><span>production</span><b>A2.4</b></div>' +
+          '<div class="gt-axis weak"><span>mediation</span><b>A2.1</b></div>' +
+          '<div class="gt-axis"><span>interaction</span><b>A2.5</b></div>' +
+          '<div class="gt-axis"><span>plurilingual</span><b>A2.3</b></div>' +
+          '<div class="gt-axis"><span>strategies</span><b>B1.0</b></div>' +
+        '</div>' +
+        '<div class="gt-micro" style="margin-top:14px">SE(θ) · <b>0.27</b> &nbsp; · &nbsp; targeting · <b style="color:var(--glyph-coral)">mediation</b></div>' +
+      '</div>' +
+    '</div>' +
+    '<button class="gt-begin" id="today-cta-lesson">Begin today\'s session →</button>';
+
+  var INKWELL_HTML = '' +
+    '<div class="gi-head">' +
+      '<h2>Inkwell · 12 of 287 pinned</h2>' +
+      '<div class="meta">sort · <b>R ↓</b> &nbsp; · &nbsp; view · <b>list</b></div>' +
+    '</div>' +
+    '<div class="gi-row r98"><div class="idx">001</div><div class="fa">صبح</div><div class="gloss">morning <em>· n.</em><span class="ipa">sobh</span></div><div class="ex">صبح زود<small>early morning</small></div><div class="ety">Middle Persian · #412</div><div class="sr"><b>R 0.98</b>S 42d</div></div>' +
+    '<div class="gi-row r97"><div class="idx">002</div><div class="fa">شب</div><div class="gloss">night <em>· n.</em><span class="ipa">shab</span></div><div class="ex">شب طولانی<small>a long night</small></div><div class="ety">Middle Persian · #338</div><div class="sr"><b>R 0.97</b>S 38d</div></div>' +
+    '<div class="gi-row r96"><div class="idx">003</div><div class="fa">صدا</div><div class="gloss">voice, sound <em>· n.</em><span class="ipa">sedâ</span></div><div class="ex">صدای پرنده<small>the bird\'s voice</small></div><div class="ety">Arabic-origin · #621</div><div class="sr"><b>R 0.96</b>S 31d</div></div>' +
+    '<div class="gi-row r95"><div class="idx">004</div><div class="fa">کتاب</div><div class="gloss">book <em>· n.</em><span class="ipa">ketâb</span></div><div class="ex">کتاب باز<small>an open book</small></div><div class="ety">Arabic-origin · #289</div><div class="sr"><b>R 0.95</b>S 29d</div></div>' +
+    '<div class="gi-row r94"><div class="idx">005</div><div class="fa">نامه</div><div class="gloss">letter <em>· n.</em><span class="ipa">nâmeh</span></div><div class="ex">نامه‌ی عاشقانه<small>a love letter</small></div><div class="ety">Middle Persian · #1 204</div><div class="sr"><b>R 0.94</b>S 22d</div></div>' +
+    '<div class="gi-row r93"><div class="idx">006</div><div class="fa">باران</div><div class="gloss">rain <em>· n.</em><span class="ipa">bârân</span></div><div class="ex">باران تابستانی<small>summer rain</small></div><div class="ety">Middle Persian · #1 087</div><div class="sr"><b>R 0.93</b>S 19d</div></div>' +
+    '<div class="gi-row r92"><div class="idx">007</div><div class="fa">خاطره</div><div class="gloss">memory <em>· n.</em><span class="ipa">khâtereh</span></div><div class="ex">خاطره‌ی شیرین<small>a sweet memory</small></div><div class="ety">Arabic-origin · #2 314</div><div class="sr"><b>R 0.92</b>S 14d</div></div>' +
+    '<div class="gi-row r91"><div class="idx">008</div><div class="fa">دلتنگ</div><div class="gloss">longing <em>· adj.</em><span class="ipa">deltang</span></div><div class="ex">دلتنگ خانه<small>homesick for home</small></div><div class="ety">Compound · NP · #4 192</div><div class="sr"><b>R 0.91</b>S 9d</div></div>' +
+    '<div class="gi-row over r88"><div class="idx">009</div><div class="fa">آرزو</div><div class="gloss">wish, longing <em>· n.</em><span class="ipa">ârezu</span></div><div class="ex">آرزوی دور<small>a distant wish</small></div><div class="ety">Middle Persian · #1 644</div><div class="sr"><b>R 0.88</b>S 7d</div></div>' +
+    '<div class="gi-row over r89"><div class="idx">010</div><div class="fa">آغوش</div><div class="gloss">embrace <em>· n.</em><span class="ipa">âghush</span></div><div class="ex">در آغوش گرفتن<small>to embrace</small></div><div class="ety">Middle Persian · #3 928</div><div class="sr"><b>R 0.89</b>S 6d</div></div>' +
+    '<div class="gi-row over r86"><div class="idx">011</div><div class="fa">پنجره</div><div class="gloss">window <em>· n.</em><span class="ipa">panjereh</span></div><div class="ex">پنجره‌ی باز<small>an open window</small></div><div class="ety">Middle Persian · #2 871</div><div class="sr"><b>R 0.86</b>S 5d</div></div>' +
+    '<div class="gi-row over r83"><div class="idx">012</div><div class="fa">یاد</div><div class="gloss">remembrance <em>· n.</em><span class="ipa">yâd</span></div><div class="ex">به یاد آوردن<small>to call to mind</small></div><div class="ety">Middle Persian · #1 528</div><div class="sr"><b>R 0.83</b>S 3d</div></div>';
+
+  var LESSON_HTML = '' +
+    '<div id="lesson-phase-editor" class="lesson-phase">' +
+      '<div class="gd-eyebrow">REFINERY · EDIT-THE-TEXT · ITEM 7 OF 14 &nbsp;<b>· close</b></div>' +
+      '<p class="gd-prompt">You wrote <em>"every morning I bought fruit at the bazaar"</em> — but this is a habit, not a single past event. Persian marks habitual past on the verb itself.</p>' +
+      '<div class="gd-sent">هر روز صبح از بازار میوه <span class="strike">خریدم</span>.</div>' +
+      '<div class="gd-correct">هر روز صبح از بازار میوه <span class="new">می‌خریدم</span>.</div>' +
+      '<div class="gd-note">' +
+        '<span class="tag">metalinguistic · A2→B1</span>' +
+        'Close — that\'s the perfective stem (a single completed event). You want the <b>imperfective</b>: prefix <span style="font-family:var(--glyph-fa)">می‍-</span> attaches to the past stem for habitual, ongoing, or repeated past action.' +
+      '</div>' +
+      '<div class="gd-foot">' +
+        '<div class="stat">FSRS · retightened &nbsp;·&nbsp; next review <b>~2d</b></div>' +
+        '<button class="next">Continue →</button>' +
+      '</div>' +
+      '<div class="gd-mascot">72 × 72 · mascot</div>' +
+    '</div>';
+
+  function paint(id, html) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  }
+
+  function paintCurrent() {
+    var a = document.querySelector('.screen.active');
+    if (!a) return;
+    if (a.id === 'screen-today') paint('screen-today', TODAY_HTML);
+    else if (a.id === 'screen-inkwell') paint('screen-inkwell', INKWELL_HTML);
+    else if (a.id === 'screen-lesson') paint('screen-lesson', LESSON_HTML);
+  }
+
+  function installOverrides() {
+    if (!window.Folio) return false;
+    window.Folio.renderToday = function () { paint('screen-today', TODAY_HTML); };
+    window.Folio.renderInkwell = function () { paint('screen-inkwell', INKWELL_HTML); };
+    window.Folio.renderLesson = function () { paint('screen-lesson', LESSON_HTML); };
+    return true;
+  }
+
+  function observeScreens() {
+    var screens = document.querySelectorAll('.screen');
+    if (!screens.length) return;
+    var obs = new MutationObserver(function (muts) {
+      for (var i = 0; i < muts.length; i++) {
+        var m = muts[i];
+        if (m.attributeName === 'class' && m.target.classList.contains('active')) {
+          paintCurrent();
+          break;
+        }
+      }
+    });
+    screens.forEach(function (s) {
+      obs.observe(s, { attributes: true, attributeFilter: ['class'] });
+    });
+  }
+
+  function init() {
+    // Retry until Folio is ready (it may load after this script)
+    var tries = 0;
+    function tick() {
+      tries++;
+      var ok = installOverrides();
+      paintCurrent();
+      if (!ok && tries < 40) setTimeout(tick, 150);
+    }
+    tick();
+    observeScreens();
+    // Also repaint after a delay in case other JS runs after activation
+    setTimeout(paintCurrent, 250);
+    setTimeout(paintCurrent, 1000);
+    setTimeout(paintCurrent, 2500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
 </body></html>
