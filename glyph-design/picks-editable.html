@@ -1087,7 +1087,17 @@
   .critique .verdict b { color: var(--ink); font-weight: 500; }
 
   /* ───────── Picks-editable additions ───────── */
-  .wrap { padding-top: 96px; padding-bottom: 160px; max-width: 1140px; }
+
+  /* Desktop layout — wide enough for the horizontal grids in every screen.
+     min-width on desktop keeps horizontal layouts intact on narrow viewports;
+     body overflows horizontally rather than reflowing. */
+  .wrap {
+    padding: 96px 56px 160px;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+  body:not(.is-mobile) { overflow-x: auto; }
+  body:not(.is-mobile) .wrap { min-width: 1080px; }
 
   .screen {
     margin-bottom: 88px;
@@ -1108,23 +1118,29 @@
     color: var(--ink-mid);
   }
 
-  /* Edit-mode hints. Visible by default; toggle .hints-off on <body> to hide. */
+  /* Edit-mode hints. Visible by default; toggle .hints-off on <body> to hide.
+     iOS additions: explicit user-select + tap-highlight so Safari treats
+     these as editable instead of merely tappable. */
   [contenteditable="true"] {
     outline: none;
     transition: background 0.18s var(--ease), box-shadow 0.18s var(--ease);
-    border-radius: 1px;
+    border-radius: 2px;
     cursor: text;
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-tap-highlight-color: rgba(196, 69, 54, 0.15);
   }
   body:not(.hints-off) [contenteditable="true"] {
-    box-shadow: inset 0 -1px 0 0 color-mix(in oklch, var(--ochre) 35%, transparent);
+    background: rgba(184, 130, 106, 0.06);
+    box-shadow: inset 0 -1px 0 0 rgba(184, 130, 106, 0.5);
   }
   body:not(.hints-off) [contenteditable="true"]:hover {
-    background: color-mix(in oklch, var(--ochre) 10%, transparent);
-    box-shadow: 0 0 0 1px color-mix(in oklch, var(--ochre) 55%, transparent);
+    background: rgba(184, 130, 106, 0.14);
+    box-shadow: 0 0 0 1px rgba(184, 130, 106, 0.7);
   }
   body:not(.hints-off) [contenteditable="true"]:focus {
-    background: color-mix(in oklch, var(--gold) 18%, transparent);
-    box-shadow: 0 0 0 1.5px var(--ochre);
+    background: rgba(212, 175, 122, 0.24);
+    box-shadow: 0 0 0 2px var(--ochre);
   }
 
   /* Floating toolbar */
@@ -1154,6 +1170,11 @@
   .toolbar button:hover { background: var(--paper-2); border-color: var(--hair); }
   .toolbar button.primary { background: var(--ink); color: var(--paper); }
   .toolbar button.primary:hover { background: var(--coral); }
+  .toolbar button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
   .toolbar .sep { width: 1px; background: var(--hair); margin: 4px 2px; }
   .toolbar .status {
     font-family: var(--mono);
@@ -1166,9 +1187,95 @@
 
   @media print {
     .toolbar { display: none; }
-    body:not(.hints-off) [contenteditable="true"]:hover,
-    body:not(.hints-off) [contenteditable="true"]:focus { background: transparent; box-shadow: none; }
+    body:not(.hints-off) [contenteditable="true"] { background: transparent; box-shadow: none; }
   }
+
+  /* ─────────────────────────────────────────────────────────────
+     MOBILE MODE — activated by body.is-mobile (JS sets it from a
+     media query or an explicit mobile/desktop toggle). Reflows every
+     screen into a single column on phone/tablet-portrait widths.
+     Desktop horizontal layouts remain the default at ≥1100px.
+     ───────────────────────────────────────────────────────────── */
+
+  body.is-mobile { overflow-x: hidden; }
+  body.is-mobile .wrap {
+    max-width: 100%;
+    min-width: 0;
+    padding: 24px 14px 96px;
+  }
+  body.is-mobile .screen { margin-bottom: 36px; }
+  body.is-mobile .screen-label { font-size: 9.5px; }
+
+  body.is-mobile .a3,
+  body.is-mobile .b3,
+  body.is-mobile .c2,
+  body.is-mobile .d-frame {
+    padding: 28px 18px 32px;
+  }
+
+  /* A3 — Today */
+  body.is-mobile .a3-top {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+  }
+  body.is-mobile .a3 h1 { font-size: 34px; }
+  body.is-mobile .a3-grid { grid-template-columns: 1fr; gap: 24px; }
+  body.is-mobile .a3-cell {
+    border-right: none !important;
+    border-bottom: 1px solid var(--hair);
+    padding: 0 0 20px !important;
+  }
+  body.is-mobile .a3-cell:last-child { border-bottom: none; padding-bottom: 0 !important; }
+  body.is-mobile .a3-axes { grid-template-columns: 1fr; gap: 12px; }
+
+  /* B3 — vocab table */
+  body.is-mobile .b3-head { grid-template-columns: 1fr; gap: 6px; }
+  body.is-mobile .b3-row {
+    display: flex !important;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0;
+  }
+  body.is-mobile .b3-row .fa { font-size: 24px; }
+  body.is-mobile .b3-row .sr { text-align: left; }
+  body.is-mobile .b3-row .ety { padding: 6px 0 0; }
+
+  /* C2 — composer */
+  body.is-mobile .c2 { grid-template-columns: 1fr; gap: 28px; }
+  body.is-mobile .c2-section { grid-template-columns: 1fr; gap: 6px; }
+  body.is-mobile .c2-footer { flex-direction: column; align-items: stretch; gap: 12px; }
+  body.is-mobile .c2-preview .pv-row { grid-template-columns: 1fr; gap: 4px; }
+
+  /* D1 — lesson feedback */
+  body.is-mobile .d-prompt { font-size: 16px; }
+  body.is-mobile .d1-sent,
+  body.is-mobile .d1-correct { font-size: 22px; line-height: 1.55; }
+  body.is-mobile .d1-foot { flex-direction: column; align-items: stretch; gap: 12px; }
+
+  /* Toolbar — moves to bottom edge on mobile */
+  body.is-mobile .toolbar {
+    top: auto;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 8px;
+  }
+  body.is-mobile .toolbar button {
+    flex: 1 1 auto;
+    padding: 10px 12px;
+    font-size: 12px;
+    min-height: 40px;
+  }
+  body.is-mobile .toolbar .status {
+    flex: 1 0 100%;
+    padding: 2px 6px 6px;
+    text-align: left;
+  }
+  body.is-mobile .toolbar .sep { display: none; }
 
 </style>
 </head>
@@ -1176,6 +1283,9 @@
 
 <div class="toolbar" role="toolbar" aria-label="Editor controls">
   <span class="status" id="status">edit mode · on</span>
+  <div class="sep"></div>
+  <button id="modeDesktopBtn" type="button" aria-pressed="false">desktop</button>
+  <button id="modeMobileBtn" type="button" aria-pressed="false">mobile</button>
   <div class="sep"></div>
   <button id="toggleHints" type="button">hints</button>
   <button id="resetBtn" type="button">reset</button>
@@ -1353,22 +1463,32 @@
   'use strict';
 
   var SCREENS_SELECTOR = 'main.wrap';
-  var initial = document.querySelector(SCREENS_SELECTOR).innerHTML;
-
-  var SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'BUTTON', 'SVG', 'CIRCLE', 'PATH', 'IMG', 'HR', 'BR']);
+  var SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'BUTTON', 'SVG', 'CIRCLE', 'PATH', 'IMG', 'HR', 'BR', 'INPUT', 'TEXTAREA']);
   var SKIP_CLASSES = ['toolbar', 'mascot-anchor', 'ring'];
   var INLINE_TAGS = new Set(['EM', 'B', 'I', 'SMALL', 'SPAN', 'SUP', 'SUB', 'MARK', 'CODE', 'STRONG', 'A', 'U']);
+  // Auto-mobile breakpoint chosen to match the minimum width at which all
+  // four screens render fully horizontally without their grids being crushed.
+  var MOBILE_MAX = '(max-width: 1100px)';
+
+  var initial = null;
+  var fieldCount = 0;
+  // View mode: 'auto' (follow media query), 'mobile', 'desktop' (both forced).
+  var viewMode = 'auto';
+
+  function status(msg) {
+    var s = document.getElementById('status');
+    if (s) s.textContent = msg;
+  }
 
   function shouldSkip(el) {
+    if (!el || !el.tagName) return true;
     if (SKIP_TAGS.has(el.tagName)) return true;
     for (var i = 0; i < SKIP_CLASSES.length; i++) {
-      if (el.closest('.' + SKIP_CLASSES[i])) return true;
+      if (el.closest && el.closest('.' + SKIP_CLASSES[i])) return true;
     }
     return false;
   }
 
-  // A text-leaf is an element that contains text directly, and whose only
-  // element children (if any) are inline formatting tags.
   function isTextLeaf(el) {
     var hasText = false;
     for (var i = 0; i < el.childNodes.length; i++) {
@@ -1382,7 +1502,6 @@
     return hasText;
   }
 
-  // Walk top-down; mark outermost text-leaves only so each block gets one outline.
   function makeEditable() {
     var count = 0;
     function walk(el) {
@@ -1390,77 +1509,141 @@
       if (isTextLeaf(el)) {
         el.setAttribute('contenteditable', 'true');
         el.setAttribute('spellcheck', 'false');
+        // tabindex lets iOS Safari focus these reliably.
+        if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
         count++;
         return;
       }
       for (var i = 0; i < el.children.length; i++) walk(el.children[i]);
     }
-    walk(document.querySelector(SCREENS_SELECTOR));
+    var root = document.querySelector(SCREENS_SELECTOR);
+    if (!root) return 0;
+    walk(root);
     return count;
   }
 
-  function status(msg) {
-    var s = document.getElementById('status');
-    if (s) s.textContent = msg;
+  // ─── Mode handling ──────────────────────────────────────────
+  var mql = window.matchMedia ? window.matchMedia(MOBILE_MAX) : null;
+
+  function applyMode() {
+    var isMobile;
+    if (viewMode === 'mobile') isMobile = true;
+    else if (viewMode === 'desktop') isMobile = false;
+    else isMobile = mql ? mql.matches : false;
+    document.body.classList.toggle('is-mobile', isMobile);
+    var mb = document.getElementById('modeMobileBtn');
+    var db = document.getElementById('modeDesktopBtn');
+    if (mb) mb.setAttribute('aria-pressed', viewMode === 'mobile' ? 'true' : 'false');
+    if (db) db.setAttribute('aria-pressed', viewMode === 'desktop' ? 'true' : 'false');
   }
 
-  // Prevent in-doc anchor links from navigating while editing.
-  document.addEventListener('click', function (e) {
-    var a = e.target.closest && e.target.closest('a[contenteditable]');
-    if (a) e.preventDefault();
-  });
-
-  // Boot
-  var count = makeEditable();
-  status(count + ' fields · editable');
-
-  // Toolbar wiring
-  document.getElementById('toggleHints').addEventListener('click', function () {
-    document.body.classList.toggle('hints-off');
-    var off = document.body.classList.contains('hints-off');
-    status(off ? 'hints · off' : count + ' fields · editable');
-  });
-
-  document.getElementById('resetBtn').addEventListener('click', function () {
-    if (!confirm('Reset all edits to the original?')) return;
-    document.querySelector(SCREENS_SELECTOR).innerHTML = initial;
-    count = makeEditable();
-    status(count + ' fields · restored');
-  });
-
-  document.getElementById('saveBtn').addEventListener('click', function () {
-    // Clone the document so we can clean it (strip contenteditable, toolbar, this script) before saving.
-    var clone = document.documentElement.cloneNode(true);
-    clone.querySelectorAll('[contenteditable]').forEach(function (el) {
-      el.removeAttribute('contenteditable');
-      el.removeAttribute('spellcheck');
-    });
-    var tb = clone.querySelector('.toolbar');
-    if (tb) tb.remove();
-    var scripts = clone.querySelectorAll('script');
-    scripts.forEach(function (s) { s.remove(); });
-    var html = '<!doctype html>\n' + clone.outerHTML;
-    var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    var d = new Date();
-    var stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') +
-                '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
-    a.download = 'glyph-edited-' + stamp + '.html';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-    status('saved · ' + a.download);
-  });
-
-  // Cmd/Ctrl+S → save
-  document.addEventListener('keydown', function (e) {
-    if ((e.metaKey || e.ctrlKey) && e.key === 's') {
-      e.preventDefault();
-      document.getElementById('saveBtn').click();
+  function boot() {
+    try {
+      var root = document.querySelector(SCREENS_SELECTOR);
+      if (!root) {
+        status('error · main.wrap missing');
+        return;
+      }
+      initial = root.innerHTML;
+      fieldCount = makeEditable();
+      status(fieldCount + ' fields · editable');
+    } catch (err) {
+      status('error · ' + (err && err.message ? err.message : 'boot failed'));
+      console.error(err);
+      return;
     }
+
+    // Prevent in-doc anchor links from navigating while editing.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[contenteditable]');
+      if (a) e.preventDefault();
+    });
+
+    var hintsBtn = document.getElementById('toggleHints');
+    if (hintsBtn) hintsBtn.addEventListener('click', function () {
+      document.body.classList.toggle('hints-off');
+      var off = document.body.classList.contains('hints-off');
+      status(off ? 'hints · off' : fieldCount + ' fields · editable');
+    });
+
+    var resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) resetBtn.addEventListener('click', function () {
+      if (!confirm('Reset all edits to the original?')) return;
+      var root = document.querySelector(SCREENS_SELECTOR);
+      root.innerHTML = initial;
+      fieldCount = makeEditable();
+      status(fieldCount + ' fields · restored');
+    });
+
+    var modeMobileBtn = document.getElementById('modeMobileBtn');
+    if (modeMobileBtn) modeMobileBtn.addEventListener('click', function () {
+      viewMode = (viewMode === 'mobile') ? 'auto' : 'mobile';
+      applyMode();
+      status(viewMode === 'mobile' ? 'mobile · forced' : 'view · auto');
+    });
+    var modeDesktopBtn = document.getElementById('modeDesktopBtn');
+    if (modeDesktopBtn) modeDesktopBtn.addEventListener('click', function () {
+      viewMode = (viewMode === 'desktop') ? 'auto' : 'desktop';
+      applyMode();
+      status(viewMode === 'desktop' ? 'desktop · forced' : 'view · auto');
+    });
+    if (mql) {
+      var onChange = function () { if (viewMode === 'auto') applyMode(); };
+      if (mql.addEventListener) mql.addEventListener('change', onChange);
+      else if (mql.addListener) mql.addListener(onChange);
+    }
+    applyMode();
+
+    var saveBtn = document.getElementById('saveBtn');
+    if (saveBtn) saveBtn.addEventListener('click', function () {
+      var clone = document.documentElement.cloneNode(true);
+      clone.querySelectorAll('[contenteditable]').forEach(function (el) {
+        el.removeAttribute('contenteditable');
+        el.removeAttribute('spellcheck');
+        el.removeAttribute('tabindex');
+      });
+      var cb = clone.querySelector('body');
+      if (cb) {
+        cb.classList.remove('is-mobile');
+        cb.classList.remove('hints-off');
+      }
+      var tb = clone.querySelector('.toolbar');
+      if (tb) tb.remove();
+      clone.querySelectorAll('script').forEach(function (s) { s.remove(); });
+      var html = '<!doctype html>\n' + clone.outerHTML;
+      var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      var d = new Date();
+      var stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') +
+                  '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
+      a.download = 'glyph-edited-' + stamp + '.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      status('saved · ' + a.download);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        var btn = document.getElementById('saveBtn');
+        if (btn) btn.click();
+      }
+    });
+  }
+
+  window.addEventListener('error', function (e) {
+    status('JS error · ' + (e.message || 'see console'));
   });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 })();
 </script>
 
