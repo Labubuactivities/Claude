@@ -7934,6 +7934,163 @@ ${renderInkwellDrawer()}`;
 .today-match-body{flex:1;min-width:0}
 .today-match-label{font-size:13.5px;color:var(--text);font-weight:500;line-height:1.2}
 .today-match-detail{font-size:11.5px;color:var(--text-muted);font-style:italic;margin-top:2px;line-height:1.35;overflow:hidden;text-overflow:ellipsis}
+
+/* ════════════════════════════════════════════════════════════
+   TOUCH FIX + DESKTOP MODE
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Touch fixes — kill iOS "first tap = hover, second tap = click" ── */
+@media (hover: none) {
+  /* Neutralize hover effects on touch devices: any :hover state below
+     gets reset so the first tap registers as a click immediately. */
+  *:hover { background-color: inherit !important; }
+  .today-match:hover,
+  .tab:hover,
+  .chip:hover,
+  button:hover,
+  .lang-item:hover,
+  .word-card:hover,
+  .inkwell-card:hover {
+    border-color: inherit !important;
+    background: inherit !important;
+    transform: none !important;
+    opacity: inherit !important;
+  }
+}
+
+/* Make every interactive element touch-friendly */
+button,
+.tab,
+.chip,
+.toggle,
+a[role="button"],
+[onclick],
+input[type="button"],
+input[type="submit"],
+.today-match,
+.lang-item,
+.pin-btn,
+.comment-btn,
+.comment-save,
+.comment-clear,
+.unpin-btn {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;     /* removes the 300ms tap delay on legacy iOS */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Minimum tap-target size (Apple HIG = 44px, Material = 48px) */
+.tab, .chip, button.primary, button.secondary, button.danger {
+  min-height: 44px;
+}
+.toggle { min-height: 48px; }
+
+/* Tap feedback — visible :active state so users know the tap landed */
+button:active,
+.tab:active,
+.chip:active,
+.toggle:active,
+.today-match:active,
+.lang-item:active,
+.word-card:active {
+  opacity: 0.7;
+  transition: opacity 0.05s;
+}
+
+/* ── Desktop mode (≥ 900px) ── */
+@media (min-width: 900px) {
+  /* Open up the canvas — remove the phone-shaped 480px lane */
+  body {
+    max-width: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    flex-direction: row !important;
+  }
+
+  /* Left sidebar nav replaces bottom tabbar */
+  nav.tabbar {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: auto !important;
+    transform: none !important;
+    flex-direction: column !important;
+    width: 220px !important;
+    max-width: 220px !important;
+    height: 100vh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-right: 1px solid var(--border) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: var(--bg-elevated) !important;
+    padding: 24px 12px !important;
+    gap: 4px !important;
+    box-shadow: none !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    display: flex !important;
+    order: -1 !important;   /* push sidebar to the LEFT in DOM-order flex */
+  }
+
+  /* Sidebar tab buttons: full-width with label visible alongside icon */
+  nav.tabbar .tab {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    height: 44px !important;
+    justify-content: flex-start !important;
+    padding: 0 14px !important;
+    border-radius: 10px !important;
+    gap: 12px !important;
+  }
+  nav.tabbar .tab[aria-label]::after {
+    content: attr(aria-label);
+    font-family: var(--font-display, var(--font-ui));
+    font-size: 14px;
+    font-weight: 500;
+    color: inherit;
+  }
+
+  /* Show the lesson tab on desktop too */
+  nav.tabbar .tab[data-screen="lesson"] { display: flex !important; }
+
+  /* Main content area gets the remaining width */
+  main, .app-main, .screens-wrap {
+    flex: 1;
+  }
+  .screen {
+    max-width: 920px !important;
+    margin: 0 auto !important;
+    padding: 56px 48px 56px !important;
+  }
+
+  /* Codex: cards in a two-column grid on desktop */
+  #screen-codex .codex-cards,
+  #screen-codex .tactical-cards,
+  #screen-codex .cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+  /* Fallback: wrap loose .word-card siblings into a grid using subgrid behavior */
+  #screen-codex {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  #screen-codex > .word-card {
+    margin-top: 0 !important;
+  }
+
+  /* Hide the floating-pill styling at large widths even before our reorg */
+  body:not(.tabbar-visible) nav.tabbar { display: none !important; }
+}
+
+/* Even wider screens get a 3-column codex */
+@media (min-width: 1400px) {
+  .screen { max-width: 1200px !important; }
+}
 </style>
 <script id="folio-match-mode">
 (function(){
