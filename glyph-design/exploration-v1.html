@@ -464,14 +464,15 @@
   }
   .a3-cell .num b { color: var(--ink); font-weight: 500; margin-left: 8px; }
   .a3-cell .head {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--ink-mid);
-    margin-bottom: 14px;
+    margin-bottom: 18px;
   }
   .a3-cell .body {
-    font-size: 18px;
+    font-size: 22px;
     color: var(--ink);
     line-height: 1.45;
+    letter-spacing: -0.005em;
   }
   .a3-cell .body em { font-style: italic; color: var(--ink-2); }
   .a3-cell .micro {
@@ -490,10 +491,11 @@
   }
   .a3-axes .axis {
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: 13px;
     color: var(--ink-mid);
     display: flex;
     justify-content: space-between;
+    padding: 2px 0;
   }
   .a3-axes .axis b { color: var(--ink); font-weight: 500; }
   .a3-axes .axis.weak b { color: var(--coral); }
@@ -621,32 +623,37 @@
   .b3-list { display: grid; gap: 0; }
   .b3-row {
     display: grid;
-    grid-template-columns: 60px 180px 1fr 120px 110px;
-    align-items: baseline;
-    gap: 28px;
-    padding: 14px 0;
+    grid-template-columns: 44px 130px 190px 1fr 150px 110px;
+    align-items: center;
+    gap: 22px;
+    padding: 16px 0;
     border-bottom: 1px solid var(--hair);
   }
   .b3-row:last-child { border-bottom: none; }
   .b3-row .idx { font-family: var(--mono); font-size: 10.5px; color: var(--ink-soft); letter-spacing: 0.04em; }
-  .b3-row .fa { font-family: var(--fa); direction: rtl; font-size: 24px; line-height: 1; color: var(--ink); font-weight: 500; }
-  .b3-row .en { font-size: 14.5px; color: var(--ink-2); }
-  .b3-row .en em { color: var(--ink-mid); font-style: italic; font-size: 12.5px; }
+  .b3-row .fa { font-family: var(--fa); direction: rtl; font-size: 26px; line-height: 1; color: var(--ink); font-weight: 500; }
+  .b3-row .gloss { display: flex; flex-direction: column; gap: 3px; }
+  .b3-row .gloss .en { font-size: 15px; color: var(--ink); }
+  .b3-row .gloss .en em { color: var(--ink-mid); font-style: italic; font-size: 12.5px; margin-left: 4px; }
+  .b3-row .gloss .ipa { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); letter-spacing: 0.02em; }
+  .b3-row .ex { display: flex; flex-direction: column; gap: 3px; }
+  .b3-row .ex .ex-fa { font-family: var(--fa); direction: rtl; font-size: 17px; color: var(--ink-2); line-height: 1.2; }
+  .b3-row .ex .ex-en { font-family: var(--sans); font-size: 12.5px; color: var(--ink-mid); font-style: italic; }
   .b3-row .ety {
     font-family: var(--mono);
     font-size: 10px;
     color: var(--ink-mid);
     letter-spacing: 0.04em;
     border: 1px solid var(--hair-2);
-    padding: 3px 8px;
+    padding: 4px 8px;
     justify-self: start;
+    line-height: 1.2;
   }
-  .b3-row .sr { font-family: var(--mono); font-size: 10.5px; color: var(--ink-mid); letter-spacing: 0.04em; text-align: right; }
-  .b3-row.over .en, .b3-row.over .fa {
-    border-bottom: 1px solid var(--coral);
-    padding-bottom: 2px;
-  }
-  .b3-row.over .sr { color: var(--coral); }
+  .b3-row .sr { font-family: var(--mono); font-size: 10.5px; color: var(--ink-mid); letter-spacing: 0.04em; text-align: right; line-height: 1.5; }
+  .b3-row .sr b { display: block; color: var(--ink); font-weight: 500; }
+  .b3-row.over .fa { border-bottom: 1px solid var(--coral); padding-bottom: 2px; }
+  .b3-row.over .gloss .en { border-bottom: 1px solid var(--coral); padding-bottom: 1px; align-self: flex-start; }
+  .b3-row.over .sr, .b3-row.over .sr b { color: var(--coral); }
 
   /* ═══════════════════════════════════════
      FORK C — 5-AXIS FILTER CHIPS
@@ -701,7 +708,8 @@
   .c1-count b { color: var(--ink); font-weight: 500; }
 
   /* C2 — Stripe-stacked composer */
-  .c2 { padding: 40px 56px 48px; max-width: 560px; }
+  .c2 { padding: 40px 56px 48px; display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: start; }
+  .c2-main { min-width: 0; }
   .c2-title { font-size: 22px; font-weight: 500; margin: 0 0 6px; }
   .c2-sub { color: var(--ink-mid); font-size: 14px; margin-bottom: 32px; }
   .c2-section {
@@ -756,6 +764,46 @@
     font-family: var(--sans);
     font-weight: 500;
   }
+  .c2-preview {
+    background: var(--paper-2);
+    border: 1px solid var(--hair);
+    padding: 20px 22px;
+    align-self: stretch;
+  }
+  .c2-preview .pv-eyebrow {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-mid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .c2-preview .pv-eyebrow b { color: var(--ochre); font-weight: 500; }
+  .c2-preview .pv-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    padding: 9px 0;
+    border-top: 1px solid var(--hair-2);
+    gap: 12px;
+  }
+  .c2-preview .pv-row:first-of-type { border-top: 1px solid var(--hair); }
+  .c2-preview .pv-fa { font-family: var(--fa); direction: rtl; font-size: 19px; color: var(--ink); font-weight: 500; line-height: 1.2; }
+  .c2-preview .pv-fa small { display: block; font-family: var(--sans); font-size: 12px; color: var(--ink-mid); margin-top: 1px; direction: ltr; }
+  .c2-preview .pv-rank { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); letter-spacing: 0.02em; text-align: right; white-space: nowrap; }
+  .c2-preview .pv-more {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+    padding-top: 14px;
+    border-top: 1px solid var(--hair);
+    margin-top: 4px;
+    text-align: right;
+  }
+  .c2-preview .pv-more a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 1px; }
 
   /* C3 — Balatro loadout */
   .c3 { padding: 44px 56px 52px; }
@@ -952,14 +1000,38 @@
     font-size: 14px;
     color: var(--ink-2);
     line-height: 1.55;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
+  .d2-margin .gloss b { color: var(--ink); font-weight: 500; }
+  .d2-margin .rule {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    background: var(--paper-2);
+    border-left: 2px solid var(--ochre);
+    padding: 10px 12px;
+    margin-bottom: 16px;
+  }
+  .d2-margin .rule .rk { font-family: var(--mono); font-size: 10px; color: var(--ochre); letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .d2-margin .ex {
+    font-family: var(--fa);
+    direction: rtl;
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.45;
+    margin-bottom: 4px;
+  }
+  .d2-margin .ex .hi { background: linear-gradient(transparent 65%, color-mix(in oklch, var(--gold) 55%, transparent) 65%); }
+  .d2-margin .ex-gloss { font-size: 12.5px; color: var(--ink-mid); font-style: italic; margin-bottom: 16px; }
   .d2-margin .micro {
     font-family: var(--mono);
     font-size: 10.5px;
     color: var(--ink-mid);
     letter-spacing: 0.04em;
+    line-height: 1.7;
   }
+  .d2-margin .micro b { color: var(--ink); font-weight: 500; }
+  .d2-margin .micro .row { display: flex; justify-content: space-between; }
   .d2-foot {
     border-top: 1px solid var(--hair);
     margin-top: 28px;
@@ -1282,18 +1354,18 @@
             <div class="meta">sort · <b>R ↓</b> &nbsp; · &nbsp; view · <b>list</b></div>
           </div>
           <div class="b3-list">
-            <div class="b3-row r98"><div class="idx">001</div><div class="fa">صبح</div><div class="en">morning <em>· n.</em></div><div class="ety">Middle Persian</div><div class="sr">S 42d · R 0.98</div></div>
-            <div class="b3-row r97"><div class="idx">002</div><div class="fa">شب</div><div class="en">night <em>· n.</em></div><div class="ety">Middle Persian</div><div class="sr">S 38d · R 0.97</div></div>
-            <div class="b3-row r96"><div class="idx">003</div><div class="fa">صدا</div><div class="en">voice, sound <em>· n.</em></div><div class="ety">Arabic-origin</div><div class="sr">S 31d · R 0.96</div></div>
-            <div class="b3-row r96"><div class="idx">004</div><div class="fa">کتاب</div><div class="en">book <em>· n.</em></div><div class="ety">Arabic-origin</div><div class="sr">S 29d · R 0.95</div></div>
-            <div class="b3-row r94"><div class="idx">005</div><div class="fa">نامه</div><div class="en">letter <em>· n.</em></div><div class="ety">Middle Persian</div><div class="sr">S 22d · R 0.94</div></div>
-            <div class="b3-row r94"><div class="idx">006</div><div class="fa">باران</div><div class="en">rain <em>· n.</em></div><div class="ety">Middle Persian</div><div class="sr">S 19d · R 0.93</div></div>
-            <div class="b3-row r92"><div class="idx">007</div><div class="fa">خاطره</div><div class="en">memory <em>· n.</em></div><div class="ety">Arabic-origin</div><div class="sr">S 14d · R 0.92</div></div>
-            <div class="b3-row r90"><div class="idx">008</div><div class="fa">دلتنگ</div><div class="en">longing, homesick <em>· adj.</em></div><div class="ety">Compound · NP</div><div class="sr">S 9d · R 0.91</div></div>
-            <div class="b3-row over r88"><div class="idx">009</div><div class="fa">آرزو</div><div class="en">wish, longing <em>· n.</em></div><div class="ety">Middle Persian</div><div class="sr">S 7d · R 0.88</div></div>
-            <div class="b3-row over r88"><div class="idx">010</div><div class="fa">آغوش</div><div class="en">embrace <em>· n.</em></div><div class="ety">Middle Persian</div><div class="sr">S 6d · R 0.89</div></div>
-            <div class="b3-row over r86"><div class="idx">011</div><div class="fa">پنجره</div><div class="en">window <em>· n.</em></div><div class="ety">Middle Persian</div><div class="sr">S 5d · R 0.86</div></div>
-            <div class="b3-row over r83"><div class="idx">012</div><div class="fa">یاد</div><div class="en">remembrance <em>· n.</em></div><div class="ety">Middle Persian</div><div class="sr">S 3d · R 0.83</div></div>
+            <div class="b3-row r98"><div class="idx">001</div><div class="fa">صبح</div><div class="gloss"><span class="en">morning <em>· n.</em></span><span class="ipa">sobh</span></div><div class="ex"><span class="ex-fa">صبح زود</span><span class="ex-en">early morning</span></div><div class="ety">Middle Persian · #412</div><div class="sr"><b>R 0.98</b>S 42d</div></div>
+            <div class="b3-row r97"><div class="idx">002</div><div class="fa">شب</div><div class="gloss"><span class="en">night <em>· n.</em></span><span class="ipa">shab</span></div><div class="ex"><span class="ex-fa">شب طولانی</span><span class="ex-en">a long night</span></div><div class="ety">Middle Persian · #338</div><div class="sr"><b>R 0.97</b>S 38d</div></div>
+            <div class="b3-row r96"><div class="idx">003</div><div class="fa">صدا</div><div class="gloss"><span class="en">voice, sound <em>· n.</em></span><span class="ipa">sedâ</span></div><div class="ex"><span class="ex-fa">صدای پرنده</span><span class="ex-en">the bird's voice</span></div><div class="ety">Arabic-origin · #621</div><div class="sr"><b>R 0.96</b>S 31d</div></div>
+            <div class="b3-row r96"><div class="idx">004</div><div class="fa">کتاب</div><div class="gloss"><span class="en">book <em>· n.</em></span><span class="ipa">ketâb</span></div><div class="ex"><span class="ex-fa">کتاب باز</span><span class="ex-en">an open book</span></div><div class="ety">Arabic-origin · #289</div><div class="sr"><b>R 0.95</b>S 29d</div></div>
+            <div class="b3-row r94"><div class="idx">005</div><div class="fa">نامه</div><div class="gloss"><span class="en">letter <em>· n.</em></span><span class="ipa">nâmeh</span></div><div class="ex"><span class="ex-fa">نامه‌ی عاشقانه</span><span class="ex-en">a love letter</span></div><div class="ety">Middle Persian · #1 204</div><div class="sr"><b>R 0.94</b>S 22d</div></div>
+            <div class="b3-row r94"><div class="idx">006</div><div class="fa">باران</div><div class="gloss"><span class="en">rain <em>· n.</em></span><span class="ipa">bârân</span></div><div class="ex"><span class="ex-fa">باران تابستانی</span><span class="ex-en">summer rain</span></div><div class="ety">Middle Persian · #1 087</div><div class="sr"><b>R 0.93</b>S 19d</div></div>
+            <div class="b3-row r92"><div class="idx">007</div><div class="fa">خاطره</div><div class="gloss"><span class="en">memory <em>· n.</em></span><span class="ipa">khâtereh</span></div><div class="ex"><span class="ex-fa">خاطره‌ی شیرین</span><span class="ex-en">a sweet memory</span></div><div class="ety">Arabic-origin · #2 314</div><div class="sr"><b>R 0.92</b>S 14d</div></div>
+            <div class="b3-row r90"><div class="idx">008</div><div class="fa">دلتنگ</div><div class="gloss"><span class="en">longing <em>· adj.</em></span><span class="ipa">deltang</span></div><div class="ex"><span class="ex-fa">دلتنگ خانه</span><span class="ex-en">homesick for home</span></div><div class="ety">Compound · NP · #4 192</div><div class="sr"><b>R 0.91</b>S 9d</div></div>
+            <div class="b3-row over r88"><div class="idx">009</div><div class="fa">آرزو</div><div class="gloss"><span class="en">wish, longing <em>· n.</em></span><span class="ipa">ârezu</span></div><div class="ex"><span class="ex-fa">آرزوی دور</span><span class="ex-en">a distant wish</span></div><div class="ety">Middle Persian · #1 644</div><div class="sr"><b>R 0.88</b>S 7d</div></div>
+            <div class="b3-row over r88"><div class="idx">010</div><div class="fa">آغوش</div><div class="gloss"><span class="en">embrace <em>· n.</em></span><span class="ipa">âghush</span></div><div class="ex"><span class="ex-fa">در آغوش گرفتن</span><span class="ex-en">to embrace (lit. take in arms)</span></div><div class="ety">Middle Persian · #3 928</div><div class="sr"><b>R 0.89</b>S 6d</div></div>
+            <div class="b3-row over r86"><div class="idx">011</div><div class="fa">پنجره</div><div class="gloss"><span class="en">window <em>· n.</em></span><span class="ipa">panjereh</span></div><div class="ex"><span class="ex-fa">پنجره‌ی باز</span><span class="ex-en">an open window</span></div><div class="ety">Middle Persian · #2 871</div><div class="sr"><b>R 0.86</b>S 5d</div></div>
+            <div class="b3-row over r83"><div class="idx">012</div><div class="fa">یاد</div><div class="gloss"><span class="en">remembrance <em>· n.</em></span><span class="ipa">yâd</span></div><div class="ex"><span class="ex-fa">به یاد آوردن</span><span class="ex-en">to call to mind</span></div><div class="ety">Middle Persian · #1 528</div><div class="sr"><b>R 0.83</b>S 3d</div></div>
           </div>
         </div>
       </div>
@@ -1347,39 +1419,52 @@
       </div>
       <div class="variant-body">
         <div class="c2">
-          <h2 class="c2-title">Compose this session</h2>
-          <div class="c2-sub">Five axes. Pick what you're working on — leave any blank.</div>
+          <div class="c2-main">
+            <h2 class="c2-title">Compose this session</h2>
+            <div class="c2-sub">Five axes. Pick what you're working on — leave any blank.</div>
 
-          <div class="c2-section">
-            <div class="num">01 <b>etym</b></div>
-            <div class="label">Etymology origin <small>where the word came from</small></div>
-            <div class="chip">Arabic-origin</div>
-          </div>
-          <div class="c2-section">
-            <div class="num">02 <b>freq</b></div>
-            <div class="label">Frequency band <small>how common in the corpus</small></div>
-            <div class="chip">5K–10K</div>
-          </div>
-          <div class="c2-section">
-            <div class="num">03 <b>reg</b></div>
-            <div class="label">Register <small>formality / context</small></div>
-            <div class="chip">literary</div>
-          </div>
-          <div class="c2-section">
-            <div class="num">04 <b>abst</b></div>
-            <div class="label">Abstraction <small>concrete ↔ abstract</small></div>
-            <div class="chip">concrete</div>
-          </div>
-          <div class="c2-section">
-            <div class="num">05 <b>topic</b></div>
-            <div class="label">Topic <small>semantic field</small></div>
-            <div class="chip">nature</div>
+            <div class="c2-section">
+              <div class="num">01 <b>etym</b></div>
+              <div class="label">Etymology origin <small>where the word came from</small></div>
+              <div class="chip">Arabic-origin</div>
+            </div>
+            <div class="c2-section">
+              <div class="num">02 <b>freq</b></div>
+              <div class="label">Frequency band <small>how common in the corpus</small></div>
+              <div class="chip">5K–10K</div>
+            </div>
+            <div class="c2-section">
+              <div class="num">03 <b>reg</b></div>
+              <div class="label">Register <small>formality / context</small></div>
+              <div class="chip">literary</div>
+            </div>
+            <div class="c2-section">
+              <div class="num">04 <b>abst</b></div>
+              <div class="label">Abstraction <small>concrete ↔ abstract</small></div>
+              <div class="chip">concrete</div>
+            </div>
+            <div class="c2-section">
+              <div class="num">05 <b>topic</b></div>
+              <div class="label">Topic <small>semantic field</small></div>
+              <div class="chip">nature</div>
+            </div>
+
+            <div class="c2-footer">
+              <div class="count">287 words <small>of 4 812 in band</small></div>
+              <button class="go">Run session →</button>
+            </div>
           </div>
 
-          <div class="c2-footer">
-            <div class="count">287 words <small>of 4 812 in band</small></div>
-            <button class="go">Run session →</button>
-          </div>
+          <aside class="c2-preview">
+            <div class="pv-eyebrow"><span>— Preview · 6 of 287</span> <b>uncommon</b></div>
+            <div class="pv-row"><div class="pv-fa">شفق<small>shafaq · twilight glow</small></div><div class="pv-rank">#6 214</div></div>
+            <div class="pv-row"><div class="pv-fa">گلستان<small>golestân · rose garden</small></div><div class="pv-rank">#7 802</div></div>
+            <div class="pv-row"><div class="pv-fa">مهتاب<small>mahtâb · moonlight</small></div><div class="pv-rank">#8 449</div></div>
+            <div class="pv-row"><div class="pv-fa">نسیم<small>nasim · gentle breeze</small></div><div class="pv-rank">#5 928</div></div>
+            <div class="pv-row"><div class="pv-fa">شبنم<small>shabnam · dew</small></div><div class="pv-rank">#9 117</div></div>
+            <div class="pv-row"><div class="pv-fa">سحر<small>sahar · dawn</small></div><div class="pv-rank">#6 740</div></div>
+            <div class="pv-more"><a href="#">see all 287 →</a></div>
+          </aside>
         </div>
       </div>
     </div>
@@ -1500,9 +1585,25 @@
               <div class="tag">— EDITOR'S NOTE</div>
               <div class="word-row"><span class="from">خریدم</span><span class="arr">→</span><span class="to">می‌خریدم</span></div>
               <div class="gloss">
-                That's the perfective stem (one completed event). For a habit, attach <span style="font-family:var(--fa)">می‍-</span> to the past stem — imperfective.
+                That's the <b>perfective</b> stem — one completed event. For habits, ongoing, or repeated past action, prefix <span style="font-family:var(--fa)">می‍-</span> to the past stem.
               </div>
-              <div class="micro">tag · habitual past &nbsp; · &nbsp; CEFR A2 → B1</div>
+
+              <div class="rule">
+                <span class="rk">Rule · imperfective past</span>
+                <b style="color:var(--ink);font-weight:500">می +</b> past stem &nbsp;→&nbsp; habitual / continuous past. Persian marks aspect, not tense alone — the same past stem can read as completed or habitual depending on this prefix.
+              </div>
+
+              <div class="ex">دیروز سه کتاب <span class="hi">خریدم</span>.</div>
+              <div class="ex-gloss">yesterday I bought three books · perfective, one event</div>
+              <div class="ex">هر هفته یک کتاب <span class="hi">می‌خریدم</span>.</div>
+              <div class="ex-gloss">every week I would buy a book · imperfective, habit</div>
+
+              <div class="micro">
+                <div class="row"><span>tag</span><b>habitual past</b></div>
+                <div class="row"><span>CEFR</span><b>A2 → B1</b></div>
+                <div class="row"><span>seen in your Inkwell</span><b>3 cards</b></div>
+                <div class="row"><span>next encounter</span><b>~2d</b></div>
+              </div>
             </div>
           </div>
 
