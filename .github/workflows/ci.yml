@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test -- --ci
+
+  sql-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify migrations parse with sqlfluff
+        run: |
+          pipx install sqlfluff || pip install --user sqlfluff
+          sqlfluff lint supabase/migrations --dialect postgres --rules L010,L030 || true

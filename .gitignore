@@ -1,0 +1,20 @@
+node_modules/
+.expo/
+dist/
+docs/
+web-build/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+ios/
+android/
+.eas/
+.idea/
+.vscode/
+coverage/
+
+# Ingest pipeline working files
+services/ingest/data/
+services/ingest/cache/
