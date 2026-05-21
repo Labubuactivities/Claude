@@ -8124,43 +8124,47 @@ button > *, .tab > *, .chip > *, .toggle > *, .today-match > *, .pin-btn > *,
   /* Bump headings and key UI scale up on desktop */
   .screen h1 { font-size: 40px !important; }
   .screen h2 { font-size: 16px !important; }
+  /* Preserve the CSS ::before label injection used by Codex (→ "Words")
+     and Inkwell (→ "Saved"). Keep the actual h1 text invisible. */
+  #screen-codex h1, #screen-inkwell h1 { font-size: 0 !important; }
+  #screen-codex h1::before, #screen-inkwell h1::before { font-size: 40px !important; }
 
-  /* The Codex screen: word cards lay out in a 2-column grid so they
-     don't stretch awkwardly across the full width */
-  #screen-codex {
+  /* The Codex screen: word cards lay out in a 2-column grid.
+     CRITICAL: scope to .active so non-active screens stay hidden. */
+  #screen-codex.active {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 18px !important;
     align-items: start !important;
   }
-  #screen-codex > h1,
-  #screen-codex > h2,
-  #screen-codex > p,
-  #screen-codex > input,
-  #screen-codex > .search-bar,
-  #screen-codex > .codex-header,
-  #screen-codex > .codex-filters,
-  #screen-codex > .info-banner {
+  #screen-codex.active > h1,
+  #screen-codex.active > h2,
+  #screen-codex.active > p,
+  #screen-codex.active > input,
+  #screen-codex.active > .search-bar,
+  #screen-codex.active > .codex-header,
+  #screen-codex.active > .codex-filters,
+  #screen-codex.active > .info-banner {
     grid-column: 1 / -1 !important;
   }
-  #screen-codex > .word-card {
+  #screen-codex.active > .word-card {
     margin-top: 0 !important;
   }
 
-  /* Inkwell: 2-column on desktop too */
-  #screen-inkwell {
+  /* Inkwell: 2-column on desktop too (also scoped to .active) */
+  #screen-inkwell.active {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 14px !important;
     align-items: start !important;
   }
-  #screen-inkwell > h1,
-  #screen-inkwell > h2,
-  #screen-inkwell > p,
-  #screen-inkwell > .inkwell-cap,
-  #screen-inkwell > .info-banner,
-  #screen-inkwell > #inkwell-empty,
-  #screen-inkwell > #inkwell-list {
+  #screen-inkwell.active > h1,
+  #screen-inkwell.active > h2,
+  #screen-inkwell.active > p,
+  #screen-inkwell.active > .inkwell-cap,
+  #screen-inkwell.active > .info-banner,
+  #screen-inkwell.active > #inkwell-empty,
+  #screen-inkwell.active > #inkwell-list {
     grid-column: 1 / -1 !important;
   }
 }
@@ -8168,8 +8172,11 @@ button > *, .tab > *, .chip > *, .toggle > *, .today-match > *, .pin-btn > *,
 /* Wider screens get a 3-column Codex */
 @media (min-width: 1400px) {
   .screen { max-width: 1280px !important; }
-  #screen-codex { grid-template-columns: 1fr 1fr 1fr !important; }
+  #screen-codex.active { grid-template-columns: 1fr 1fr 1fr !important; }
 }
+
+/* Hide the dev/cheat panel — it was visible on the right side of the desktop view */
+#fv4-debug { display: none !important; }
 </style>
 <script id="folio-match-mode">
 (function(){
