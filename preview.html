@@ -7939,26 +7939,9 @@ ${renderInkwellDrawer()}`;
    TOUCH FIX + DESKTOP MODE
    ════════════════════════════════════════════════════════════ */
 
-/* ── Touch fixes — kill iOS "first tap = hover, second tap = click" ── */
-@media (hover: none) {
-  /* Neutralize hover effects on touch devices: any :hover state below
-     gets reset so the first tap registers as a click immediately. */
-  *:hover { background-color: inherit !important; }
-  .today-match:hover,
-  .tab:hover,
-  .chip:hover,
-  button:hover,
-  .lang-item:hover,
-  .word-card:hover,
-  .inkwell-card:hover {
-    border-color: inherit !important;
-    background: inherit !important;
-    transform: none !important;
-    opacity: inherit !important;
-  }
-}
-
-/* Make every interactive element touch-friendly */
+/* Make every interactive element touch-friendly.
+   touch-action: manipulation is what actually fixes the iOS tap delay —
+   no need to nuke hover styles. */
 button,
 .tab,
 .chip,
@@ -7973,29 +7956,64 @@ input[type="submit"],
 .comment-btn,
 .comment-save,
 .comment-clear,
-.unpin-btn {
+.unpin-btn,
+.word-card {
   -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;     /* removes the 300ms tap delay on legacy iOS */
+  touch-action: manipulation;
+}
+button, .tab, .chip, .toggle {
   user-select: none;
   -webkit-user-select: none;
 }
 
-/* Minimum tap-target size (Apple HIG = 44px, Material = 48px) */
+/* Minimum tap-target size (Apple HIG = 44px) */
 .tab, .chip, button.primary, button.secondary, button.danger {
   min-height: 44px;
 }
 .toggle { min-height: 48px; }
 
-/* Tap feedback — visible :active state so users know the tap landed */
+/* ── Active/press feedback — works on BOTH touch and mouse,
+      so you see the tap register immediately ── */
 button:active,
 .tab:active,
 .chip:active,
 .toggle:active,
 .today-match:active,
 .lang-item:active,
-.word-card:active {
-  opacity: 0.7;
-  transition: opacity 0.05s;
+.word-card:active,
+.pin-btn:active,
+.inkwell-card:active {
+  transform: scale(0.97);
+  opacity: 0.92;
+  transition: transform 0.06s ease-out, opacity 0.06s ease-out;
+}
+
+/* Default transition so the release animates back smoothly */
+button, .tab, .chip, .toggle, .today-match, .lang-item, .word-card, .pin-btn {
+  transition: transform 0.15s ease-out, opacity 0.15s, background 0.15s, border-color 0.15s;
+}
+
+/* ── Hover lift — ONLY on mouse-capable devices.
+      Wrap in @media (hover: hover) so iOS doesn't get stuck on first tap. ── */
+@media (hover: hover) and (pointer: fine) {
+  .word-card:hover,
+  .lang-item:hover,
+  .today-match:hover,
+  .inkwell-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong, var(--accent-dim));
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  }
+  .chip:hover,
+  .tab:hover,
+  .pin-btn:hover,
+  button.secondary:hover {
+    transform: translateY(-1px);
+  }
+  button.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(139,92,246,0.35);
+  }
 }
 
 /* ── Desktop mode (≥ 900px) ── */
