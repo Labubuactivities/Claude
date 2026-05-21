@@ -8014,7 +8014,54 @@ button, .tab, .chip, .toggle, .today-match, .lang-item, .word-card, .pin-btn {
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(139,92,246,0.35);
   }
+
+  /* Sign-in screen — bigger, more dramatic hover lift */
+  #screen-signin button.primary:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 28px rgba(139,92,246,0.45);
+  }
+  #screen-signin button.secondary:hover,
+  #screen-signin #preview-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    border-color: var(--accent) !important;
+    background: var(--accent-soft, rgba(139,92,246,0.12)) !important;
+    color: var(--text) !important;
+  }
+  #screen-signin input[type="email"]:hover {
+    border-color: var(--accent-dim) !important;
+  }
 }
+
+/* ── Fix "2-finger tap" / hard-to-tap issue ──
+   When a button has children (svg, span, divs), those children can intercept
+   the tap and the button itself doesn't get the click event. Forcing pointer-events
+   to flow through to the button fixes this. */
+button, .tab, .chip, .toggle, .today-match, .lang-item, .pin-btn,
+.today-cta, .comment-btn, .unpin-btn {
+  position: relative;
+}
+button > *, .tab > *, .chip > *, .toggle > *, .today-match > *, .pin-btn > *,
+.today-cta > *, .comment-btn > *, .unpin-btn > *, .lang-item > * {
+  pointer-events: none;
+}
+
+/* Bigger touch targets specifically for the sign-in screen — these are the
+   gateway buttons, they should be unmissable */
+#screen-signin button {
+  min-height: 56px !important;
+  padding: 14px 20px !important;
+  font-size: 16px !important;
+}
+#screen-signin input[type="email"] {
+  min-height: 52px !important;
+  padding: 14px 16px !important;
+  font-size: 16px !important;   /* 16px+ prevents iOS auto-zoom on focus */
+}
+#screen-signin {
+  gap: 12px !important;
+}
+#screen-signin > * { width: 100%; }
+#screen-signin h1 { width: auto; }
 
 /* ── Desktop mode (≥ 900px) ──
    Keep the bottom tabbar. Make it bigger and span most of the screen.
